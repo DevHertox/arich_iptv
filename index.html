@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArichIPTV - L'Expérience IPTV Ultime</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background-color: #0A0A12; color: #FFFFFF; overflow-x: hidden; }
+        
+        /* Navbar */
+        nav { display: flex; justify-content: space-between; padding: 30px 5%; background: rgba(10, 10, 18, 0.9); backdrop-filter: blur(10px); position: fixed; width: 100%; z-index: 100; }
+        .logo { font-size: 24px; font-weight: 700; color: #fff; text-decoration: none; }
+        .logo span { color: #6C5CE7; }
+        .nav-links a { color: #A0A0B0; text-decoration: none; margin-left: 30px; transition: 0.3s; }
+        .nav-links a:hover { color: #00D2D3; }
+
+        /* Hero Section */
+        .hero { height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; background: radial-gradient(circle at center, #1C1C28 0%, #0A0A12 100%); padding: 0 20px; }
+        .hero-content h1 { font-size: 4rem; margin-bottom: 20px; line-height: 1.1; }
+        .hero-content h1 span { background: -webkit-linear-gradient(#6C5CE7, #00D2D3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-content p { font-size: 1.2rem; color: #A0A0B0; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        
+        .btn { padding: 15px 40px; border-radius: 30px; font-size: 1.1rem; font-weight: bold; text-decoration: none; display: inline-block; transition: 0.3s; cursor: pointer; border: none; }
+        .btn-primary { background: linear-gradient(90deg, #6C5CE7, #8A2BE2); color: white; box-shadow: 0 10px 20px rgba(108, 92, 231, 0.4); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(108, 92, 231, 0.6); }
+
+        /* Features */
+        .features { padding: 100px 5%; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .feature-card { background: #1C1C28; padding: 40px; border-radius: 20px; text-align: center; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); }
+        .feature-card:hover { transform: translateY(-10px); border-color: #6C5CE7; }
+        .feature-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: #00D2D3; }
+        .feature-card p { color: #A0A0B0; line-height: 1.6; }
+
+        /* Footer */
+        footer { text-align: center; padding: 40px; background: #05050A; color: #A0A0B0; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo">Arich<span>IPTV</span></a>
+        <div class="nav-links">
+            <a href="#features">Fonctionnalités</a>
+            <a href="#tv">Smart TV</a>
+            <a href="#download" class="btn btn-primary" style="padding: 10px 25px;">Télécharger l'APK</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Le futur du streaming<br><span>dans votre salon.</span></h1>
+            <p>Une interface cinématographique, une navigation ultra-fluide optimisée pour Smart TV et mobile. Connectez votre abonnement IPTV légal en quelques secondes.</p>
+            <a href="#download" class="btn btn-primary">Télécharger pour Android</a>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="feature-card">
+            <h3>Design Premium</h3>
+            <p>Une interface sombre, immersive et moderne inspirée des plus grandes plateformes de VOD.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Optimisé Smart TV</h3>
+            <p>Support natif de la télécommande (D-Pad), animations fluides et affichage Leanback.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Lecteur Ultra Rapide</h3>
+            <p>Support HLS, DASH, changement de piste audio et sous-titres, avec un overlay intelligent.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 NovaPlay App. Application conçue pour la lecture de flux légaux uniquement.</p>
+    </footer>
+
+</body>
+</html>
