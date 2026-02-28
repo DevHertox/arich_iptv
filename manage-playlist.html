@@ -2,839 +2,295 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARICH IPTV — Panel de Gestion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ARICH IPTV — Panel</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%237B2FFF'/><stop offset='100%25' stop-color='%23FF2D55'/></linearGradient></defs><rect width='100' height='100' rx='22' fill='url(%23g)'/><text y='.9em' font-size='70' x='15'>📡</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 <style>
-/* ═══════════════════════════════════════════════════
-   ARICH IPTV PANEL — Design System
-   Glassmorphism · Dark Premium · Violet/Rouge
-═══════════════════════════════════════════════════ */
-
 :root {
-  --violet:     #7B2FFF;
-  --violet-dim: #5a1fd4;
-  --rouge:      #FF2D55;
-  --rouge-dim:  #cc0033;
-  --bg:         #080810;
-  --bg-2:       #0d0d1a;
-  --bg-3:       #12122a;
-  --surface:    rgba(255,255,255,0.04);
-  --surface-2:  rgba(255,255,255,0.07);
-  --border:     rgba(255,255,255,0.08);
-  --border-2:   rgba(255,255,255,0.14);
-  --text:       #ffffff;
-  --text-2:     rgba(255,255,255,0.55);
-  --text-3:     rgba(255,255,255,0.3);
-  --green:      #00e676;
-  --gold:       #ffd740;
-  --glass:      rgba(255,255,255,0.05);
-  --glass-border: rgba(255,255,255,0.10);
-  --blur:       blur(20px) saturate(180%);
-  --radius:     16px;
-  --radius-lg:  24px;
-  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --v: #7B2FFF; --vd: #5a1fd4; --r: #FF2D55; --rd: #cc0033;
+  --bg: #07070f; --bg2: #0c0c1a; --bg3: #111126;
+  --s: rgba(255,255,255,0.04); --s2: rgba(255,255,255,0.08);
+  --b: rgba(255,255,255,0.08); --b2: rgba(255,255,255,0.14);
+  --t: #fff; --t2: rgba(255,255,255,0.55); --t3: rgba(255,255,255,0.28);
+  --g: #00e676; --gold: #ffd740; --info: #29b6f6;
+  --blur: blur(20px) saturate(180%);
+  --r8: 8px; --r12: 12px; --r16: 16px; --r24: 24px;
+  --tr: all 0.22s cubic-bezier(.4,0,.2,1);
+  --sb: 260px;
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Syne',system-ui,sans-serif;background:var(--bg);color:var(--t);min-height:100vh;overflow-x:hidden}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── BG ── */
+.bg-orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-orbs::before{content:'';position:absolute;top:-20%;left:-10%;width:60%;height:60%;background:radial-gradient(ellipse,rgba(123,47,255,.1) 0%,transparent 70%);animation:orbFloat 14s ease-in-out infinite alternate}
+.bg-orbs::after{content:'';position:absolute;bottom:-20%;right:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(255,45,85,.07) 0%,transparent 70%);animation:orbFloat 18s ease-in-out infinite alternate-reverse}
+@keyframes orbFloat{from{transform:translate(0,0) scale(1)}to{transform:translate(5%,7%) scale(1.1)}}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.02;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
 
-html { scroll-behavior: smooth; }
+/* ── LAYOUT ── */
+#app{position:relative;z-index:2;display:flex;min-height:100vh}
 
-body {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sb);min-height:100vh;background:rgba(7,7,15,.9);backdrop-filter:var(--blur);border-right:1px solid var(--b);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.sb-logo{padding:24px 20px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:12px}
+.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--v),var(--r));border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 20px rgba(123,47,255,.4);flex-shrink:0}
+.logo-text strong{display:block;font-weight:800;font-size:15px;background:linear-gradient(90deg,var(--v),var(--r));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1.5px}
+.logo-text span{font-size:10px;color:var(--t3);letter-spacing:.5px}
+.sb-device{margin:12px 14px 6px;padding:11px 13px;background:var(--s);border:1px solid var(--b);border-radius:var(--r12);display:none}
+.sb-device.show{display:block}
+.sb-device .mac{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--v);letter-spacing:.8px;word-break:break-all}
+.sb-device .key{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--t);letter-spacing:3px;margin-top:2px}
+.sb-nav{flex:1;padding:6px 10px;overflow-y:auto}
+.nav-lbl{padding:10px 10px 5px;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--t3);text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--r12);cursor:pointer;transition:var(--tr);color:var(--t2);font-size:13px;font-weight:600;user-select:none;margin-bottom:2px;border:1px solid transparent}
+.nav-item:hover{background:var(--s2);color:var(--t)}
+.nav-item.active{background:linear-gradient(135deg,rgba(123,47,255,.18),rgba(255,45,85,.08));color:var(--t);border-color:rgba(123,47,255,.3)}
+.nav-icon{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:14px;background:var(--s);flex-shrink:0}
+.nav-item.active .nav-icon{background:linear-gradient(135deg,var(--v),var(--r));box-shadow:0 3px 10px rgba(123,47,255,.3)}
+.nav-badge{margin-left:auto;background:var(--r);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px}
+.sb-footer{padding:10px;border-top:1px solid var(--b)}
+.logout-btn{display:flex;align-items:center;gap:9px;width:100%;padding:9px 12px;background:rgba(255,45,85,.08);border:1px solid rgba(255,45,85,.2);border-radius:10px;color:var(--r);font-size:12px;font-weight:700;cursor:pointer;transition:var(--tr);font-family:inherit}
+.logout-btn:hover{background:rgba(255,45,85,.15)}
 
-/* ── BACKGROUND ANIMÉ ── */
-.bg-orbs {
-  position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  overflow: hidden;
-}
-.bg-orbs::before {
-  content: '';
-  position: absolute;
-  top: -20%; left: -10%;
-  width: 60%; height: 60%;
-  background: radial-gradient(ellipse, rgba(123,47,255,0.12) 0%, transparent 70%);
-  animation: orbFloat 12s ease-in-out infinite alternate;
-}
-.bg-orbs::after {
-  content: '';
-  position: absolute;
-  bottom: -20%; right: -10%;
-  width: 50%; height: 50%;
-  background: radial-gradient(ellipse, rgba(255,45,85,0.08) 0%, transparent 70%);
-  animation: orbFloat 16s ease-in-out infinite alternate-reverse;
-}
-@keyframes orbFloat {
-  from { transform: translate(0, 0) scale(1); }
-  to   { transform: translate(4%, 6%) scale(1.08); }
-}
+/* ── MOBILE TOGGLE ── */
+.mob-toggle{display:none;position:fixed;top:14px;left:14px;z-index:200;width:38px;height:38px;background:var(--bg3);border:1px solid var(--b2);border-radius:10px;align-items:center;justify-content:center;cursor:pointer;font-size:18px}
+.sidebar-overlay{display:none;position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)}
 
-/* ── NOISE GRAIN ── */
-.grain-overlay {
-  position: fixed; inset: 0; pointer-events: none; z-index: 1;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-size: 128px;
-}
-
-/* ── LAYOUT PRINCIPAL ── */
-#app {
-  position: relative; z-index: 2;
-  display: flex;
-  min-height: 100vh;
-}
-
-/* ══════════════════════════════════════════════
-   SIDEBAR
-══════════════════════════════════════════════ */
-.sidebar {
-  width: 260px;
-  min-height: 100vh;
-  background: rgba(8,8,16,0.85);
-  backdrop-filter: var(--blur);
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  left: 0; top: 0; bottom: 0;
-  z-index: 100;
-  padding: 0 0 24px;
-  transition: var(--transition);
-}
-
-.sidebar-logo {
-  padding: 28px 24px 24px;
-  border-bottom: 1px solid var(--border);
-}
-.sidebar-logo .logo-mark {
-  display: flex; align-items: center; gap: 12px;
-}
-.logo-icon {
-  width: 40px; height: 40px;
-  background: linear-gradient(135deg, var(--violet), var(--rouge));
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-  box-shadow: 0 0 20px rgba(123,47,255,0.4);
-}
-.logo-text {
-  line-height: 1.2;
-}
-.logo-text strong {
-  display: block;
-  font-weight: 800;
-  font-size: 16px;
-  background: linear-gradient(90deg, var(--violet), var(--rouge));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: 1px;
-}
-.logo-text span {
-  font-size: 10px;
-  color: var(--text-3);
-  font-weight: 400;
-  letter-spacing: 0.5px;
-}
-
-/* Device mini-card dans sidebar */
-.sidebar-device {
-  margin: 16px 16px 8px;
-  padding: 12px 14px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  display: none;
-}
-.sidebar-device.visible { display: block; }
-.sidebar-device .mac {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--violet);
-  letter-spacing: 1px;
-}
-.sidebar-device .key {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text);
-  letter-spacing: 3px;
-  margin-top: 2px;
-}
-.sidebar-device .status-pill {
-  display: inline-flex; align-items: center; gap: 5px;
-  margin-top: 6px;
-  padding: 3px 8px;
-  border-radius: 20px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-/* Nav items */
-.sidebar-nav {
-  flex: 1;
-  padding: 8px 12px;
-  overflow-y: auto;
-}
-.nav-section-label {
-  padding: 12px 12px 6px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  color: var(--text-3);
-  text-transform: uppercase;
-}
-.nav-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 11px 14px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: var(--transition);
-  color: var(--text-2);
-  font-size: 14px;
-  font-weight: 500;
-  user-select: none;
-  margin-bottom: 2px;
-}
-.nav-item:hover {
-  background: var(--surface-2);
-  color: var(--text);
-}
-.nav-item.active {
-  background: linear-gradient(135deg, rgba(123,47,255,0.18), rgba(255,45,85,0.08));
-  color: var(--text);
-  border: 1px solid rgba(123,47,255,0.3);
-}
-.nav-item .nav-icon {
-  width: 32px; height: 32px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 8px;
-  font-size: 16px;
-  background: var(--surface);
-  flex-shrink: 0;
-}
-.nav-item.active .nav-icon {
-  background: linear-gradient(135deg, var(--violet), var(--rouge));
-  box-shadow: 0 4px 12px rgba(123,47,255,0.3);
-}
-.nav-item .nav-badge {
-  margin-left: auto;
-  background: var(--rouge);
-  color: white;
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 20px;
-}
-
-.sidebar-footer {
-  padding: 12px;
-  border-top: 1px solid var(--border);
-  margin-top: auto;
-}
-.logout-btn {
-  display: flex; align-items: center; gap: 10px;
-  width: 100%; padding: 10px 14px;
-  background: rgba(255,45,85,0.08);
-  border: 1px solid rgba(255,45,85,0.2);
-  border-radius: 10px;
-  color: var(--rouge);
-  font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: var(--transition);
-}
-.logout-btn:hover { background: rgba(255,45,85,0.15); }
-
-/* ══════════════════════════════════════════════
-   MAIN CONTENT
-══════════════════════════════════════════════ */
-.main {
-  margin-left: 260px;
-  flex: 1;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.topbar {
-  position: sticky; top: 0; z-index: 50;
-  background: rgba(8,8,16,0.8);
-  backdrop-filter: var(--blur);
-  border-bottom: 1px solid var(--border);
-  padding: 0 32px;
-  height: 68px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.topbar-title {
-  font-size: 18px; font-weight: 700; letter-spacing: -0.3px;
-}
-.topbar-subtitle {
-  font-size: 12px; color: var(--text-2); margin-top: 1px;
-}
-.topbar-actions {
-  display: flex; align-items: center; gap: 12px;
-}
-.topbar-refresh {
-  width: 36px; height: 36px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: var(--transition);
-  font-size: 16px;
-}
-.topbar-refresh:hover { background: var(--surface-2); }
-
-.content {
-  flex: 1;
-  padding: 32px;
-}
+/* ── MAIN ── */
+.main{margin-left:var(--sb);flex:1;min-height:100vh;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(7,7,15,.85);backdrop-filter:var(--blur);border-bottom:1px solid var(--b);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-size:17px;font-weight:800;letter-spacing:-.2px}
+.topbar-sub{font-size:11px;color:var(--t2);margin-top:1px}
+.topbar-actions{display:flex;align-items:center;gap:10px}
+.topbar-btn{width:34px;height:34px;background:var(--s);border:1px solid var(--b);border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--tr);font-size:15px}
+.topbar-btn:hover{background:var(--s2)}
+.admin-badge{padding:4px 10px;background:linear-gradient(135deg,var(--v),var(--r));border-radius:20px;font-size:10px;font-weight:800;letter-spacing:1px}
+.content{flex:1;padding:24px 28px;max-width:1400px;width:100%}
 
 /* ── SECTIONS ── */
-.section { display: none; animation: fadeSlideIn 0.35s cubic-bezier(0.4,0,0.2,1); }
-.section.active { display: block; }
-@keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+.section{display:none;animation:fadeUp .3s cubic-bezier(.4,0,.2,1)}
+.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── GLASS CARD ── */
-.card {
-  background: var(--glass);
-  backdrop-filter: var(--blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  position: relative;
-  overflow: hidden;
-}
-.card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
-  pointer-events: none;
-}
-.card-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-2);
-  letter-spacing: 0.5px;
-  margin-bottom: 8px;
-}
-.card-value {
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -1px;
-  line-height: 1;
-}
-.card-trend {
-  display: inline-flex; align-items: center; gap: 4px;
-  margin-top: 8px;
-  font-size: 12px;
-  font-weight: 600;
-}
-.card-trend.up { color: var(--green); }
-.card-trend.down { color: var(--rouge); }
+/* ── CARDS ── */
+.card{background:rgba(255,255,255,.03);backdrop-filter:var(--blur);border:1px solid var(--b);border-radius:var(--r16);padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.03) 0%,transparent 60%);pointer-events:none}
+.card-title{font-size:12px;font-weight:700;color:var(--t2);letter-spacing:.5px;margin-bottom:6px}
+.card-val{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1}
+.card-sub{font-size:11px;color:var(--t3);margin-top:6px;display:flex;align-items:center;gap:4px}
+.card-sub.up{color:var(--g)} .card-sub.warn{color:var(--gold)} .card-sub.danger{color:var(--r)}
 
 /* ── GRIDS ── */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+/* ── SECTION HEADER ── */
+.sh{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap}
+.sh h2{font-size:19px;font-weight:800;letter-spacing:-.3px}
+.sh p{font-size:12px;color:var(--t2);margin-top:3px}
 
-/* ── TABLES ── */
-.table-wrap {
-  overflow-x: auto;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-}
-table {
-  width: 100%; border-collapse: collapse;
-  font-size: 13px;
-}
-thead tr {
-  background: rgba(255,255,255,0.03);
-  border-bottom: 1px solid var(--border);
-}
-thead th {
-  padding: 12px 16px;
-  text-align: left;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: var(--text-3);
-  white-space: nowrap;
-}
-tbody tr {
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  transition: var(--transition);
-}
-tbody tr:last-child { border-bottom: none; }
-tbody tr:hover { background: var(--surface); }
-tbody td {
-  padding: 14px 16px;
-  color: var(--text-2);
-  vertical-align: middle;
-}
-tbody td:first-child { color: var(--text); }
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;border-radius:var(--r12);border:1px solid var(--b)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead tr{background:rgba(255,255,255,.03);border-bottom:1px solid var(--b)}
+thead th{padding:10px 14px;text-align:left;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);white-space:nowrap}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:var(--tr)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--s)}
+tbody td{padding:12px 14px;color:var(--t2);vertical-align:middle}
+tbody td:first-child{color:var(--t)}
 
 /* ── BADGES ── */
-.badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-.badge-active    { background: rgba(0,230,118,0.12); color: #00e676; border: 1px solid rgba(0,230,118,0.25); }
-.badge-trial     { background: rgba(255,215,64,0.12); color: #ffd740; border: 1px solid rgba(255,215,64,0.25); }
-.badge-expired   { background: rgba(255,45,85,0.12); color: #ff2d55; border: 1px solid rgba(255,45,85,0.25); }
-.badge-suspended { background: rgba(255,152,0,0.12); color: #ff9800; border: 1px solid rgba(255,152,0,0.25); }
-.badge-xtream    { background: rgba(123,47,255,0.12); color: #7b2fff; border: 1px solid rgba(123,47,255,0.25); }
-.badge-m3u       { background: rgba(33,150,243,0.12); color: #2196f3; border: 1px solid rgba(33,150,243,0.25); }
-.badge-dot::before {
-  content: '';
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  display: block;
-}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.b-active{background:rgba(0,230,118,.1);color:#00e676;border:1px solid rgba(0,230,118,.2)}
+.b-trial{background:rgba(255,215,64,.1);color:#ffd740;border:1px solid rgba(255,215,64,.2)}
+.b-expired{background:rgba(255,45,85,.1);color:#ff2d55;border:1px solid rgba(255,45,85,.2)}
+.b-suspended{background:rgba(255,152,0,.1);color:#ff9800;border:1px solid rgba(255,152,0,.2)}
+.b-banned{background:rgba(255,45,85,.15);color:#ff2d55;border:1px solid rgba(255,45,85,.3)}
+.b-dot::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;display:block}
 
 /* ── BUTTONS ── */
-.btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: var(--transition);
-  border: none; outline: none; text-decoration: none;
-  user-select: none;
-}
-.btn-primary {
-  background: linear-gradient(135deg, var(--violet), var(--rouge));
-  color: white;
-  box-shadow: 0 4px 16px rgba(123,47,255,0.3);
-}
-.btn-primary:hover { box-shadow: 0 6px 24px rgba(123,47,255,0.5); transform: translateY(-1px); }
-.btn-ghost {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text-2);
-}
-.btn-ghost:hover { background: var(--surface-2); color: var(--text); }
-.btn-danger { background: rgba(255,45,85,0.12); border: 1px solid rgba(255,45,85,0.3); color: var(--rouge); }
-.btn-danger:hover { background: rgba(255,45,85,0.2); }
-.btn-sm { padding: 6px 12px; font-size: 11px; border-radius: 8px; }
-.btn-icon { width: 32px; height: 32px; padding: 0; justify-content: center; font-size: 15px; }
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--r12);font-size:12px;font-weight:700;cursor:pointer;transition:var(--tr);border:none;outline:none;font-family:inherit;white-space:nowrap}
+.btn-primary{background:linear-gradient(135deg,var(--v),var(--r));color:#fff;box-shadow:0 4px 14px rgba(123,47,255,.3)}
+.btn-primary:hover{box-shadow:0 6px 20px rgba(123,47,255,.5);transform:translateY(-1px)}
+.btn-ghost{background:var(--s);border:1px solid var(--b);color:var(--t2)}
+.btn-ghost:hover{background:var(--s2);color:var(--t)}
+.btn-danger{background:rgba(255,45,85,.1);border:1px solid rgba(255,45,85,.25);color:var(--r)}
+.btn-danger:hover{background:rgba(255,45,85,.2)}
+.btn-success{background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.25);color:var(--g)}
+.btn-success:hover{background:rgba(0,230,118,.2)}
+.btn-sm{padding:5px 11px;font-size:10px;border-radius:8px}
+.btn-icon{width:30px;height:30px;padding:0;justify-content:center;font-size:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
 
 /* ── FORMS ── */
-.form-group { margin-bottom: 16px; }
-.form-label {
-  display: block;
-  font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
-  color: var(--text-2);
-  margin-bottom: 8px;
-}
-.form-input {
-  width: 100%; padding: 12px 16px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--text);
-  font-size: 13px;
-  font-family: inherit;
-  transition: var(--transition);
-  outline: none;
-}
-.form-input:focus { border-color: var(--violet); background: rgba(123,47,255,0.06); box-shadow: 0 0 0 3px rgba(123,47,255,0.12); }
-.form-input::placeholder { color: var(--text-3); }
-.form-input-mono { font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; }
-.form-select {
-  width: 100%; padding: 12px 16px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--text);
-  font-size: 13px;
-  font-family: inherit;
-  outline: none; cursor: pointer;
-  appearance: none;
-}
-.form-select option { background: var(--bg-3); }
-.radio-group { display: flex; gap: 10px; }
-.radio-card {
-  flex: 1; padding: 12px 16px;
-  background: var(--surface);
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  cursor: pointer; transition: var(--transition);
-  text-align: center; font-size: 13px; font-weight: 600;
-}
-.radio-card:hover { border-color: rgba(123,47,255,0.4); }
-.radio-card.selected { border-color: var(--violet); background: rgba(123,47,255,0.08); color: var(--violet); }
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--t2);margin-bottom:7px}
+.form-input{width:100%;padding:11px 14px;background:rgba(255,255,255,.05);border:1px solid var(--b);border-radius:var(--r12);color:var(--t);font-size:12px;font-family:inherit;transition:var(--tr);outline:none}
+.form-input:focus{border-color:var(--v);background:rgba(123,47,255,.06);box-shadow:0 0 0 3px rgba(123,47,255,.1)}
+.form-input::placeholder{color:var(--t3)}
+.mono{font-family:'JetBrains Mono',monospace;letter-spacing:1px}
+.form-select{width:100%;padding:11px 14px;background:rgba(255,255,255,.05);border:1px solid var(--b);border-radius:var(--r12);color:var(--t);font-size:12px;font-family:inherit;outline:none;cursor:pointer;appearance:none}
+.form-select option{background:var(--bg3)}
+.radio-group{display:flex;gap:8px}
+.radio-card{flex:1;padding:10px 14px;background:var(--s);border:2px solid var(--b);border-radius:var(--r12);cursor:pointer;transition:var(--tr);text-align:center;font-size:12px;font-weight:700}
+.radio-card:hover{border-color:rgba(123,47,255,.4)}
+.radio-card.selected{border-color:var(--v);background:rgba(123,47,255,.08);color:var(--v)}
+
+/* ── SEARCH ── */
+.search-wrap{position:relative;flex:1;max-width:320px}
+.search-wrap input{padding-left:36px}
+.search-wrap::before{content:'🔍';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none}
 
 /* ── MODAL ── */
-.modal-overlay {
-  position: fixed; inset: 0; z-index: 1000;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(8px);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-.modal-overlay.open { opacity: 1; pointer-events: auto; }
-.modal {
-  background: var(--bg-3);
-  border: 1px solid var(--border-2);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-  width: 100%;
-  max-width: 520px;
-  max-height: 90vh;
-  overflow-y: auto;
-  transform: scale(0.95) translateY(10px);
-  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-}
-.modal-overlay.open .modal { transform: scale(1) translateY(0); }
-.modal-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 24px;
-}
-.modal-title { font-size: 18px; font-weight: 700; }
-.modal-close {
-  width: 32px; height: 32px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 8px; display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: var(--transition); font-size: 18px; color: var(--text-2);
-}
-.modal-close:hover { background: var(--surface-2); color: var(--text); }
-.modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+.modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal{background:var(--bg3);border:1px solid var(--b2);border-radius:var(--r24);padding:24px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;transform:scale(.96) translateY(8px);transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.modal-overlay.open .modal{transform:scale(1) translateY(0)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:17px;font-weight:800}
+.modal-close{width:30px;height:30px;background:var(--s);border:1px solid var(--b);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--tr);font-size:16px;color:var(--t2)}
+.modal-close:hover{background:var(--s2);color:var(--t)}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
 
 /* ── TOAST ── */
-#toast-container {
-  position: fixed; bottom: 24px; right: 24px;
-  z-index: 9999; display: flex; flex-direction: column; gap: 8px;
-}
-.toast {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 18px;
-  background: rgba(20,20,35,0.95);
-  border: 1px solid var(--border-2);
-  border-radius: 14px;
-  backdrop-filter: blur(20px);
-  font-size: 13px; font-weight: 500;
-  min-width: 280px; max-width: 380px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-  transform: translateX(120%);
-  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.3s;
-  opacity: 0;
-}
-.toast.show { transform: translateX(0); opacity: 1; }
-.toast.hide { transform: translateX(120%); opacity: 0; }
-.toast-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-.toast-success .toast-icon { background: rgba(0,230,118,0.15); }
-.toast-error   .toast-icon { background: rgba(255,45,85,0.15); }
-.toast-info    .toast-icon { background: rgba(123,47,255,0.15); }
-.toast-warning .toast-icon { background: rgba(255,215,64,0.15); }
-.toast-text strong { display: block; margin-bottom: 1px; }
-.toast-text small { color: var(--text-3); font-size: 11px; }
-.toast-progress {
-  position: absolute; bottom: 0; left: 0;
-  height: 2px; border-radius: 0 0 14px 14px;
-  transition: width linear;
-}
-.toast-success .toast-progress { background: var(--green); }
-.toast-error   .toast-progress { background: var(--rouge); }
-.toast-info    .toast-progress { background: var(--violet); }
-.toast-warning .toast-progress { background: var(--gold); }
+#toasts{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:7px;pointer-events:none}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(18,18,38,.97);border:1px solid var(--b2);border-radius:14px;backdrop-filter:blur(20px);font-size:12px;font-weight:600;min-width:240px;max-width:340px;box-shadow:0 8px 28px rgba(0,0,0,.5);transform:translateX(110%);transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s;opacity:0;pointer-events:auto}
+.toast.show{transform:translateX(0);opacity:1}
+.toast.hide{transform:translateX(110%);opacity:0}
+.t-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.toast-success .t-icon{background:rgba(0,230,118,.12)}
+.toast-error   .t-icon{background:rgba(255,45,85,.12)}
+.toast-info    .t-icon{background:rgba(123,47,255,.12)}
+.toast-warning .t-icon{background:rgba(255,215,64,.12)}
+.t-text strong{display:block;margin-bottom:1px}
+.t-text small{color:var(--t3);font-size:10px}
 
-/* ══════════════════════════════════════════════
-   LOGIN SCREEN
-══════════════════════════════════════════════ */
-#login-screen {
-  position: fixed; inset: 0; z-index: 500;
-  background: var(--bg);
-  display: flex; align-items: center; justify-content: center;
-  padding: 20px;
-}
-#login-screen.hidden { display: none; }
-.login-box {
-  width: 100%; max-width: 420px;
-  animation: fadeSlideIn 0.5s cubic-bezier(0.4,0,0.2,1);
-}
-.login-logo {
-  text-align: center; margin-bottom: 40px;
-}
-.login-logo .glow-ring {
-  width: 72px; height: 72px; margin: 0 auto 16px;
-  background: linear-gradient(135deg, var(--violet), var(--rouge));
-  border-radius: 20px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 32px;
-  box-shadow: 0 0 40px rgba(123,47,255,0.5), 0 0 80px rgba(123,47,255,0.2);
-  position: relative;
-}
-.login-logo .glow-ring::after {
-  content: '';
-  position: absolute; inset: -4px;
-  border-radius: 24px;
-  border: 1px solid rgba(123,47,255,0.4);
-  animation: ringPulse 2s ease-in-out infinite;
-}
-@keyframes ringPulse {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.03); }
-}
-.login-logo h1 {
-  font-size: 28px; font-weight: 800; letter-spacing: 2px;
-  background: linear-gradient(90deg, var(--violet), var(--rouge));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-.login-logo p { color: var(--text-3); font-size: 13px; margin-top: 4px; }
-.login-card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border-2);
-  border-radius: 24px;
-  padding: 32px;
-  backdrop-filter: blur(20px);
-}
-.login-divider {
-  display: flex; align-items: center; gap: 12px;
-  margin: 20px 0;
-  color: var(--text-3); font-size: 11px;
-}
-.login-divider::before, .login-divider::after {
-  content: ''; flex: 1; height: 1px; background: var(--border);
-}
-.login-submit {
-  width: 100%; padding: 14px;
-  background: linear-gradient(135deg, var(--violet), var(--rouge));
-  color: white; border: none; border-radius: 12px;
-  font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
-  cursor: pointer; transition: var(--transition);
-  font-family: inherit;
-}
-.login-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(123,47,255,0.4); }
-.login-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+/* ── LOGIN ── */
+#login-screen{position:fixed;inset:0;z-index:500;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px}
+#login-screen.hidden{display:none}
+.login-box{width:100%;max-width:400px;animation:fadeUp .5s cubic-bezier(.4,0,.2,1)}
+.login-logo{text-align:center;margin-bottom:32px}
+.glow-ring{width:68px;height:68px;margin:0 auto 14px;background:linear-gradient(135deg,var(--v),var(--r));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 0 40px rgba(123,47,255,.5);position:relative}
+.glow-ring::after{content:'';position:absolute;inset:-4px;border-radius:24px;border:1px solid rgba(123,47,255,.4);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:.7;transform:scale(1.03)}}
+.login-logo h1{font-size:26px;font-weight:800;letter-spacing:2px;background:linear-gradient(90deg,var(--v),var(--r));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.login-logo p{color:var(--t3);font-size:12px;margin-top:3px}
+.login-card{background:rgba(255,255,255,.04);border:1px solid var(--b2);border-radius:var(--r24);padding:28px;backdrop-filter:blur(20px)}
+.login-tabs{display:flex;gap:3px;margin-bottom:20px;background:var(--s);padding:3px;border-radius:10px}
+.login-tab{flex:1;padding:7px;text-align:center;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;color:var(--t2);transition:var(--tr)}
+.login-tab.active{background:linear-gradient(135deg,var(--v),var(--r));color:#fff}
+.login-submit{width:100%;padding:13px;background:linear-gradient(135deg,var(--v),var(--r));color:#fff;border:none;border-radius:var(--r12);font-size:13px;font-weight:800;letter-spacing:.5px;cursor:pointer;transition:var(--tr);font-family:inherit}
+.login-submit:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(123,47,255,.4)}
+.login-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.login-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--t3);font-size:10px}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--b)}
 
-/* ── Separateur tabs de login ── */
-.login-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: var(--surface); padding: 4px; border-radius: 10px; }
-.login-tab { flex: 1; padding: 8px; text-align: center; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--text-2); transition: var(--transition); }
-.login-tab.active { background: linear-gradient(135deg, var(--violet), var(--rouge)); color: white; }
+/* ── STAT CARD GLOW ── */
+.stat-card .glow{position:absolute;top:-15px;right:-15px;width:70px;height:70px;border-radius:50%;filter:blur(28px);opacity:.25}
+.stat-card .s-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:10px}
 
-/* ══════════════════════════════════════════════
-   SECTION DASHBOARD
-══════════════════════════════════════════════ */
-.stat-card {
-  position: relative; overflow: hidden;
-}
-.stat-card .card-glow {
-  position: absolute; top: -20px; right: -20px;
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  filter: blur(30px);
-  opacity: 0.3;
-}
-.stat-card .card-icon {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-  margin-bottom: 12px;
-}
-.chart-container { position: relative; height: 260px; }
+/* ── DEVICE CARD (admin) ── */
+.user-row{cursor:pointer}
+.user-row:hover td{color:var(--t)!important}
+.action-cell{white-space:nowrap;display:flex;gap:5px}
 
-/* ══════════════════════════════════════════════
-   SECTION PLAYLISTS
-══════════════════════════════════════════════ */
-.playlist-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  background: var(--surface);
-  transition: var(--transition);
-  cursor: pointer;
-}
-.playlist-card:hover { border-color: rgba(123,47,255,0.3); background: var(--surface-2); transform: translateY(-2px); }
-.playlist-card .pc-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
-.playlist-card .pc-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-.playlist-card .pc-host { font-size: 11px; color: var(--text-3); font-family: 'JetBrains Mono', monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; }
-.playlist-card .pc-stats { display: flex; gap: 16px; margin-top: 14px; }
-.playlist-card .pc-stat { text-align: center; }
-.playlist-card .pc-stat-val { font-size: 18px; font-weight: 800; }
-.playlist-card .pc-stat-lbl { font-size: 10px; color: var(--text-3); font-weight: 500; margin-top: 2px; }
-.playlists-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-.add-playlist-card {
-  border: 2px dashed var(--border);
-  border-radius: var(--radius);
-  padding: 40px 20px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 10px; cursor: pointer; transition: var(--transition);
-  color: var(--text-3);
-}
-.add-playlist-card:hover { border-color: var(--violet); color: var(--violet); background: rgba(123,47,255,0.04); }
-.add-playlist-card .plus-icon { font-size: 28px; }
-.add-playlist-card span { font-size: 13px; font-weight: 600; }
+/* ── DEVICE HERO ── */
+.device-hero{background:linear-gradient(135deg,rgba(123,47,255,.1),rgba(255,45,85,.05));border:1px solid rgba(123,47,255,.2);border-radius:var(--r16);padding:28px;text-align:center;margin-bottom:20px}
+.device-mac{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;letter-spacing:3px;color:var(--v);margin:6px 0;word-break:break-all}
+.device-key{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:800;letter-spacing:6px;background:linear-gradient(90deg,var(--v),var(--r));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
-/* ══════════════════════════════════════════════
-   SECTION DEVICE
-══════════════════════════════════════════════ */
-.device-hero {
-  background: linear-gradient(135deg, rgba(123,47,255,0.1), rgba(255,45,85,0.05));
-  border: 1px solid rgba(123,47,255,0.2);
-  border-radius: var(--radius-lg);
-  padding: 32px;
-  text-align: center;
-  margin-bottom: 24px;
-}
-.device-mac {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 22px; font-weight: 700; letter-spacing: 3px;
-  color: var(--violet); margin: 8px 0;
-}
-.device-key {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 36px; font-weight: 800; letter-spacing: 6px;
-  background: linear-gradient(90deg, var(--violet), var(--rouge));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-#qr-container {
-  display: flex; justify-content: center;
-  background: white;
-  border-radius: 16px;
-  padding: 16px;
-  width: fit-content; margin: 0 auto;
-}
+/* ── BILLING ── */
+.plan-card{border:1px solid var(--b);border-radius:var(--r16);padding:24px;transition:var(--tr);position:relative;overflow:hidden}
+.plan-card.rec{border-color:var(--v);background:linear-gradient(135deg,rgba(123,47,255,.08),rgba(255,45,85,.04))}
+.rec-badge{position:absolute;top:14px;right:14px;background:linear-gradient(135deg,var(--v),var(--r));color:#fff;font-size:9px;font-weight:800;padding:3px 9px;border-radius:20px}
+.plan-price{font-size:36px;font-weight:800;line-height:1;margin:14px 0 3px}
+.plan-price sup{font-size:16px;font-weight:600;vertical-align:top;margin-top:6px}
+.plan-price span{font-size:14px;font-weight:400;color:var(--t3)}
+.feat-list{list-style:none;margin-top:16px}
+.feat-list li{padding:7px 0;font-size:12px;color:var(--t2);border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:center;gap:7px}
+.feat-list li:last-child{border:none}
+.fi{color:var(--g);font-size:12px} .fi.no{color:var(--r)}
 
-/* ══════════════════════════════════════════════
-   SECTION BILLING
-══════════════════════════════════════════════ */
-.plan-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-  transition: var(--transition);
-  position: relative; overflow: hidden;
-}
-.plan-card.recommended {
-  border-color: var(--violet);
-  background: linear-gradient(135deg, rgba(123,47,255,0.08), rgba(255,45,85,0.04));
-}
-.plan-card .recommended-badge {
-  position: absolute; top: 16px; right: 16px;
-  background: linear-gradient(135deg, var(--violet), var(--rouge));
-  color: white; font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
-  padding: 4px 10px; border-radius: 20px;
-}
-.plan-price {
-  font-size: 40px; font-weight: 800; line-height: 1;
-  margin: 16px 0 4px;
-}
-.plan-price sup { font-size: 18px; font-weight: 600; vertical-align: top; margin-top: 8px; }
-.plan-price span { font-size: 16px; font-weight: 400; color: var(--text-3); }
-.plan-features { list-style: none; margin-top: 20px; }
-.plan-features li {
-  padding: 8px 0; font-size: 13px; color: var(--text-2);
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  display: flex; align-items: center; gap: 8px;
-}
-.plan-features li:last-child { border-bottom: none; }
-.plan-features .feat-icon { color: var(--green); font-size: 14px; }
-.plan-features .feat-icon.no { color: var(--rouge); }
+/* ── TIMELINE ── */
+.timeline{position:relative}
+.timeline::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:1px;background:var(--b)}
+.tl-item{display:flex;gap:14px;padding:10px 0}
+.tl-dot{width:28px;height:28px;border-radius:50%;background:var(--s);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;z-index:1;position:relative}
+.tl-date{font-size:10px;color:var(--t3);margin-top:2px}
 
-/* ── Timeline historique ── */
-.timeline { position: relative; }
-.timeline::before { content: ''; position: absolute; left: 16px; top: 0; bottom: 0; width: 1px; background: var(--border); }
-.timeline-item { display: flex; gap: 16px; padding: 12px 0; }
-.timeline-dot {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--surface); border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; flex-shrink: 0; z-index: 1; position: relative;
+/* ── LOADING ── */
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.1);border-top-color:var(--v);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-center{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px;gap:14px;color:var(--t3)}
+.empty{text-align:center;padding:48px 20px;color:var(--t3)}
+.empty .ei{font-size:40px;margin-bottom:14px;opacity:.35}
+.empty h3{font-size:15px;font-weight:700;color:var(--t2);margin-bottom:6px}
+.empty p{font-size:12px;margin-bottom:16px}
+
+/* ── PLAYLISTS ── */
+.pl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.pl-card{border:1px solid var(--b);border-radius:var(--r12);padding:18px;background:var(--s);transition:var(--tr);cursor:pointer}
+.pl-card:hover{border-color:rgba(123,47,255,.3);background:var(--s2);transform:translateY(-2px)}
+.pl-name{font-size:14px;font-weight:700;margin-bottom:3px}
+.pl-host{font-size:10px;color:var(--t3);font-family:'JetBrains Mono',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-stats{display:flex;gap:14px;margin-top:12px}
+.pl-stat-val{font-size:16px;font-weight:800}
+.pl-stat-lbl{font-size:9px;color:var(--t3);font-weight:600;margin-top:1px}
+.add-pl{border:2px dashed var(--b);border-radius:var(--r12);padding:36px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:var(--tr);color:var(--t3)}
+.add-pl:hover{border-color:var(--v);color:var(--v);background:rgba(123,47,255,.04)}
+
+/* ── PAGINATION ── */
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:16px}
+.page-btn{width:32px;height:32px;background:var(--s);border:1px solid var(--b);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--tr);font-size:12px;font-weight:700;color:var(--t2)}
+.page-btn:hover{background:var(--s2);color:var(--t)}
+.page-btn.active{background:linear-gradient(135deg,var(--v),var(--r));color:#fff;border-color:transparent}
+.page-btn:disabled{opacity:.3;cursor:not-allowed}
+.page-info{font-size:11px;color:var(--t3);padding:0 8px}
+
+/* ── CHART ── */
+.chart-wrap{position:relative;height:220px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  :root{--sb:0px}
+  .sidebar{transform:translateX(-260px);width:260px}
+  .sidebar.mob-open{transform:translateX(0)}
+  .sidebar-overlay.show{display:block}
+  .mob-toggle{display:flex}
+  .main{margin-left:0}
+  .topbar{padding:0 16px 0 62px}
+  .content{padding:16px}
+  .g2,.g3{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .device-key{font-size:22px;letter-spacing:3px}
+  .device-mac{font-size:15px}
 }
-.timeline-content { flex: 1; }
-.timeline-date { font-size: 11px; color: var(--text-3); margin-top: 3px; }
-
-/* ── Loading spinner ── */
-.spinner {
-  width: 20px; height: 20px;
-  border: 2px solid rgba(255,255,255,0.1);
-  border-top-color: var(--violet);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  display: inline-block;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-overlay {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 60px 20px; gap: 16px; color: var(--text-3);
-}
-
-/* ── Empty state ── */
-.empty-state {
-  text-align: center; padding: 60px 20px;
-  color: var(--text-3);
-}
-.empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
-.empty-state h3 { font-size: 16px; font-weight: 600; color: var(--text-2); margin-bottom: 8px; }
-.empty-state p { font-size: 13px; margin-bottom: 20px; }
-
-/* ── Divider ── */
-.divider { height: 1px; background: var(--border); margin: 24px 0; }
-
-/* ── Mono value ── */
-.mono { font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; }
-
-/* ── Section header ── */
-.section-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 20px;
-}
-.section-header h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
-.section-header p { font-size: 13px; color: var(--text-2); margin-top: 3px; }
-
-/* ─ Responsive ─ */
-@media (max-width: 900px) {
-  .sidebar { transform: translateX(-100%); }
-  .sidebar.open { transform: translateX(0); }
-  .main { margin-left: 0; }
-  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+@media(max-width:420px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .card-val{font-size:24px}
 }
 </style>
 </head>
 <body>
-
-<!-- BACKGROUND -->
 <div class="bg-orbs"></div>
-<div class="grain-overlay"></div>
+<div class="grain"></div>
+<div id="toasts"></div>
 
-<!-- TOAST CONTAINER -->
-<div id="toast-container"></div>
+<!-- MOBILE TOGGLE -->
+<div class="mob-toggle" id="mob-toggle" onclick="toggleSidebar()">☰</div>
+<div class="sidebar-overlay" id="sb-overlay" onclick="toggleSidebar()"></div>
 
-<!-- ══════════════════════════════════════════════
-     LOGIN SCREEN
-══════════════════════════════════════════════ -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">
@@ -844,30 +300,20 @@ tbody td:first-child { color: var(--text); }
     </div>
     <div class="login-card">
       <div class="login-tabs">
-        <div class="login-tab active" onclick="switchLoginTab('mac')">🔑 MAC / Clé</div>
-        <div class="login-tab" onclick="switchLoginTab('admin')">🛡️ Admin</div>
+        <div class="login-tab active" onclick="switchTab('mac')">🔑 MAC / Clé</div>
+        <div class="login-tab" onclick="switchTab('admin')">🛡️ Admin</div>
       </div>
-
-      <!-- TAB MAC/KEY -->
       <div id="tab-mac">
         <div class="form-group">
           <label class="form-label">Adresse MAC virtuelle</label>
-          <input type="text" id="login-mac" class="form-input form-input-mono"
-            placeholder="AB:CD:EF:12:34:56" maxlength="17"
-            oninput="formatMacInput(this)">
+          <input type="text" id="login-mac" class="form-input mono" placeholder="AB:CD:EF:12:34:56" maxlength="17" oninput="fmtMac(this)">
         </div>
         <div class="form-group">
-          <label class="form-label">Clé d'activation (Device Key)</label>
-          <input type="text" id="login-key" class="form-input form-input-mono"
-            placeholder="A1B2C3D4" maxlength="8"
-            oninput="this.value = this.value.toUpperCase()">
+          <label class="form-label">Clé d'activation</label>
+          <input type="text" id="login-key" class="form-input mono" placeholder="A1B2C3D4" maxlength="8" oninput="this.value=this.value.toUpperCase()">
         </div>
-        <button class="login-submit" id="btn-login-mac" onclick="loginWithMacKey()">
-          Accéder à mon panel
-        </button>
+        <button class="login-submit" id="btn-mac" onclick="loginMac()">Accéder à mon panel</button>
       </div>
-
-      <!-- TAB ADMIN -->
       <div id="tab-admin" style="display:none">
         <div class="form-group">
           <label class="form-label">Email administrateur</label>
@@ -875,404 +321,300 @@ tbody td:first-child { color: var(--text); }
         </div>
         <div class="form-group">
           <label class="form-label">Mot de passe</label>
-          <input type="password" id="login-password" class="form-input" placeholder="••••••••">
+          <input type="password" id="login-pass" class="form-input" placeholder="••••••••">
         </div>
-        <button class="login-submit" id="btn-login-admin" onclick="loginAdmin()">
-          Connexion Admin
-        </button>
+        <button class="login-submit" id="btn-admin" onclick="loginAdmin()">Connexion Admin</button>
       </div>
-
-      <div class="login-divider">Mode d'accès sécurisé</div>
-      <p style="text-align:center;font-size:11px;color:var(--text-3)">
-        Votre MAC et Clé sont affichées dans l'application ARICH IPTV.<br>
-        Aucun mot de passe requis pour l'accès utilisateur.
-      </p>
+      <div class="login-divider">Accès sécurisé</div>
+      <p style="text-align:center;font-size:10px;color:var(--t3)">Votre MAC et Clé sont affichées dans l'application ARICH IPTV</p>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     APP PRINCIPAL
-══════════════════════════════════════════════ -->
+<!-- APP -->
 <div id="app" style="display:none">
-  <!-- SIDEBAR -->
   <nav class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-mark">
-        <div class="logo-icon">📡</div>
-        <div class="logo-text">
-          <strong>ARICH IPTV</strong>
-          <span>Panel de gestion</span>
-        </div>
+    <div class="sb-logo">
+      <div class="logo-icon">📡</div>
+      <div class="logo-text">
+        <strong>ARICH IPTV</strong>
+        <span id="sb-role-label">Panel utilisateur</span>
       </div>
     </div>
-
-    <!-- Device mini info -->
-    <div class="sidebar-device" id="sidebar-device-card">
-      <div class="mac" id="sidebar-mac">—</div>
-      <div class="key" id="sidebar-key">——————</div>
-      <div class="status-pill badge badge-trial" id="sidebar-status">ESSAI</div>
+    <div class="sb-device" id="sb-device">
+      <div class="mac" id="sb-mac">—</div>
+      <div class="key" id="sb-key">——</div>
+      <div style="margin-top:5px" id="sb-status-pill"></div>
     </div>
-
-    <nav class="sidebar-nav">
-      <div class="nav-section-label">Navigation</div>
-      <div class="nav-item active" onclick="navigate('dashboard')">
-        <div class="nav-icon">📊</div>
-        <span>Dashboard</span>
+    <nav class="sb-nav">
+      <!-- User nav -->
+      <div id="nav-user">
+        <div class="nav-lbl">Navigation</div>
+        <div class="nav-item active" onclick="go('dashboard')"><div class="nav-icon">📊</div><span>Dashboard</span></div>
+        <div class="nav-item" onclick="go('playlists')"><div class="nav-icon">📋</div><span>Playlists</span><span class="nav-badge" id="pl-badge" style="display:none">0</span></div>
+        <div class="nav-item" onclick="go('device')"><div class="nav-icon">📱</div><span>Mon Appareil</span></div>
+        <div class="nav-item" onclick="go('billing')"><div class="nav-icon">💳</div><span>Abonnement</span></div>
       </div>
-      <div class="nav-item" onclick="navigate('playlists')">
-        <div class="nav-icon">📋</div>
-        <span>Playlists</span>
-        <span class="nav-badge" id="nav-badge-playlists" style="display:none">0</span>
-      </div>
-      <div class="nav-item" onclick="navigate('device')">
-        <div class="nav-icon">📱</div>
-        <span>Mon Appareil</span>
-      </div>
-      <div class="nav-item" onclick="navigate('billing')">
-        <div class="nav-icon">💳</div>
-        <span>Abonnement</span>
+      <!-- Admin nav -->
+      <div id="nav-admin" style="display:none">
+        <div class="nav-lbl">Admin</div>
+        <div class="nav-item active" onclick="go('adash')"><div class="nav-icon">📊</div><span>Dashboard</span></div>
+        <div class="nav-item" onclick="go('users')"><div class="nav-icon">👥</div><span>Utilisateurs</span></div>
+        <div class="nav-item" onclick="go('alicenses')"><div class="nav-icon">🔑</div><span>Licences</span></div>
       </div>
     </nav>
-
-    <div class="sidebar-footer">
-      <button class="logout-btn" onclick="logout()">
-        <span>⬅️</span> Déconnexion
-      </button>
+    <div class="sb-footer">
+      <button class="logout-btn" onclick="logout()">⬅️ Déconnexion</button>
     </div>
   </nav>
 
-  <!-- MAIN -->
   <main class="main">
-    <!-- TOPBAR -->
     <header class="topbar">
       <div>
-        <div class="topbar-title" id="topbar-title">Dashboard</div>
-        <div class="topbar-subtitle" id="topbar-subtitle">Vue d'ensemble de votre compte</div>
+        <div class="topbar-title" id="tb-title">Dashboard</div>
+        <div class="topbar-sub" id="tb-sub">Vue d'ensemble</div>
       </div>
       <div class="topbar-actions">
-        <div class="topbar-refresh" onclick="refreshCurrentSection()" title="Actualiser">🔄</div>
+        <span class="admin-badge" id="admin-badge" style="display:none">🛡️ ADMIN</span>
+        <div class="topbar-btn" onclick="refresh()" title="Actualiser">🔄</div>
       </div>
     </header>
 
-    <!-- CONTENT -->
     <div class="content">
-
-      <!-- ═══ DASHBOARD ═══ -->
+      <!-- ═══ DASHBOARD USER ═══ -->
       <div class="section active" id="section-dashboard">
-        <!-- Stats grid -->
-        <div class="stats-grid" id="stats-grid">
-          <div class="card stat-card" style="--accent: var(--violet)">
-            <div class="card-glow" style="background:var(--violet)"></div>
-            <div class="card-icon" style="background:rgba(123,47,255,0.12)">📡</div>
-            <div class="card-title">Chaînes Live</div>
-            <div class="card-value" id="stat-live">—</div>
-            <div class="card-trend up" id="stat-live-trend">En direct</div>
-          </div>
-          <div class="card stat-card">
-            <div class="card-glow" style="background:var(--rouge)"></div>
-            <div class="card-icon" style="background:rgba(255,45,85,0.12)">🎬</div>
-            <div class="card-title">Films VOD</div>
-            <div class="card-value" id="stat-movies">—</div>
-          </div>
-          <div class="card stat-card">
-            <div class="card-glow" style="background:#2196f3"></div>
-            <div class="card-icon" style="background:rgba(33,150,243,0.12)">📺</div>
-            <div class="card-title">Séries</div>
-            <div class="card-value" id="stat-series">—</div>
-          </div>
-          <div class="card stat-card">
-            <div class="card-glow" style="background:var(--gold)"></div>
-            <div class="card-icon" style="background:rgba(255,215,64,0.12)">📋</div>
-            <div class="card-title">Playlists</div>
-            <div class="card-value" id="stat-playlists">—</div>
-          </div>
+        <div class="stats-grid" id="u-stats-grid">
+          <div class="card stat-card"><div class="glow" style="background:var(--v)"></div><div class="s-icon" style="background:rgba(123,47,255,.12)">📡</div><div class="card-title">Chaînes Live</div><div class="card-val" id="u-live">—</div></div>
+          <div class="card stat-card"><div class="glow" style="background:var(--r)"></div><div class="s-icon" style="background:rgba(255,45,85,.12)">🎬</div><div class="card-title">Films VOD</div><div class="card-val" id="u-movies">—</div></div>
+          <div class="card stat-card"><div class="glow" style="background:#2196f3"></div><div class="s-icon" style="background:rgba(33,150,243,.12)">📺</div><div class="card-title">Séries</div><div class="card-val" id="u-series">—</div></div>
+          <div class="card stat-card"><div class="glow" style="background:var(--gold)"></div><div class="s-icon" style="background:rgba(255,215,64,.12)">📋</div><div class="card-title">Playlists</div><div class="card-val" id="u-pls">—</div></div>
         </div>
-
-        <!-- Charts row -->
-        <div class="grid-2" style="margin-bottom:24px">
+        <div class="g2" style="margin-bottom:18px">
           <div class="card">
-            <div class="section-header" style="margin-bottom:16px">
-              <div>
-                <div class="card-title" style="margin:0">Licence</div>
-                <div style="font-size:13px;color:var(--text-2);margin-top:4px" id="chart-license-subtitle">Statut actuel</div>
-              </div>
-              <span class="badge badge-trial" id="license-status-badge">ESSAI</span>
+            <div class="sh" style="margin-bottom:12px">
+              <div><div class="card-title" style="margin:0">Licence</div><div style="font-size:12px;color:var(--t2);margin-top:3px" id="u-lic-sub">—</div></div>
+              <span class="badge b-trial" id="u-lic-badge">ESSAI</span>
             </div>
-            <div class="chart-container">
-              <canvas id="chart-license"></canvas>
-            </div>
+            <div class="chart-wrap"><canvas id="ch-license"></canvas></div>
           </div>
           <div class="card">
-            <div class="card-title" style="margin-bottom:16px">Répartition des contenus</div>
-            <div class="chart-container">
-              <canvas id="chart-content"></canvas>
-            </div>
+            <div class="card-title" style="margin-bottom:12px">Répartition contenus</div>
+            <div class="chart-wrap"><canvas id="ch-content"></canvas></div>
           </div>
         </div>
-
-        <!-- Infos licence -->
-        <div class="card" id="license-info-card">
-          <div class="section-header" style="margin-bottom:16px">
-            <div>
-              <div style="font-size:16px;font-weight:700">Votre abonnement</div>
-            </div>
-            <button class="btn btn-primary btn-sm" onclick="navigate('billing')">
-              ✨ Upgrader
-            </button>
+        <div class="card">
+          <div class="sh" style="margin-bottom:14px">
+            <div><div style="font-size:15px;font-weight:800">Votre abonnement</div></div>
+            <button class="btn btn-primary btn-sm" onclick="go('billing')">✨ Upgrader</button>
           </div>
-          <div class="grid-3">
-            <div>
-              <div style="font-size:11px;color:var(--text-3);margin-bottom:4px">Plan</div>
-              <div style="font-weight:700" id="info-plan">—</div>
-            </div>
-            <div>
-              <div style="font-size:11px;color:var(--text-3);margin-bottom:4px">Expire le</div>
-              <div style="font-weight:700" id="info-expires">—</div>
-            </div>
-            <div>
-              <div style="font-size:11px;color:var(--text-3);margin-bottom:4px">Appareil</div>
-              <div style="font-weight:700" id="info-device">—</div>
-            </div>
+          <div class="g3">
+            <div><div style="font-size:10px;color:var(--t3);margin-bottom:3px">Plan</div><div style="font-weight:800" id="u-plan">—</div></div>
+            <div><div style="font-size:10px;color:var(--t3);margin-bottom:3px">Expire le</div><div style="font-weight:800" id="u-expires">—</div></div>
+            <div><div style="font-size:10px;color:var(--t3);margin-bottom:3px">Appareil</div><div style="font-weight:800" id="u-device">—</div></div>
           </div>
         </div>
       </div>
 
       <!-- ═══ PLAYLISTS ═══ -->
       <div class="section" id="section-playlists">
-        <div class="section-header">
-          <div>
-            <h2>Mes Playlists</h2>
-            <p>Gérez vos sources Xtream Codes et M3U</p>
-          </div>
-          <button class="btn btn-primary" onclick="openAddPlaylist()">
-            ➕ Ajouter
-          </button>
+        <div class="sh">
+          <div><h2>Mes Playlists</h2><p>Gérez vos sources Xtream et M3U</p></div>
+          <button class="btn btn-primary" onclick="openAddPl()">➕ Ajouter</button>
         </div>
-
-        <div class="playlists-grid" id="playlists-grid">
-          <div class="loading-overlay">
-            <div class="spinner"></div>
-            <span>Chargement des playlists…</span>
-          </div>
-        </div>
+        <div class="pl-grid" id="pl-grid"><div class="loading-center"><div class="spinner"></div></div></div>
       </div>
 
       <!-- ═══ DEVICE ═══ -->
       <div class="section" id="section-device">
-        <div class="section-header">
-          <div>
-            <h2>Mon Appareil</h2>
-            <p>Identifiant hardware et informations techniques</p>
-          </div>
-        </div>
-
+        <div class="sh"><div><h2>Mon Appareil</h2><p>Identifiant hardware</p></div></div>
         <div class="device-hero">
-          <div style="font-size:11px;letter-spacing:2px;color:var(--text-3);text-transform:uppercase;margin-bottom:8px">Adresse MAC Virtuelle</div>
-          <div class="device-mac" id="device-mac-display">——:——:——:——:——:——</div>
-          <div style="font-size:11px;letter-spacing:2px;color:var(--text-3);text-transform:uppercase;margin:16px 0 8px">Clé d'activation</div>
-          <div class="device-key" id="device-key-display">————</div>
-          <div style="margin-top:20px;display:flex;justify-content:center;gap:10px">
-            <button class="btn btn-ghost btn-sm" onclick="copyField('device-mac-display', 'MAC copiée')">📋 Copier MAC</button>
-            <button class="btn btn-ghost btn-sm" onclick="copyField('device-key-display', 'Clé copiée')">🔑 Copier Clé</button>
+          <div style="font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:6px">Adresse MAC Virtuelle</div>
+          <div class="device-mac" id="d-mac">——:——:——:——:——:——</div>
+          <div style="font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin:14px 0 6px">Clé d'activation</div>
+          <div class="device-key" id="d-key">————</div>
+          <div style="margin-top:16px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-ghost btn-sm" onclick="copyEl('d-mac','MAC copiée')">📋 Copier MAC</button>
+            <button class="btn btn-ghost btn-sm" onclick="copyEl('d-key','Clé copiée')">🔑 Copier Clé</button>
           </div>
         </div>
-
-        <!-- QR Code -->
-        <div class="card" style="text-align:center;margin-bottom:24px">
-          <div style="font-size:14px;font-weight:700;margin-bottom:16px">QR Code — Scanner pour accéder à ce panel</div>
-          <div id="qr-container"></div>
-          <div style="font-size:11px;color:var(--text-3);margin-top:12px" id="qr-url-display"></div>
+        <div class="card" style="text-align:center;margin-bottom:18px">
+          <div style="font-size:13px;font-weight:700;margin-bottom:14px">QR Code — Accès rapide au panel</div>
+          <div id="qr-box" style="display:flex;justify-content:center;background:#fff;border-radius:14px;padding:14px;width:fit-content;margin:0 auto"></div>
+          <div style="font-size:10px;color:var(--t3);margin-top:10px;word-break:break-all" id="qr-url"></div>
         </div>
-
-        <!-- Device info table -->
         <div class="card">
-          <div style="font-size:14px;font-weight:700;margin-bottom:16px">Informations Techniques</div>
-          <div class="table-wrap">
-            <table>
-              <tbody id="device-info-tbody">
-                <tr><td colspan="2"><div class="loading-overlay"><div class="spinner"></div></div></td></tr>
-              </tbody>
-            </table>
-          </div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:14px">Informations Techniques</div>
+          <div class="table-wrap"><table><tbody id="d-info-tbody"><tr><td colspan="2"><div class="loading-center"><div class="spinner"></div></div></td></tr></tbody></table></div>
         </div>
       </div>
 
       <!-- ═══ BILLING ═══ -->
       <div class="section" id="section-billing">
-        <div class="section-header">
-          <div>
-            <h2>Abonnement & Facturation</h2>
-            <p>Gérez votre licence ARICH IPTV</p>
-          </div>
-        </div>
-
-        <!-- Licence actuelle -->
-        <div class="card" style="margin-bottom:24px;background:linear-gradient(135deg,rgba(123,47,255,0.08),rgba(255,45,85,0.04));border-color:rgba(123,47,255,0.2)">
-          <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="sh"><div><h2>Abonnement & Facturation</h2><p>Gérez votre licence ARICH IPTV</p></div></div>
+        <div class="card" style="margin-bottom:18px;background:linear-gradient(135deg,rgba(123,47,255,.08),rgba(255,45,85,.04));border-color:rgba(123,47,255,.2)">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
             <div>
-              <div style="font-size:11px;letter-spacing:1px;color:var(--text-3);text-transform:uppercase">Licence actuelle</div>
-              <div style="font-size:24px;font-weight:800;margin:8px 0" id="billing-plan">Essai gratuit</div>
-              <div style="font-size:13px;color:var(--text-2)" id="billing-expires">Expire dans : —</div>
+              <div style="font-size:10px;letter-spacing:1px;color:var(--t3);text-transform:uppercase">Licence actuelle</div>
+              <div style="font-size:22px;font-weight:800;margin:6px 0" id="b-plan">Essai gratuit</div>
+              <div style="font-size:12px;color:var(--t2)" id="b-expires">Expire : —</div>
             </div>
-            <div style="text-align:right">
-              <div class="badge badge-trial" id="billing-status-badge">ESSAI</div>
-              <div style="font-size:11px;color:var(--text-3);margin-top:8px">Appareil activé</div>
-            </div>
+            <span class="badge b-trial" id="b-badge">ESSAI</span>
           </div>
         </div>
-
-        <!-- Plans -->
-        <div class="grid-3" style="margin-bottom:32px">
+        <div class="g3" style="margin-bottom:24px">
           <div class="plan-card">
-            <div style="font-size:12px;letter-spacing:1px;color:var(--text-3);text-transform:uppercase">Mensuel</div>
+            <div style="font-size:10px;letter-spacing:1px;color:var(--t3);text-transform:uppercase">Mensuel</div>
             <div class="plan-price"><sup>€</sup>4<span>/mois</span></div>
-            <ul class="plan-features">
-              <li><span class="feat-icon">✓</span>Accès complet 30 jours</li>
-              <li><span class="feat-icon">✓</span>Xtream + M3U illimité</li>
-              <li><span class="feat-icon">✓</span>Support prioritaire</li>
-              <li><span class="feat-icon no">✗</span>Sans engagement</li>
-            </ul>
-            <button class="btn btn-ghost" style="width:100%;margin-top:20px" onclick="subscribe('monthly')">Choisir</button>
+            <ul class="feat-list"><li><span class="fi">✓</span>30 jours accès complet</li><li><span class="fi">✓</span>Xtream + M3U</li><li><span class="fi">✓</span>Support prioritaire</li></ul>
+            <button class="btn btn-ghost" style="width:100%;margin-top:16px" onclick="subscribe('monthly')">Choisir</button>
           </div>
-          <div class="plan-card recommended">
-            <div class="recommended-badge">⭐ Populaire</div>
-            <div style="font-size:12px;letter-spacing:1px;color:var(--text-3);text-transform:uppercase">Annuel</div>
+          <div class="plan-card rec">
+            <div class="rec-badge">⭐ Populaire</div>
+            <div style="font-size:10px;letter-spacing:1px;color:var(--t3);text-transform:uppercase">Annuel</div>
             <div class="plan-price"><sup>€</sup>35<span>/an</span></div>
-            <div style="font-size:11px;color:var(--green);margin-top:-8px;margin-bottom:4px">Économisez 27%</div>
-            <ul class="plan-features">
-              <li><span class="feat-icon">✓</span>Accès complet 12 mois</li>
-              <li><span class="feat-icon">✓</span>Xtream + M3U illimité</li>
-              <li><span class="feat-icon">✓</span>Support prioritaire</li>
-              <li><span class="feat-icon">✓</span>Mises à jour gratuites</li>
-            </ul>
-            <button class="btn btn-primary" style="width:100%;margin-top:20px" onclick="subscribe('annual')">Choisir</button>
+            <div style="font-size:10px;color:var(--g);margin-top:-6px;margin-bottom:3px">Économisez 27%</div>
+            <ul class="feat-list"><li><span class="fi">✓</span>12 mois accès complet</li><li><span class="fi">✓</span>Xtream + M3U</li><li><span class="fi">✓</span>Mises à jour gratuites</li></ul>
+            <button class="btn btn-primary" style="width:100%;margin-top:16px" onclick="subscribe('annual')">Choisir</button>
           </div>
           <div class="plan-card">
-            <div style="font-size:12px;letter-spacing:1px;color:var(--text-3);text-transform:uppercase">À vie</div>
+            <div style="font-size:10px;letter-spacing:1px;color:var(--t3);text-transform:uppercase">À vie</div>
             <div class="plan-price"><sup>€</sup>79<span> uniq.</span></div>
-            <ul class="plan-features">
-              <li><span class="feat-icon">✓</span>Accès à vie</li>
-              <li><span class="feat-icon">✓</span>Xtream + M3U illimité</li>
-              <li><span class="feat-icon">✓</span>Support VIP</span></li>
-              <li><span class="feat-icon">✓</span>Toutes futures versions</li>
-            </ul>
-            <button class="btn btn-ghost" style="width:100%;margin-top:20px" onclick="subscribe('lifetime')">Choisir</button>
+            <ul class="feat-list"><li><span class="fi">✓</span>Accès à vie</li><li><span class="fi">✓</span>Xtream + M3U</li><li><span class="fi">✓</span>Support VIP</li></ul>
+            <button class="btn btn-ghost" style="width:100%;margin-top:16px" onclick="subscribe('lifetime')">Choisir</button>
           </div>
         </div>
-
-        <!-- Historique -->
         <div class="card">
-          <div style="font-size:16px;font-weight:700;margin-bottom:20px">Historique des licences</div>
-          <div class="timeline" id="billing-timeline">
-            <div class="loading-overlay"><div class="spinner"></div></div>
+          <div style="font-size:14px;font-weight:800;margin-bottom:16px">Historique</div>
+          <div class="timeline" id="b-timeline"><div class="loading-center"><div class="spinner"></div></div></div>
+        </div>
+      </div>
+
+      <!-- ═══ ADMIN DASHBOARD ═══ -->
+      <div class="section" id="section-adash">
+        <div class="stats-grid" id="a-stats-grid">
+          <div class="card stat-card"><div class="glow" style="background:var(--v)"></div><div class="s-icon" style="background:rgba(123,47,255,.12)">📱</div><div class="card-title">Total Devices</div><div class="card-val" id="a-total">—</div><div class="card-sub up" id="a-week">↑ — cette semaine</div></div>
+          <div class="card stat-card"><div class="glow" style="background:var(--g)"></div><div class="s-icon" style="background:rgba(0,230,118,.12)">✅</div><div class="card-title">Actifs</div><div class="card-val" id="a-active">—</div></div>
+          <div class="card stat-card"><div class="glow" style="background:var(--gold)"></div><div class="s-icon" style="background:rgba(255,215,64,.12)">⏳</div><div class="card-title">En essai</div><div class="card-val" id="a-trial">—</div></div>
+          <div class="card stat-card"><div class="glow" style="background:var(--r)"></div><div class="s-icon" style="background:rgba(255,45,85,.12)">🚫</div><div class="card-title">Bannis</div><div class="card-val" id="a-banned">—</div></div>
+          <div class="card stat-card"><div class="glow" style="background:#29b6f6"></div><div class="s-icon" style="background:rgba(41,182,246,.12)">📋</div><div class="card-title">Playlists</div><div class="card-val" id="a-pls">—</div></div>
+          <div class="card stat-card"><div class="glow" style="background:var(--r)"></div><div class="s-icon" style="background:rgba(255,45,85,.12)">🆕</div><div class="card-title">Nouveaux / Jour</div><div class="card-val" id="a-today">—</div></div>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <div class="card-title" style="margin-bottom:12px">Répartition licences</div>
+            <div class="chart-wrap"><canvas id="ch-admin-lic"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-title" style="margin-bottom:12px">Inscriptions (7 derniers jours)</div>
+            <div class="chart-wrap"><canvas id="ch-admin-reg"></canvas></div>
           </div>
         </div>
       </div>
 
-    </div><!-- /content -->
-  </main><!-- /main -->
-</div><!-- /app -->
+      <!-- ═══ ADMIN USERS ═══ -->
+      <div class="section" id="section-users">
+        <div class="sh">
+          <div><h2>Utilisateurs</h2><p id="users-count-label">Chargement…</p></div>
+          <div class="search-wrap">
+            <input type="text" id="user-search" class="form-input" placeholder="MAC, nom, clé…" oninput="searchUsers(this.value)">
+          </div>
+        </div>
+        <div class="card" style="padding:0">
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th>Appareil</th><th>MAC / Clé</th><th>Licence</th><th>Playlists</th><th>Dernière activité</th><th>Actions</th>
+              </tr></thead>
+              <tbody id="users-tbody"><tr><td colspan="6"><div class="loading-center"><div class="spinner"></div></div></td></tr></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="users-pagination"></div>
+        </div>
+      </div>
 
-<!-- MODAL AJOUTER PLAYLIST -->
-<div class="modal-overlay" id="modal-playlist">
+      <!-- ═══ ADMIN LICENCES ═══ -->
+      <div class="section" id="section-alicenses">
+        <div class="sh"><div><h2>Gestion Licences</h2><p>Actions rapides sur les licences</p></div></div>
+        <div class="card">
+          <p style="color:var(--t2);font-size:13px;margin-bottom:16px">Sélectionne un utilisateur dans l'onglet <strong>Utilisateurs</strong> pour gérer sa licence.</p>
+          <div id="quick-stats-lic" class="loading-center"><div class="spinner"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- MODAL PLAYLIST -->
+<div class="modal-overlay" id="modal-pl">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" id="modal-playlist-title">Ajouter une playlist</div>
-      <div class="modal-close" onclick="closeModal('modal-playlist')">✕</div>
+      <div class="modal-title" id="modal-pl-title">Ajouter une playlist</div>
+      <div class="modal-close" onclick="closeModal('modal-pl')">✕</div>
     </div>
-
-    <input type="hidden" id="edit-playlist-id">
-
+    <input type="hidden" id="edit-pl-id">
+    <div class="form-group"><label class="form-label">Nom</label><input type="text" id="pl-name" class="form-input" placeholder="Ma playlist principale"></div>
     <div class="form-group">
-      <label class="form-label">Nom de la playlist</label>
-      <input type="text" id="pl-name" class="form-input" placeholder="Ma playlist principale">
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Type de source</label>
+      <label class="form-label">Type</label>
       <div class="radio-group">
-        <div class="radio-card selected" id="radio-xtream" onclick="selectPlaylistType('xtream')">📡 Xtream Codes</div>
-        <div class="radio-card" id="radio-m3u" onclick="selectPlaylistType('m3u')">🔗 URL M3U</div>
+        <div class="radio-card selected" id="r-xtream" onclick="plType('xtream')">📡 Xtream</div>
+        <div class="radio-card" id="r-m3u" onclick="plType('m3u')">🔗 M3U</div>
       </div>
     </div>
-
-    <!-- Xtream fields -->
-    <div id="xtream-fields">
-      <div class="form-group">
-        <label class="form-label">Serveur (Host)</label>
-        <input type="url" id="pl-host" class="form-input form-input-mono" placeholder="http://serveur.com:8080">
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="form-group">
-          <label class="form-label">Utilisateur</label>
-          <input type="text" id="pl-username" class="form-input form-input-mono" placeholder="user123">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Mot de passe</label>
-          <input type="text" id="pl-password" class="form-input form-input-mono" placeholder="pass456">
-        </div>
+    <div id="xtream-f">
+      <div class="form-group"><label class="form-label">Serveur</label><input type="url" id="pl-host" class="form-input mono" placeholder="http://serveur.com:8080"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="form-group"><label class="form-label">Utilisateur</label><input type="text" id="pl-user" class="form-input mono" placeholder="user123"></div>
+        <div class="form-group"><label class="form-label">Mot de passe</label><input type="text" id="pl-pass" class="form-input mono" placeholder="pass456"></div>
       </div>
     </div>
-
-    <!-- M3U fields -->
-    <div id="m3u-fields" style="display:none">
-      <div class="form-group">
-        <label class="form-label">URL de la playlist M3U/M3U8</label>
-        <input type="url" id="pl-m3u-url" class="form-input form-input-mono" placeholder="http://serveur.com/playlist.m3u?token=...">
-      </div>
-    </div>
-
+    <div id="m3u-f" style="display:none"><div class="form-group"><label class="form-label">URL M3U</label><input type="url" id="pl-m3u" class="form-input mono" placeholder="http://serveur.com/playlist.m3u"></div></div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-playlist')">Annuler</button>
-      <button class="btn btn-primary" id="btn-save-playlist" onclick="savePlaylist()">Enregistrer</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-pl')">Annuler</button>
+      <button class="btn btn-primary" id="btn-save-pl" onclick="savePl()">Enregistrer</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL CONFIRMATION SUPPRESSION -->
+<!-- MODAL CONFIRM -->
 <div class="modal-overlay" id="modal-confirm">
-  <div class="modal" style="max-width:400px">
-    <div class="modal-header">
-      <div class="modal-title">Confirmer la suppression</div>
-      <div class="modal-close" onclick="closeModal('modal-confirm')">✕</div>
-    </div>
-    <p style="color:var(--text-2);font-size:14px" id="confirm-message">Êtes-vous sûr de vouloir supprimer cet élément ?</p>
+  <div class="modal" style="max-width:380px">
+    <div class="modal-header"><div class="modal-title" id="confirm-title">Confirmer</div><div class="modal-close" onclick="closeModal('modal-confirm')">✕</div></div>
+    <p style="color:var(--t2);font-size:13px" id="confirm-msg"></p>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-confirm')">Annuler</button>
-      <button class="btn btn-danger" id="btn-confirm-action">Supprimer</button>
+      <button class="btn btn-danger" id="btn-confirm">Confirmer</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════════ -->
+<!-- MODAL USER DETAIL (admin) -->
+<div class="modal-overlay" id="modal-user">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header"><div class="modal-title" id="modal-user-title">Détails utilisateur</div><div class="modal-close" onclick="closeModal('modal-user')">✕</div></div>
+    <div id="modal-user-body"></div>
+  </div>
+</div>
+
 <script>
 'use strict';
+// ══════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════
+const SB_URL  = 'https://aynucieohuowgkwyftiy.supabase.co';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5bnVjaWVvaHVvd2drd3lmdGl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyOTIxMDMsImV4cCI6MjA4Nzg2ODEwM30.H43CVcyzEuYBQfBIlkn16r5uk768isHr4DeLduo1ETk';
+const sb = supabase.createClient(SB_URL, SB_ANON);
 
 // ══════════════════════════════════════════════
-// CONFIG SUPABASE
+// STATE
 // ══════════════════════════════════════════════
-const SUPABASE_URL  = 'https://aynucieohuowgkwyftiy.supabase.co';   // ← À remplacer
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5bnVjaWVvaHVvd2drd3lmdGl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyOTIxMDMsImV4cCI6MjA4Nzg2ODEwM30.H43CVcyzEuYBQfBIlkn16r5uk768isHr4DeLduo1ETk';                          // ← À remplacer
-
-const { createClient } = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
-
-// ══════════════════════════════════════════════
-// STATE GLOBAL
-// ══════════════════════════════════════════════
-let STATE = {
-  isLoggedIn:   false,
-  isAdmin:      false,
-  currentSection: 'dashboard',
-  device:       null,   // { id, mac_address, device_key, device_name, ... }
-  license:      null,   // { id, status, plan_name, expires_at, ... }
-  playlists:    [],
-  charts:       {},
-  playlistType: 'xtream',  // 'xtream' | 'm3u'
-  editingPlaylistId: null,
+let S = {
+  loggedIn: false, isAdmin: false, section: 'dashboard',
+  device: null, license: null, playlists: [], charts: {},
+  plType: 'xtream', editPlId: null,
+  adminData: null,
+  usersPage: 0, usersTotal: 0, usersSearch: '',
+  usersPerPage: 20,
 };
 
 // ══════════════════════════════════════════════
@@ -1280,697 +622,618 @@ let STATE = {
 // ══════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   checkUrlParams();
-  animateBackground();
 });
 
 function checkUrlParams() {
-  const p   = new URLSearchParams(window.location.search);
-  const mac = p.get('mac');
-  const key = p.get('key');
+  const p = new URLSearchParams(window.location.search);
+  const mac = p.get('mac'), key = p.get('key');
   if (mac && key) {
-    document.getElementById('login-mac').value = mac;
-    document.getElementById('login-key').value = key;
-    setTimeout(() => loginWithMacKey(), 600);
+    document.getElementById('login-mac').value = decodeURIComponent(mac);
+    document.getElementById('login-key').value = decodeURIComponent(key).toUpperCase();
+    setTimeout(() => loginMac(), 500);
   }
 }
 
-function animateBackground() {
-  anime({
-    targets: '.bg-orbs::before, .bg-orbs::after',
-    translateX: [0, 20],
-    translateY: [0, 15],
-    duration: 8000,
-    direction: 'alternate',
-    easing: 'easeInOutSine',
-    loop: true,
-  });
-}
-
 // ══════════════════════════════════════════════
-// AUTH — LOGIN MAC/KEY
+// AUTH
 // ══════════════════════════════════════════════
-async function loginWithMacKey() {
+async function loginMac() {
   const mac = document.getElementById('login-mac').value.trim().toUpperCase();
   const key = document.getElementById('login-key').value.trim().toUpperCase();
-
-  if (!mac || mac.length < 17) { toast('error', 'Adresse MAC invalide', 'Format attendu : XX:XX:XX:XX:XX:XX'); return; }
-  if (!key || key.length < 8)  { toast('error', 'Clé invalide', 'La clé fait 8 caractères'); return; }
-
-  const btn = document.getElementById('btn-login-mac');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;margin:0 auto"></div>';
-
+  if (!mac || mac.length < 17) { toast('error','MAC invalide','Format : XX:XX:XX:XX:XX:XX'); return; }
+  if (!key || key.length < 8)  { toast('error','Clé invalide','8 caractères requis'); return; }
+  const btn = document.getElementById('btn-mac');
+  btn.disabled = true; btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;margin:0 auto"></div>';
   try {
-    const { data, error } = await sb.rpc('get_device_by_credentials', {
-      p_mac_address: mac,
-      p_device_key:  key,
-    });
-
+    const { data, error } = await sb.rpc('get_device_by_credentials', { p_mac_address: mac, p_device_key: key });
     if (error) throw error;
-    if (data?.error) { toast('error', 'Accès refusé', data.error); return; }
-
-    STATE.device  = data.device;
-    STATE.license = data.license;
-    STATE.isLoggedIn = true;
-    STATE.isAdmin    = false;
-
+    if (data?.error) { toast('error','Accès refusé', data.error); return; }
+    if (!data?.device) { toast('error','Device introuvable','Vérifiez votre MAC et clé'); return; }
+    S.device = data.device; S.license = data.license;
+    S.loggedIn = true; S.isAdmin = false;
     showApp();
-    toast('success', 'Connexion réussie', `Bienvenue, ${STATE.device.device_name || 'Appareil'}`);
-  } catch (err) {
-    console.error(err);
-    toast('error', 'Erreur de connexion', err.message || 'Serveur inaccessible');
+    toast('success','Connexion réussie', S.device.device_name || 'Bienvenue');
+  } catch(e) {
+    toast('error','Erreur', e.message);
   } finally {
-    btn.disabled = false;
-    btn.textContent = 'Accéder à mon panel';
+    btn.disabled = false; btn.textContent = 'Accéder à mon panel';
   }
 }
 
-// ══════════════════════════════════════════════
-// AUTH — LOGIN ADMIN (Supabase Auth)
-// ══════════════════════════════════════════════
 async function loginAdmin() {
   const email = document.getElementById('login-email').value.trim();
-  const pass  = document.getElementById('login-password').value;
-
-  if (!email || !pass) { toast('error', 'Champs manquants', 'Email et mot de passe requis'); return; }
-
-  const btn = document.getElementById('btn-login-admin');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;margin:0 auto"></div>';
-
+  const pass  = document.getElementById('login-pass').value;
+  if (!email || !pass) { toast('error','Champs manquants',''); return; }
+  const btn = document.getElementById('btn-admin');
+  btn.disabled = true; btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;margin:0 auto"></div>';
   try {
-    const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+    const { data, error } = await sb.rpc('admin_login', { p_email: email, p_password: pass });
     if (error) throw error;
-
-    STATE.isAdmin    = true;
-    STATE.isLoggedIn = true;
-    // Pour l'admin, charger toutes les données (future extension)
+    if (data?.error) { toast('error','Accès refusé', data.error); return; }
+    S.isAdmin = true; S.loggedIn = true;
+    S.adminUser = data;
     showApp();
-    toast('success', 'Connexion Admin', `Bienvenue ${email}`);
-  } catch (err) {
-    toast('error', 'Échec de connexion', err.message);
+    toast('success','Connexion Admin', `Bienvenue ${data.username || email}`);
+  } catch(e) {
+    toast('error','Erreur', e.message);
   } finally {
-    btn.disabled = false;
-    btn.textContent = 'Connexion Admin';
+    btn.disabled = false; btn.textContent = 'Connexion Admin';
   }
 }
 
-function switchLoginTab(tab) {
-  document.querySelectorAll('.login-tab').forEach((t, i) => {
-    t.classList.toggle('active', (tab === 'mac' && i === 0) || (tab === 'admin' && i === 1));
-  });
-  document.getElementById('tab-mac').style.display   = tab === 'mac'   ? 'block' : 'none';
-  document.getElementById('tab-admin').style.display = tab === 'admin' ? 'block' : 'none';
+function switchTab(t) {
+  document.querySelectorAll('.login-tab').forEach((el,i) => el.classList.toggle('active', (t==='mac'&&i===0)||(t==='admin'&&i===1)));
+  document.getElementById('tab-mac').style.display   = t==='mac'   ? 'block':'none';
+  document.getElementById('tab-admin').style.display = t==='admin' ? 'block':'none';
 }
 
 function logout() {
-  STATE = { isLoggedIn: false, isAdmin: false, currentSection: 'dashboard',
-            device: null, license: null, playlists: [], charts: {}, playlistType: 'xtream', editingPlaylistId: null };
+  Object.values(S.charts).forEach(c => c?.destroy?.());
+  S = { loggedIn:false, isAdmin:false, section:'dashboard', device:null, license:null, playlists:[], charts:{}, plType:'xtream', editPlId:null, adminData:null, usersPage:0, usersTotal:0, usersSearch:'', usersPerPage:20 };
   document.getElementById('app').style.display = 'none';
   document.getElementById('login-screen').classList.remove('hidden');
-  Object.values(STATE.charts).forEach(c => c.destroy?.());
-  toast('info', 'Déconnecté', 'À bientôt sur ARICH IPTV');
+  history.replaceState({}, '', window.location.pathname);
+  toast('info','Déconnecté','À bientôt');
 }
 
 // ══════════════════════════════════════════════
-// APP INIT APRÈS LOGIN
+// SHOW APP
 // ══════════════════════════════════════════════
 function showApp() {
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('app').style.display = 'flex';
+  anime({ targets:'#app', opacity:[0,1], duration:350, easing:'easeOutCubic' });
 
-  // Animer l'entrée
-  anime({ targets: '#app', opacity: [0, 1], duration: 400, easing: 'easeOutCubic' });
-
-  // Remplir sidebar device
-  if (STATE.device) {
-    const sc = document.getElementById('sidebar-device-card');
-    sc.classList.add('visible');
-    document.getElementById('sidebar-mac').textContent = STATE.device.mac_address;
-    document.getElementById('sidebar-key').textContent = STATE.device.device_key;
-    updateStatusBadge(document.getElementById('sidebar-status'), STATE.license?.status);
+  if (S.isAdmin) {
+    document.getElementById('nav-user').style.display = 'none';
+    document.getElementById('nav-admin').style.display = 'block';
+    document.getElementById('sb-role-label').textContent = 'Panel administrateur';
+    document.getElementById('admin-badge').style.display = 'inline-flex';
+    go('adash');
+  } else {
+    document.getElementById('nav-user').style.display = 'block';
+    document.getElementById('nav-admin').style.display = 'none';
+    if (S.device) {
+      const sc = document.getElementById('sb-device');
+      sc.classList.add('show');
+      document.getElementById('sb-mac').textContent = S.device.mac_address;
+      document.getElementById('sb-key').textContent = S.device.device_key;
+      document.getElementById('sb-status-pill').innerHTML = statusBadge(S.license?.status);
+    }
+    go('dashboard');
   }
-
-  navigate('dashboard');
 }
 
 // ══════════════════════════════════════════════
 // NAVIGATION
 // ══════════════════════════════════════════════
-const SECTIONS = {
-  dashboard: { title: 'Dashboard',       subtitle: 'Vue d\'ensemble de votre compte', load: loadDashboard },
-  playlists: { title: 'Mes Playlists',   subtitle: 'Gérez vos sources Xtream et M3U', load: loadPlaylists },
-  device:    { title: 'Mon Appareil',    subtitle: 'Identifiant et informations hardware', load: loadDevice },
-  billing:   { title: 'Abonnement',      subtitle: 'Gérez votre licence ARICH IPTV', load: loadBilling },
+const PAGES = {
+  dashboard: { title:'Dashboard',       sub:'Vue d\'ensemble',           load: loadDashboard },
+  playlists: { title:'Mes Playlists',   sub:'Sources Xtream et M3U',     load: loadPlaylists },
+  device:    { title:'Mon Appareil',    sub:'Identifiant hardware',       load: loadDevice },
+  billing:   { title:'Abonnement',      sub:'Gérez votre licence',        load: loadBilling },
+  adash:     { title:'Dashboard Admin', sub:'Statistiques globales',      load: loadAdminDash },
+  users:     { title:'Utilisateurs',    sub:'Gestion des devices',        load: loadUsers },
+  alicenses: { title:'Licences',        sub:'Gestion des licences',       load: loadAdminLicenses },
 };
 
-function navigate(section) {
-  if (!SECTIONS[section]) return;
-  STATE.currentSection = section;
-
-  // Mise à jour sidebar
+function go(page) {
+  if (!PAGES[page]) return;
+  S.section = page;
   document.querySelectorAll('.nav-item').forEach(el => {
-    el.classList.toggle('active', el.getAttribute('onclick')?.includes(`'${section}'`));
+    el.classList.toggle('active', el.getAttribute('onclick')?.includes(`'${page}'`));
   });
-
-  // Mise à jour sections
   document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-  document.getElementById(`section-${section}`)?.classList.add('active');
-
-  // Topbar
-  document.getElementById('topbar-title').textContent    = SECTIONS[section].title;
-  document.getElementById('topbar-subtitle').textContent = SECTIONS[section].subtitle;
-
-  // Charger données
-  SECTIONS[section].load();
+  document.getElementById(`section-${page}`)?.classList.add('active');
+  document.getElementById('tb-title').textContent = PAGES[page].title;
+  document.getElementById('tb-sub').textContent   = PAGES[page].sub;
+  PAGES[page].load();
+  if (window.innerWidth < 768) closeSidebar();
 }
 
-function refreshCurrentSection() {
-  const el = document.querySelector('.topbar-refresh');
-  el.style.transform = 'rotate(360deg)';
-  el.style.transition = 'transform 0.5s ease';
-  setTimeout(() => { el.style.transform = ''; el.style.transition = ''; }, 500);
-  SECTIONS[STATE.currentSection]?.load();
+function refresh() {
+  const btn = document.querySelector('.topbar-btn');
+  btn.style.transform = 'rotate(360deg)'; btn.style.transition = 'transform .5s ease';
+  setTimeout(() => { btn.style.transform=''; btn.style.transition=''; }, 500);
+  PAGES[S.section]?.load();
 }
 
 // ══════════════════════════════════════════════
-// DASHBOARD
+// USER — DASHBOARD
 // ══════════════════════════════════════════════
 async function loadDashboard() {
-  if (!STATE.device) return;
-
-  // Stats playlists
+  if (!S.device) return;
   try {
     const { data: pls } = await sb.from('playlists')
-      .select('total_channels, total_movies, total_series')
-      .eq('device_id', STATE.device.id);
-
-    const totLive    = pls?.reduce((a, p) => a + (p.total_channels || 0), 0) || 0;
-    const totMovies  = pls?.reduce((a, p) => a + (p.total_movies || 0), 0) || 0;
-    const totSeries  = pls?.reduce((a, p) => a + (p.total_series || 0), 0) || 0;
-
-    animateNumber('stat-live',     totLive);
-    animateNumber('stat-movies',   totMovies);
-    animateNumber('stat-series',   totSeries);
-    animateNumber('stat-playlists', pls?.length || 0);
-
-    renderContentChart(totLive, totMovies, totSeries);
-  } catch (e) {
-    console.error('[Dashboard] stats:', e);
+      .select('total_channels,total_movies,total_series')
+      .eq('device_id', S.device.id);
+    const live   = pls?.reduce((a,p)=>a+(p.total_channels||0),0)||0;
+    const movies = pls?.reduce((a,p)=>a+(p.total_movies||0),0)||0;
+    const series = pls?.reduce((a,p)=>a+(p.total_series||0),0)||0;
+    animNum('u-live', live); animNum('u-movies', movies);
+    animNum('u-series', series); animNum('u-pls', pls?.length||0);
+    renderContentChart(live, movies, series);
+  } catch(e) { console.error(e); }
+  if (S.license) {
+    document.getElementById('u-plan').textContent    = S.license.plan_name || 'Essai';
+    document.getElementById('u-expires').textContent = fmtExpiry(S.license.expires_at);
+    document.getElementById('u-device').textContent  = S.device.device_name || '—';
+    document.getElementById('u-lic-badge').outerHTML = statusBadge(S.license.status, 'u-lic-badge');
+    document.getElementById('u-lic-sub').textContent = `Plan : ${S.license.plan_name||'Essai'}`;
+    renderLicenseChart(S.license);
   }
-
-  // Licence info
-  if (STATE.license) {
-    document.getElementById('info-plan').textContent    = STATE.license.plan_name || 'Essai';
-    document.getElementById('info-expires').textContent = formatExpiry(STATE.license.expires_at);
-    document.getElementById('info-device').textContent  = STATE.device.device_name || '—';
-    updateStatusBadge(document.getElementById('license-status-badge'), STATE.license.status);
-    document.getElementById('chart-license-subtitle').textContent = `Plan : ${STATE.license.plan_name}`;
-    renderLicenseChart(STATE.license);
-  }
-}
-
-function renderLicenseChart(license) {
-  const ctx = document.getElementById('chart-license').getContext('2d');
-  if (STATE.charts.license) STATE.charts.license.destroy();
-
-  const expires = license.expires_at ? new Date(license.expires_at) : null;
-  const starts  = license.starts_at  ? new Date(license.starts_at)  : new Date();
-  const now     = new Date();
-
-  let used = 0, remaining = 0;
-  if (expires) {
-    const total    = expires - starts;
-    const elapsed  = now - starts;
-    used      = Math.max(0, Math.min(100, (elapsed / total) * 100));
-    remaining = 100 - used;
-  } else {
-    used = 1; remaining = 99; // illimité
-  }
-
-  const colorUsed = license.status === 'active' ? '#7B2FFF' : license.status === 'trial' ? '#ffd740' : '#ff2d55';
-
-  STATE.charts.license = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: ['Utilisé', 'Restant'],
-      datasets: [{
-        data: [used, remaining],
-        backgroundColor: [colorUsed, 'rgba(255,255,255,0.05)'],
-        borderColor: ['transparent', 'transparent'],
-        borderRadius: 4,
-        hoverOffset: 4,
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '72%',
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: { label: ctx => `${ctx.label}: ${Math.round(ctx.raw)}%` }
-        },
-      },
-    },
-  });
-}
-
-function renderContentChart(live, movies, series) {
-  const ctx = document.getElementById('chart-content').getContext('2d');
-  if (STATE.charts.content) STATE.charts.content.destroy();
-
-  if (!live && !movies && !series) {
-    // Pas encore de data
-    return;
-  }
-
-  STATE.charts.content = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Live', 'Films', 'Séries'],
-      datasets: [{
-        data: [live, movies, series],
-        backgroundColor: [
-          'rgba(123,47,255,0.7)',
-          'rgba(255,45,85,0.7)',
-          'rgba(33,150,243,0.7)',
-        ],
-        borderRadius: 8,
-        borderSkipped: false,
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: 'rgba(255,255,255,0.4)' } },
-        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: 'rgba(255,255,255,0.4)' }, beginAtZero: true },
-      },
-    },
-  });
 }
 
 // ══════════════════════════════════════════════
-// PLAYLISTS
+// USER — PLAYLISTS
 // ══════════════════════════════════════════════
 async function loadPlaylists() {
-  if (!STATE.device) return;
-  const grid = document.getElementById('playlists-grid');
-  grid.innerHTML = '<div class="loading-overlay"><div class="spinner"></div><span>Chargement…</span></div>';
-
+  if (!S.device) return;
+  const grid = document.getElementById('pl-grid');
+  grid.innerHTML = '<div class="loading-center"><div class="spinner"></div></div>';
   try {
-    const { data, error } = await sb.from('playlists')
-      .select('*')
-      .eq('device_id', STATE.device.id)
-      .order('created_at', { ascending: false });
-
+    const { data, error } = await sb.from('playlists').select('*').eq('device_id',S.device.id).order('created_at',{ascending:false});
     if (error) throw error;
-
-    STATE.playlists = data || [];
-    const badge = document.getElementById('nav-badge-playlists');
-    if (STATE.playlists.length > 0) {
-      badge.textContent = STATE.playlists.length;
-      badge.style.display = 'inline';
-    } else {
-      badge.style.display = 'none';
-    }
-
+    S.playlists = data || [];
+    const badge = document.getElementById('pl-badge');
+    if (S.playlists.length) { badge.textContent=S.playlists.length; badge.style.display='inline'; }
+    else badge.style.display='none';
     renderPlaylists();
-  } catch (err) {
-    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><h3>Erreur de chargement</h3><p>${err.message}</p></div>`;
-    toast('error', 'Erreur', err.message);
+  } catch(e) {
+    grid.innerHTML = `<div class="empty"><div class="ei">⚠️</div><h3>Erreur</h3><p>${e.message}</p></div>`;
   }
 }
 
 function renderPlaylists() {
-  const grid = document.getElementById('playlists-grid');
-
-  if (!STATE.playlists.length) {
-    grid.innerHTML = `
-      <div class="add-playlist-card" onclick="openAddPlaylist()">
-        <div class="plus-icon">➕</div>
-        <span>Ajouter votre première playlist</span>
-        <small style="color:var(--text-3);font-size:11px">Xtream Codes ou M3U</small>
-      </div>`;
+  const grid = document.getElementById('pl-grid');
+  if (!S.playlists.length) {
+    grid.innerHTML = `<div class="add-pl" onclick="openAddPl()"><div style="font-size:28px">➕</div><span style="font-size:13px;font-weight:700">Ajouter votre première playlist</span><small style="color:var(--t3);font-size:10px">Xtream ou M3U</small></div>`;
     return;
   }
-
-  grid.innerHTML = STATE.playlists.map(pl => `
-    <div class="playlist-card" onclick="editPlaylist('${pl.id}')">
-      <div class="pc-header">
-        <div>
-          <div class="pc-name">${escHtml(pl.name)}</div>
-          <div class="pc-host">${escHtml(pl.xtream_host || pl.m3u_url || '—')}</div>
+  grid.innerHTML = S.playlists.map(pl=>`
+    <div class="pl-card" onclick="editPl('${pl.id}')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+        <div style="flex:1;min-width:0">
+          <div class="pl-name">${esc(pl.name)}</div>
+          <div class="pl-host">${esc(pl.xtream_host||pl.m3u_url||'—')}</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-          <span class="badge badge-${pl.type}">${pl.type === 'xtream' ? '📡 XTREAM' : '🔗 M3U'}</span>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;margin-left:8px">
+          <span class="badge ${pl.type==='xtream'?'b-active':'b-trial'}">${pl.type==='xtream'?'XTREAM':'M3U'}</span>
           <div style="display:flex;gap:4px" onclick="event.stopPropagation()">
-            <button class="btn btn-ghost btn-icon btn-sm" title="Modifier" onclick="editPlaylist('${pl.id}')">✏️</button>
-            <button class="btn btn-danger btn-icon btn-sm" title="Supprimer" onclick="confirmDelete('${pl.id}', '${escHtml(pl.name)}')">🗑️</button>
+            <button class="btn btn-ghost btn-icon btn-sm" onclick="editPl('${pl.id}')">✏️</button>
+            <button class="btn btn-danger btn-icon btn-sm" onclick="confirmDelPl('${pl.id}','${esc(pl.name)}')">🗑️</button>
           </div>
         </div>
       </div>
-      <div style="height:1px;background:var(--border);margin:8px 0"></div>
-      <div class="pc-stats">
-        <div class="pc-stat">
-          <div class="pc-stat-val" style="color:var(--violet)">${fmtNum(pl.total_channels)}</div>
-          <div class="pc-stat-lbl">Live</div>
-        </div>
-        <div class="pc-stat">
-          <div class="pc-stat-val" style="color:var(--rouge)">${fmtNum(pl.total_movies)}</div>
-          <div class="pc-stat-lbl">Films</div>
-        </div>
-        <div class="pc-stat">
-          <div class="pc-stat-val" style="color:#2196f3">${fmtNum(pl.total_series)}</div>
-          <div class="pc-stat-lbl">Séries</div>
-        </div>
+      <div style="height:1px;background:var(--b);margin:8px 0"></div>
+      <div class="pl-stats">
+        <div><div class="pl-stat-val" style="color:var(--v)">${fmt(pl.total_channels)}</div><div class="pl-stat-lbl">Live</div></div>
+        <div><div class="pl-stat-val" style="color:var(--r)">${fmt(pl.total_movies)}</div><div class="pl-stat-lbl">Films</div></div>
+        <div><div class="pl-stat-val" style="color:#2196f3">${fmt(pl.total_series)}</div><div class="pl-stat-lbl">Séries</div></div>
       </div>
-      ${pl.last_synced_at ? `<div style="font-size:10px;color:var(--text-3);margin-top:8px">Sync : ${fmtDate(pl.last_synced_at)}</div>` : ''}
+      ${pl.last_synced_at?`<div style="font-size:9px;color:var(--t3);margin-top:7px">Sync : ${fmtDate(pl.last_synced_at)}</div>`:''}
     </div>
-  `).join('') + `
-    <div class="add-playlist-card" onclick="openAddPlaylist()">
-      <div class="plus-icon">➕</div>
-      <span>Ajouter une playlist</span>
-    </div>`;
-
-  anime({
-    targets: '.playlist-card',
-    opacity: [0, 1],
-    translateY: [16, 0],
-    delay: anime.stagger(60),
-    duration: 350,
-    easing: 'easeOutCubic',
-  });
+  `).join('') + `<div class="add-pl" onclick="openAddPl()"><div style="font-size:24px">➕</div><span style="font-size:12px;font-weight:700">Ajouter</span></div>`;
+  anime({ targets:'.pl-card', opacity:[0,1], translateY:[12,0], delay:anime.stagger(50), duration:300, easing:'easeOutCubic' });
 }
 
-// ── MODAL AJOUTER/MODIFIER ──
-function openAddPlaylist() {
-  STATE.editingPlaylistId = null;
-  document.getElementById('modal-playlist-title').textContent = 'Ajouter une playlist';
-  document.getElementById('btn-save-playlist').textContent = 'Ajouter';
-  document.getElementById('edit-playlist-id').value = '';
-  document.getElementById('pl-name').value     = '';
-  document.getElementById('pl-host').value     = '';
-  document.getElementById('pl-username').value = '';
-  document.getElementById('pl-password').value = '';
-  document.getElementById('pl-m3u-url').value  = '';
-  selectPlaylistType('xtream');
-  openModal('modal-playlist');
+function openAddPl() {
+  S.editPlId = null;
+  document.getElementById('modal-pl-title').textContent = 'Ajouter une playlist';
+  document.getElementById('btn-save-pl').textContent = 'Ajouter';
+  document.getElementById('edit-pl-id').value = '';
+  ['pl-name','pl-host','pl-user','pl-pass','pl-m3u'].forEach(id => document.getElementById(id).value='');
+  plType('xtream'); openModal('modal-pl');
 }
-
-function editPlaylist(id) {
-  const pl = STATE.playlists.find(p => p.id === id);
-  if (!pl) return;
-  STATE.editingPlaylistId = id;
-  document.getElementById('modal-playlist-title').textContent = 'Modifier la playlist';
-  document.getElementById('btn-save-playlist').textContent = 'Enregistrer';
-  document.getElementById('edit-playlist-id').value = id;
-  document.getElementById('pl-name').value     = pl.name || '';
-  document.getElementById('pl-host').value     = pl.xtream_host || '';
-  document.getElementById('pl-username').value = pl.xtream_username || '';
-  document.getElementById('pl-password').value = pl.xtream_password || '';
-  document.getElementById('pl-m3u-url').value  = pl.m3u_url || '';
-  selectPlaylistType(pl.type);
-  openModal('modal-playlist');
+function editPl(id) {
+  const pl = S.playlists.find(p=>p.id===id); if(!pl) return;
+  S.editPlId = id;
+  document.getElementById('modal-pl-title').textContent = 'Modifier la playlist';
+  document.getElementById('btn-save-pl').textContent = 'Enregistrer';
+  document.getElementById('edit-pl-id').value = id;
+  document.getElementById('pl-name').value = pl.name||'';
+  document.getElementById('pl-host').value = pl.xtream_host||'';
+  document.getElementById('pl-user').value = pl.xtream_username||'';
+  document.getElementById('pl-pass').value = pl.xtream_password||'';
+  document.getElementById('pl-m3u').value  = pl.m3u_url||'';
+  plType(pl.type); openModal('modal-pl');
 }
-
-async function savePlaylist() {
+async function savePl() {
   const name = document.getElementById('pl-name').value.trim();
-  if (!name) { toast('warning', 'Nom requis', 'Donnez un nom à votre playlist'); return; }
-
-  const isXtream = STATE.playlistType === 'xtream';
-  const btn = document.getElementById('btn-save-playlist');
-
+  if (!name) { toast('warning','Nom requis',''); return; }
+  const isX = S.plType==='xtream';
+  const btn = document.getElementById('btn-save-pl');
   const payload = {
-    device_id:       STATE.device.id,
-    name,
-    type:            STATE.playlistType,
-    is_active:       true,
-    xtream_host:     isXtream ? document.getElementById('pl-host').value.trim()     : null,
-    xtream_username: isXtream ? document.getElementById('pl-username').value.trim() : null,
-    xtream_password: isXtream ? document.getElementById('pl-password').value.trim() : null,
-    m3u_url:         !isXtream ? document.getElementById('pl-m3u-url').value.trim() : null,
+    device_id: S.device.id, name, type: S.plType, is_active: true,
+    xtream_host:     isX ? document.getElementById('pl-host').value.trim() : null,
+    xtream_username: isX ? document.getElementById('pl-user').value.trim() : null,
+    xtream_password: isX ? document.getElementById('pl-pass').value.trim() : null,
+    m3u_url:         !isX ? document.getElementById('pl-m3u').value.trim() : null,
   };
-
-  if (isXtream && !payload.xtream_host) { toast('warning', 'Serveur requis', 'Entrez l\'URL du serveur Xtream'); return; }
-  if (!isXtream && !payload.m3u_url)   { toast('warning', 'URL requise', 'Entrez l\'URL M3U'); return; }
-
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;margin:0 4px"></div> Enregistrement…';
-
+  if (isX && !payload.xtream_host) { toast('warning','Serveur requis',''); return; }
+  if (!isX && !payload.m3u_url)    { toast('warning','URL requise',''); return; }
+  btn.disabled=true; btn.innerHTML='<div class="spinner" style="width:12px;height:12px;margin:0 4px"></div>';
   try {
+    const editId = document.getElementById('edit-pl-id').value;
     let error;
-    const editId = document.getElementById('edit-playlist-id').value;
-
-    if (editId) {
-      ({ error } = await sb.from('playlists').update(payload).eq('id', editId).eq('device_id', STATE.device.id));
-      if (!error) toast('success', 'Playlist modifiée', name);
-    } else {
-      ({ error } = await sb.from('playlists').insert(payload));
-      if (!error) toast('success', 'Playlist ajoutée', name);
-    }
-
+    if (editId) ({ error } = await sb.from('playlists').update(payload).eq('id',editId).eq('device_id',S.device.id));
+    else        ({ error } = await sb.from('playlists').insert(payload));
     if (error) throw error;
-    closeModal('modal-playlist');
-    await loadPlaylists();
-  } catch (err) {
-    toast('error', 'Erreur', err.message);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = editId ? 'Enregistrer' : 'Ajouter';
-  }
+    toast('success', editId?'Playlist modifiée':'Playlist ajoutée', name);
+    closeModal('modal-pl'); await loadPlaylists();
+  } catch(e) { toast('error','Erreur',e.message); }
+  finally { btn.disabled=false; btn.textContent=S.editPlId?'Enregistrer':'Ajouter'; }
 }
-
-function confirmDelete(id, name) {
-  document.getElementById('confirm-message').textContent = `Supprimer "${name}" ? Cette action est irréversible.`;
-  document.getElementById('btn-confirm-action').onclick = async () => {
+function confirmDelPl(id, name) {
+  document.getElementById('confirm-title').textContent = 'Supprimer la playlist';
+  document.getElementById('confirm-msg').textContent   = `Supprimer "${name}" ? Action irréversible.`;
+  document.getElementById('btn-confirm').onclick = async () => {
     try {
-      const { error } = await sb.from('playlists').delete().eq('id', id).eq('device_id', STATE.device.id);
-      if (error) throw error;
-      closeModal('modal-confirm');
-      toast('success', 'Supprimée', `"${name}" a été supprimée`);
-      await loadPlaylists();
-    } catch (err) {
-      toast('error', 'Erreur', err.message);
-    }
+      const {error} = await sb.from('playlists').delete().eq('id',id).eq('device_id',S.device.id);
+      if(error) throw error;
+      closeModal('modal-confirm'); toast('success','Supprimée',name); await loadPlaylists();
+    } catch(e) { toast('error','Erreur',e.message); }
   };
   openModal('modal-confirm');
 }
-
-function selectPlaylistType(type) {
-  STATE.playlistType = type;
-  document.getElementById('radio-xtream').classList.toggle('selected', type === 'xtream');
-  document.getElementById('radio-m3u').classList.toggle('selected', type === 'm3u');
-  document.getElementById('xtream-fields').style.display = type === 'xtream' ? 'block' : 'none';
-  document.getElementById('m3u-fields').style.display    = type === 'm3u'    ? 'block' : 'none';
+function plType(t) {
+  S.plType = t;
+  document.getElementById('r-xtream').classList.toggle('selected', t==='xtream');
+  document.getElementById('r-m3u').classList.toggle('selected', t==='m3u');
+  document.getElementById('xtream-f').style.display = t==='xtream'?'block':'none';
+  document.getElementById('m3u-f').style.display    = t==='m3u'?'block':'none';
 }
 
 // ══════════════════════════════════════════════
-// DEVICE
+// USER — DEVICE
 // ══════════════════════════════════════════════
-async function loadDevice() {
-  if (!STATE.device) return;
-  const d = STATE.device;
+function loadDevice() {
+  if (!S.device) return;
+  const d = S.device;
+  document.getElementById('d-mac').textContent = d.mac_address||'—';
+  document.getElementById('d-key').textContent = d.device_key||'—';
+  const qrUrl = `${window.location.origin}${window.location.pathname}?mac=${encodeURIComponent(d.mac_address)}&key=${encodeURIComponent(d.device_key)}`;
+  document.getElementById('qr-url').textContent = qrUrl;
+  const qrBox = document.getElementById('qr-box'); qrBox.innerHTML='';
+  new QRCode(qrBox,{text:qrUrl,width:160,height:160,colorDark:'#0D0D1A',colorLight:'#FFFFFF',correctLevel:QRCode.CorrectLevel.M});
+  const rows=[
+    ['Adresse MAC',`<span class="mono" style="color:var(--v)">${d.mac_address}</span>`],
+    ['Clé d\'activation',`<span class="mono" style="font-size:16px;font-weight:700">${d.device_key}</span>`],
+    ['Appareil', d.device_name||'—'],['Modèle',d.device_model||'—'],
+    ['Marque',d.device_brand||'—'],['Android',d.android_version||'—'],
+    ['Version app',d.app_version||'—'],
+    ['Premier accès',d.created_at?fmtDate(d.created_at):'—'],
+    ['Dernier accès',d.last_seen_at?fmtDate(d.last_seen_at):'—'],
+    ['Statut',d.is_banned?'<span class="badge b-banned">BANNI</span>':'<span class="badge b-active">ACTIF</span>'],
+  ];
+  document.getElementById('d-info-tbody').innerHTML = rows.map(([l,v])=>`<tr><td style="color:var(--t3);font-size:11px;font-weight:600;width:40%">${l}</td><td>${v}</td></tr>`).join('');
+}
 
-  document.getElementById('device-mac-display').textContent = d.mac_address || '—';
-  document.getElementById('device-key-display').textContent = d.device_key  || '—';
+// ══════════════════════════════════════════════
+// USER — BILLING
+// ══════════════════════════════════════════════
+function loadBilling() {
+  if (!S.license) return;
+  const l = S.license;
+  document.getElementById('b-plan').textContent    = l.plan_name||'Essai';
+  document.getElementById('b-expires').textContent = `Expire : ${fmtExpiry(l.expires_at)}`;
+  document.getElementById('b-badge').outerHTML = statusBadge(l.status, 'b-badge');
+  document.getElementById('b-timeline').innerHTML = `
+    <div class="tl-item"><div class="tl-dot">🎯</div><div><div style="font-size:12px;font-weight:700">Licence "${l.plan_name||'Essai'}" activée</div><div class="tl-date">${l.starts_at?fmtDate(l.starts_at):'—'}</div></div></div>
+    ${l.expires_at?`<div class="tl-item"><div class="tl-dot">⏱️</div><div><div style="font-size:12px;font-weight:700">Expiration prévue</div><div class="tl-date">${fmtDate(l.expires_at)}</div></div></div>`:''}
+  `;
+}
+function subscribe(plan) { toast('info','Bientôt disponible',`Paiement Stripe — intégration en cours`); }
 
-  // QR Code
-  const qrUrl = `https://devhertox.github.io/arich_iptv/manage-playlist.html?mac=${encodeURIComponent(d.mac_address)}&key=${encodeURIComponent(d.device_key)}`;
-  document.getElementById('qr-url-display').textContent = qrUrl;
-  const qrContainer = document.getElementById('qr-container');
-  qrContainer.innerHTML = '';
-  new QRCode(qrContainer, {
-    text:   qrUrl,
-    width:  180, height: 180,
-    colorDark:  '#0D0D1A',
-    colorLight: '#FFFFFF',
-    correctLevel: QRCode.CorrectLevel.M,
+// ══════════════════════════════════════════════
+// ADMIN — DASHBOARD
+// ══════════════════════════════════════════════
+async function loadAdminDash() {
+  try {
+    const { data, error } = await sb.rpc('admin_get_stats');
+    if (error) throw error;
+    S.adminData = data;
+    animNum('a-total',  data.total_devices||0);
+    animNum('a-active', data.active_devices||0);
+    animNum('a-trial',  data.trial_devices||0);
+    animNum('a-banned', data.banned_devices||0);
+    animNum('a-pls',    data.total_playlists||0);
+    animNum('a-today',  data.new_today||0);
+    document.getElementById('a-week').textContent = `↑ ${data.new_week||0} cette semaine`;
+    renderAdminCharts(data);
+  } catch(e) { toast('error','Erreur stats',e.message); }
+}
+
+function renderAdminCharts(d) {
+  // Licences doughnut
+  const ctx1 = document.getElementById('ch-admin-lic').getContext('2d');
+  if (S.charts.adminLic) S.charts.adminLic.destroy();
+  S.charts.adminLic = new Chart(ctx1, {
+    type: 'doughnut',
+    data: {
+      labels: ['Actifs','Essai','Bannis'],
+      datasets:[{
+        data: [d.active_devices||0, d.trial_devices||0, d.banned_devices||0],
+        backgroundColor: ['rgba(0,230,118,.7)','rgba(255,215,64,.7)','rgba(255,45,85,.7)'],
+        borderColor: ['transparent','transparent','transparent'],
+        borderRadius: 4,
+      }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, cutout:'70%',
+      plugins:{ legend:{ position:'bottom', labels:{ color:'rgba(255,255,255,.5)', font:{size:11}, padding:12 } } }
+    }
   });
 
-  // Table infos
-  const rows = [
-    ['Adresse MAC', `<span class="mono" style="color:var(--violet)">${d.mac_address}</span>`],
-    ['Clé d\'activation', `<span class="mono" style="font-size:18px;font-weight:700;color:var(--text)">${d.device_key}</span>`],
-    ['Appareil', d.device_name || '—'],
-    ['Modèle', d.device_model || '—'],
-    ['Marque', d.device_brand || '—'],
-    ['Android', d.android_version || '—'],
-    ['Version app', d.app_version || '—'],
-    ['Premier accès', d.first_seen_at ? fmtDate(d.first_seen_at) : '—'],
-    ['Dernier accès', d.last_seen_at  ? fmtDate(d.last_seen_at)  : '—'],
-    ['Statut', d.is_banned ? '<span class="badge badge-expired">BANNI</span>' : '<span class="badge badge-active">ACTIF</span>'],
-  ];
-
-  document.getElementById('device-info-tbody').innerHTML = rows.map(([label, val]) => `
-    <tr>
-      <td style="color:var(--text-3);font-size:12px;font-weight:500;width:40%">${label}</td>
-      <td>${val}</td>
-    </tr>
-  `).join('');
-}
-
-// ══════════════════════════════════════════════
-// BILLING
-// ══════════════════════════════════════════════
-async function loadBilling() {
-  if (!STATE.license) return;
-  const lic = STATE.license;
-
-  document.getElementById('billing-plan').textContent    = lic.plan_name    || 'Essai';
-  document.getElementById('billing-expires').textContent = `Expire : ${formatExpiry(lic.expires_at)}`;
-  updateStatusBadge(document.getElementById('billing-status-badge'), lic.status);
-
-  // Timeline
-  const timeline = document.getElementById('billing-timeline');
-  const events = [
-    {
-      icon: '🎯',
-      label: `Licence "${lic.plan_name}" activée`,
-      date: lic.starts_at,
+  // Registrations bar (mock 7 jours — à remplacer par vraie query si besoin)
+  const ctx2 = document.getElementById('ch-admin-reg').getContext('2d');
+  if (S.charts.adminReg) S.charts.adminReg.destroy();
+  const days = Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return d.toLocaleDateString('fr-FR',{weekday:'short'});});
+  S.charts.adminReg = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: days,
+      datasets:[{
+        label: 'Inscriptions',
+        data: Array.from({length:6},()=>0).concat([d.new_today||0]),
+        backgroundColor: 'rgba(123,47,255,.6)',
+        borderRadius: 6, borderSkipped: false,
+      }]
     },
-    ...(lic.expires_at ? [{
-      icon: '⏱️',
-      label: `Expiration prévue`,
-      date: lic.expires_at,
-    }] : []),
-  ];
-
-  timeline.innerHTML = events.map(ev => `
-    <div class="timeline-item">
-      <div class="timeline-dot">${ev.icon}</div>
-      <div class="timeline-content">
-        <div style="font-size:13px;font-weight:600">${ev.label}</div>
-        <div class="timeline-date">${ev.date ? fmtDate(ev.date) : '—'}</div>
-      </div>
-    </div>
-  `).join('');
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:false } },
+      scales:{ x:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'rgba(255,255,255,.35)',font:{size:10}} }, y:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'rgba(255,255,255,.35)',font:{size:10}}, beginAtZero:true } }
+    }
+  });
 }
 
-function subscribe(plan) {
-  // TODO: Intégrer Stripe Checkout
-  // Rediriger vers une Stripe Checkout Session créée via Supabase Edge Function
-  toast('info', 'Bientôt disponible', `Abonnement ${plan} — Paiement Stripe en cours d\'intégration`);
+// ══════════════════════════════════════════════
+// ADMIN — USERS
+// ══════════════════════════════════════════════
+let searchTimer;
+function searchUsers(val) {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => { S.usersSearch=val; S.usersPage=0; loadUsers(); }, 350);
+}
+
+async function loadUsers() {
+  const tbody = document.getElementById('users-tbody');
+  tbody.innerHTML = '<tr><td colspan="6"><div class="loading-center"><div class="spinner"></div></div></td></tr>';
+  try {
+    const { data, error } = await sb.rpc('admin_get_users', {
+      p_limit: S.usersPerPage, p_offset: S.usersPage * S.usersPerPage, p_search: S.usersSearch
+    });
+    if (error) throw error;
+    S.usersTotal = data.total || 0;
+    const users = data.users || [];
+    document.getElementById('users-count-label').textContent = `${S.usersTotal} appareil${S.usersTotal>1?'s':''} enregistré${S.usersTotal>1?'s':''}`;
+    if (!users.length) {
+      tbody.innerHTML = '<tr><td colspan="6"><div class="empty"><div class="ei">👥</div><h3>Aucun utilisateur</h3><p>Aucun device ne correspond à la recherche</p></div></td></tr>';
+    } else {
+      tbody.innerHTML = users.map(u=>`
+        <tr class="user-row" onclick="openUserDetail('${u.id}')">
+          <td>
+            <div style="font-size:13px;font-weight:700">${esc(u.device_name||'—')}</div>
+            <div style="font-size:10px;color:var(--t3)">${esc(u.device_brand||'')} ${esc(u.device_model||'')} · Android ${u.android_version||'—'}</div>
+          </td>
+          <td>
+            <div class="mono" style="font-size:11px;color:var(--v)">${esc(u.mac_address)}</div>
+            <div class="mono" style="font-size:12px;font-weight:700;letter-spacing:2px">${esc(u.device_key)}</div>
+          </td>
+          <td>${statusBadge(u.license_status)}</td>
+          <td><span style="font-weight:700;font-size:14px">${u.playlist_count||0}</span></td>
+          <td style="font-size:11px;color:var(--t3)">${u.last_seen_at?fmtDate(u.last_seen_at):'Jamais'}</td>
+          <td onclick="event.stopPropagation()">
+            <div class="action-cell">
+              ${u.is_banned
+                ? `<button class="btn btn-success btn-sm" onclick="deviceAction('${u.id}','unban')">✅ Débannir</button>`
+                : `<button class="btn btn-danger btn-sm" onclick="deviceAction('${u.id}','ban')">🚫 Bannir</button>`}
+              <button class="btn btn-ghost btn-sm" onclick="deviceAction('${u.id}','extend_trial')">+7j</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+    renderUsersPagination();
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="ei">⚠️</div><h3>Erreur</h3><p>${e.message}</p></div></td></tr>`;
+    toast('error','Erreur chargement',e.message);
+  }
+}
+
+function renderUsersPagination() {
+  const total = Math.ceil(S.usersTotal / S.usersPerPage);
+  const pg = document.getElementById('users-pagination');
+  if (total <= 1) { pg.innerHTML=''; return; }
+  let html = `<button class="page-btn" onclick="usersPage(${S.usersPage-1})" ${S.usersPage===0?'disabled':''}>‹</button>`;
+  for (let i=0; i<total; i++) {
+    if (i===0||i===total-1||Math.abs(i-S.usersPage)<=1)
+      html += `<button class="page-btn ${i===S.usersPage?'active':''}" onclick="usersPage(${i})">${i+1}</button>`;
+    else if (Math.abs(i-S.usersPage)===2)
+      html += `<span class="page-info">…</span>`;
+  }
+  html += `<button class="page-btn" onclick="usersPage(${S.usersPage+1})" ${S.usersPage>=total-1?'disabled':''}>›</button>`;
+  html += `<span class="page-info">${S.usersTotal} total</span>`;
+  pg.innerHTML = html;
+}
+function usersPage(p) { S.usersPage=p; loadUsers(); }
+
+async function deviceAction(deviceId, action, value='') {
+  try {
+    const { data, error } = await sb.rpc('admin_device_action', { p_device_id: deviceId, p_action: action, p_value: value });
+    if (error) throw error;
+    if (data?.error) throw new Error(data.error);
+    const msgs = { ban:'Device banni', unban:'Device débanni', extend_trial:'Essai prolongé de 7 jours', activate:'Licence activée' };
+    toast('success', msgs[action]||'Action effectuée','');
+    loadUsers();
+  } catch(e) { toast('error','Erreur', e.message); }
+}
+
+async function openUserDetail(deviceId) {
+  openModal('modal-user');
+  document.getElementById('modal-user-body').innerHTML = '<div class="loading-center"><div class="spinner"></div></div>';
+  try {
+    const { data } = await sb.rpc('admin_get_users', { p_limit:1, p_offset:0, p_search:'' });
+    // Chercher dans la liste chargée
+    const { data: d2 } = await sb.from('devices').select('*, licenses(*)').eq('id', deviceId).single();
+    if (!d2) throw new Error('Device introuvable');
+    const lic = d2.licenses?.[0];
+    document.getElementById('modal-user-title').textContent = d2.device_name || d2.mac_address;
+    document.getElementById('modal-user-body').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        <div class="card" style="padding:14px">
+          <div style="font-size:10px;color:var(--t3);margin-bottom:4px">MAC / Clé</div>
+          <div class="mono" style="color:var(--v);font-size:12px">${d2.mac_address}</div>
+          <div class="mono" style="font-weight:700;font-size:18px;letter-spacing:3px">${d2.device_key}</div>
+        </div>
+        <div class="card" style="padding:14px">
+          <div style="font-size:10px;color:var(--t3);margin-bottom:4px">Licence</div>
+          ${statusBadge(lic?.status)}
+          <div style="font-size:12px;margin-top:4px">${lic?.plan_name||'—'}</div>
+          <div style="font-size:10px;color:var(--t3)">${lic?.expires_at?'Expire : '+fmtDate(lic.expires_at):'Illimité'}</div>
+        </div>
+      </div>
+      <div class="table-wrap" style="margin-bottom:16px">
+        <table><tbody>
+          ${[['Appareil',d2.device_name||'—'],['Modèle',d2.device_model||'—'],['Marque',d2.device_brand||'—'],
+             ['Android',d2.android_version||'—'],['App',d2.app_version||'—'],
+             ['Inscrit',d2.created_at?fmtDate(d2.created_at):'—'],
+             ['Vu',d2.last_seen_at?fmtDate(d2.last_seen_at):'Jamais'],
+             ['Statut',d2.is_banned?'<span class="badge b-banned">BANNI</span>':'<span class="badge b-active">ACTIF</span>']
+          ].map(([l,v])=>`<tr><td style="color:var(--t3);font-size:11px;width:35%">${l}</td><td style="font-size:12px">${v}</td></tr>`).join('')}
+        </tbody></table>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${d2.is_banned
+          ? `<button class="btn btn-success btn-sm" onclick="deviceAction('${d2.id}','unban');closeModal('modal-user')">✅ Débannir</button>`
+          : `<button class="btn btn-danger btn-sm" onclick="deviceAction('${d2.id}','ban');closeModal('modal-user')">🚫 Bannir</button>`}
+        <button class="btn btn-ghost btn-sm" onclick="deviceAction('${d2.id}','extend_trial');closeModal('modal-user')">⏳ +7 jours essai</button>
+        <button class="btn btn-primary btn-sm" onclick="deviceAction('${d2.id}','activate','Mensuel');closeModal('modal-user')">✨ Activer 30j</button>
+      </div>
+    `;
+  } catch(e) {
+    document.getElementById('modal-user-body').innerHTML = `<p style="color:var(--r)">${e.message}</p>`;
+  }
+}
+
+async function loadAdminLicenses() {
+  const el = document.getElementById('quick-stats-lic');
+  try {
+    const { data } = await sb.rpc('admin_get_stats');
+    el.innerHTML = `
+      <div class="g3">
+        <div><div style="font-size:10px;color:var(--t3)">Actives</div><div style="font-size:28px;font-weight:800;color:var(--g)">${data.active_devices||0}</div></div>
+        <div><div style="font-size:10px;color:var(--t3)">Essai</div><div style="font-size:28px;font-weight:800;color:var(--gold)">${data.trial_devices||0}</div></div>
+        <div><div style="font-size:10px;color:var(--t3)">Bannis</div><div style="font-size:28px;font-weight:800;color:var(--r)">${data.banned_devices||0}</div></div>
+      </div>
+      <p style="font-size:12px;color:var(--t2);margin-top:16px">Pour gérer les licences individuellement, rendez-vous dans <strong>Utilisateurs</strong> et cliquez sur un device.</p>
+    `;
+  } catch(e) { el.innerHTML = `<p style="color:var(--r)">${e.message}</p>`; }
+}
+
+// ══════════════════════════════════════════════
+// CHARTS (user)
+// ══════════════════════════════════════════════
+function renderLicenseChart(lic) {
+  const ctx = document.getElementById('ch-license').getContext('2d');
+  if (S.charts.lic) S.charts.lic.destroy();
+  const exp = lic.expires_at?new Date(lic.expires_at):null;
+  const sta = lic.starts_at?new Date(lic.starts_at):new Date();
+  const now = new Date();
+  let used=1,rem=99;
+  if (exp) { const t=exp-sta, e=now-sta; used=Math.max(0,Math.min(100,(e/t)*100)); rem=100-used; }
+  const col = lic.status==='active'?'#7B2FFF':lic.status==='trial'?'#ffd740':'#ff2d55';
+  S.charts.lic = new Chart(ctx,{type:'doughnut',data:{labels:['Utilisé','Restant'],datasets:[{data:[used,rem],backgroundColor:[col,'rgba(255,255,255,.05)'],borderColor:['transparent','transparent'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.label}: ${Math.round(c.raw)}%`}}}}});
+}
+function renderContentChart(live, movies, series) {
+  const ctx = document.getElementById('ch-content').getContext('2d');
+  if (S.charts.content) S.charts.content.destroy();
+  S.charts.content = new Chart(ctx,{type:'bar',data:{labels:['Live','Films','Séries'],datasets:[{data:[live,movies,series],backgroundColor:['rgba(123,47,255,.7)','rgba(255,45,85,.7)','rgba(33,150,243,.7)'],borderRadius:7,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(255,255,255,.35)'}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(255,255,255,.35)'},beginAtZero:true}}}});
 }
 
 // ══════════════════════════════════════════════
 // MODALS
 // ══════════════════════════════════════════════
-function openModal(id) {
-  document.getElementById(id).classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-  document.body.style.overflow = '';
-}
-// Fermer modal en cliquant overlay
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) closeModal(overlay.id);
-  });
-});
+function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
+document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) closeModal(o.id); }));
 
 // ══════════════════════════════════════════════
-// TOAST NOTIFICATIONS
+// MOBILE SIDEBAR
 // ══════════════════════════════════════════════
-const TOAST_ICONS = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('mob-open');
+  document.getElementById('sb-overlay').classList.toggle('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('mob-open');
+  document.getElementById('sb-overlay').classList.remove('show');
+}
 
-function toast(type, title, message = '', duration = 4000) {
-  const container = document.getElementById('toast-container');
+// ══════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════
+const T_ICONS = { success:'✅', error:'❌', info:'ℹ️', warning:'⚠️' };
+function toast(type, title, msg='', dur=4000) {
+  const c = document.getElementById('toasts');
   const el = document.createElement('div');
   el.className = `toast toast-${type}`;
-  el.style.position = 'relative';
-  el.innerHTML = `
-    <div class="toast-icon">${TOAST_ICONS[type] || 'ℹ️'}</div>
-    <div class="toast-text">
-      <strong>${escHtml(title)}</strong>
-      ${message ? `<small>${escHtml(message)}</small>` : ''}
-    </div>
-    <div class="toast-progress" style="width:100%"></div>
-  `;
-
-  container.appendChild(el);
+  el.innerHTML = `<div class="t-icon">${T_ICONS[type]||'ℹ️'}</div><div class="t-text"><strong>${esc(title)}</strong>${msg?`<small>${esc(msg)}</small>`:''}</div>`;
+  c.appendChild(el);
   requestAnimationFrame(() => el.classList.add('show'));
-
-  // Progress bar
-  const bar = el.querySelector('.toast-progress');
-  bar.style.transition = `width ${duration}ms linear`;
-  requestAnimationFrame(() => { bar.style.width = '0%'; });
-
-  setTimeout(() => {
-    el.classList.add('hide');
-    setTimeout(() => el.remove(), 400);
-  }, duration);
+  setTimeout(() => { el.classList.add('hide'); setTimeout(()=>el.remove(),350); }, dur);
 }
 
 // ══════════════════════════════════════════════
-// UTILITIES
+// UTILS
 // ══════════════════════════════════════════════
-function formatMacInput(input) {
-  let v = input.value.replace(/[^0-9A-Fa-f]/g, '').toUpperCase();
-  let formatted = v.match(/.{1,2}/g)?.join(':').substring(0, 17) || '';
-  input.value = formatted;
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmt(n) { return (n||0).toLocaleString('fr-FR'); }
+function fmtDate(iso) { if(!iso) return '—'; return new Date(iso).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+function fmtExpiry(iso) {
+  if (!iso) return 'Illimité ♾️';
+  const d = new Date(iso), diff = d-new Date();
+  if (diff<0) return 'Expiré ❌';
+  const days = Math.ceil(diff/86400000);
+  return `${days}j (${d.toLocaleDateString('fr-FR')})`;
 }
-
-function escHtml(str) {
-  if (!str) return '';
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function statusBadge(status, id='') {
+  const M = { active:['b-active','● ACTIF'], trial:['b-trial','◌ ESSAI'], expired:['b-expired','✕ EXPIRÉ'], suspended:['b-suspended','⏸ SUSPENDU'], banned:['b-banned','⛔ BANNI'] };
+  const [cls,lbl] = M[status]||['b-trial', status?.toUpperCase()||'—'];
+  return `<span class="badge ${cls}"${id?` id="${id}"`:''}>${lbl}</span>`;
 }
-
-function fmtNum(n) { return (n || 0).toLocaleString('fr-FR'); }
-
-function fmtDate(iso) {
-  if (!iso) return '—';
-  return new Date(iso).toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+function animNum(id, target) {
+  const el = document.getElementById(id); if(!el) return;
+  const start = parseInt(el.textContent.replace(/\D/g,''))||0;
+  anime({ targets:{val:start}, val:target, round:1, duration:800, easing:'easeOutCubic', update:(a)=>{ el.textContent=Math.round(a.animations[0].currentValue).toLocaleString('fr-FR'); } });
 }
-
-function formatExpiry(isoDate) {
-  if (!isoDate) return 'Illimité ♾️';
-  const dt   = new Date(isoDate);
-  const diff = dt - new Date();
-  if (diff < 0) return 'Expiré ❌';
-  const days = Math.ceil(diff / 86400000);
-  if (days > 365) return `${Math.round(days/365)} an(s)  (${dt.toLocaleDateString('fr-FR')})`;
-  return `${days} jour(s)  (${dt.toLocaleDateString('fr-FR')})`;
+function copyEl(id, msg) {
+  const t = document.getElementById(id)?.textContent; if(!t) return;
+  navigator.clipboard.writeText(t).then(()=>toast('success',msg,t));
 }
-
-function updateStatusBadge(el, status) {
-  if (!el) return;
-  const MAP = {
-    active:    ['badge-active',    '● ACTIF'],
-    trial:     ['badge-trial',     '◌ ESSAI'],
-    expired:   ['badge-expired',   '✕ EXPIRÉ'],
-    suspended: ['badge-suspended', '⏸ SUSPENDU'],
-    banned:    ['badge-expired',   '⛔ BANNI'],
-  };
-  const [cls, label] = MAP[status] || ['badge-trial', status?.toUpperCase() || '—'];
-  el.className = `badge ${cls}`;
-  el.textContent = label;
-}
-
-function animateNumber(id, target) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const start = parseInt(el.textContent.replace(/\D/g,'')) || 0;
-  anime({
-    targets: { val: start },
-    val: target,
-    round: 1,
-    duration: 900,
-    easing: 'easeOutCubic',
-    update: (anim) => {
-      el.textContent = Math.round(anim.animations[0].currentValue).toLocaleString('fr-FR');
-    },
-  });
-}
-
-function copyField(id, msg) {
-  const text = document.getElementById(id)?.textContent;
-  if (!text) return;
-  navigator.clipboard.writeText(text).then(() => toast('success', msg, text));
+function fmtMac(input) {
+  let v = input.value.replace(/[^0-9A-Fa-f]/g,'').toUpperCase();
+  input.value = v.match(/.{1,2}/g)?.join(':').substring(0,17)||'';
 }
 </script>
 </body>
