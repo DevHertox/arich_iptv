@@ -9,9 +9,6 @@
   <meta property="og:description" content="Player IPTV premium pour Android. Compatible Xtream Codes et M3U. Design premium, zapping ultra-rapide." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-
-  <!-- ── Umami Analytics (RGPD-friendly, sans cookies, sans bandeau) ── -->
-  <!-- Remplacer data-website-id par votre ID après création du compte sur umami.is ou auto-hébergement -->
   <script defer src="https://cloud.umami.is/script.js" data-website-id="VOTRE-UMAMI-ID" data-domains="arich-iptv.com"></script>
 
   <style>
@@ -90,7 +87,7 @@
       font-size: 15px;
       box-shadow: 0 0 20px rgba(123,47,255,0.4);
     }
-    .nav-links { display: flex; align-items: center; gap: 36px; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; }
     .nav-links a:hover { color: white; }
     .nav-cta {
@@ -101,6 +98,30 @@
       transition: box-shadow .2s, transform .2s !important;
     }
     .nav-cta:hover { box-shadow: 0 0 28px rgba(123,47,255,0.45); transform: scale(1.04); }
+
+    /* ── NAV LOGIN BUTTON ─────────────────────────────── */
+    .nav-login {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: 100px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.8);
+      font-size: 13px; font-weight: 500;
+      text-decoration: none;
+      transition: background .2s, border-color .2s, color .2s, transform .2s;
+      white-space: nowrap;
+    }
+    .nav-login:hover {
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(255,255,255,0.22);
+      color: white;
+      transform: translateY(-1px);
+    }
+    .nav-login svg { opacity: 0.7; flex-shrink: 0; }
+    .nav-login:hover svg { opacity: 1; }
+
+    /* Nav right cluster */
+    .nav-right { display: flex; align-items: center; gap: 10px; }
 
     /* ── SECTIONS ──────────────────────────────────── */
     section { padding: 120px 48px; max-width: 1200px; margin: 0 auto; }
@@ -170,6 +191,7 @@
     .hero-actions {
       display: flex; align-items: center; gap: 14px;
       margin-top: 40px; animation: fadeUp .7s .3s ease both;
+      flex-wrap: wrap;
     }
     .btn-primary {
       background: var(--grad); color: white; border: none; cursor: pointer;
@@ -187,8 +209,35 @@
     }
     .btn-secondary:hover { border-color: rgba(255,255,255,0.25); color: white; transform: translateY(-2px); }
 
+    /* ── HERO LOGIN STRIP ─────────────────────────── */
+    .hero-login-strip {
+      display: inline-flex; align-items: center; gap: 12px;
+      margin-top: 28px;
+      padding: 12px 18px;
+      background: rgba(123,47,255,0.07);
+      border: 1px solid rgba(123,47,255,0.18);
+      border-radius: 14px;
+      font-size: 14px; color: var(--muted);
+      animation: fadeUp .7s .45s ease both;
+      width: fit-content;
+    }
+    .hero-login-strip a {
+      color: white; font-weight: 600; text-decoration: none;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 13px;
+      transition: background .2s, border-color .2s, transform .2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .hero-login-strip a:hover {
+      background: rgba(255,255,255,0.13);
+      border-color: rgba(255,255,255,0.25);
+      transform: translateY(-1px);
+    }
+
     .hero-stats {
-      display: flex; gap: 32px; margin-top: 48px;
+      display: flex; gap: 32px; margin-top: 40px;
       animation: fadeUp .7s .4s ease both;
     }
     .hero-stat span:first-child { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: white; }
@@ -323,7 +372,6 @@
     .plan-btn.outline { background: transparent; color: var(--muted); border: 1px solid var(--faint); }
     .plan-btn.outline:hover { border-color: rgba(255,255,255,0.25); color: white; }
 
-    /* disclaimer pricing */
     .pricing-disclaimer {
       max-width: 760px; margin: 28px auto 0;
       background: rgba(123,47,255,0.05);
@@ -377,9 +425,23 @@
     /* ── FOOTER ────────────────────────────────────── */
     footer { border-top: 1px solid var(--border); padding: 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
     .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; display: flex; align-items: center; gap: 10px; }
-    .footer-links { display: flex; gap: 28px; }
+    .footer-links { display: flex; gap: 28px; flex-wrap: wrap; align-items: center; }
     .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
     .footer-links a:hover { color: white; }
+
+    /* ── FOOTER LOGIN LINK ─────────────────────────── */
+    .footer-login-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600;
+      background: var(--grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      padding: 0;
+      transition: opacity .2s;
+    }
+    .footer-login-link:hover { opacity: 0.8; }
+
     .footer-copy { font-size: 12px; color: var(--muted); }
 
     /* ── SCROLL REVEAL ─────────────────────────────── */
@@ -392,8 +454,9 @@
 
     /* ── RESPONSIVE ────────────────────────────────── */
     @media (max-width: 900px) {
-      nav { padding: 0 24px; }
+      nav { padding: 0 20px; }
       .nav-links { display: none; }
+      .nav-right { gap: 8px; }
       section { padding: 80px 24px; }
       .hero-inner { grid-template-columns: 1fr; padding: 0 24px; }
       .hero-phone { display: none; }
@@ -402,7 +465,7 @@
       .plan-card.featured { transform: none; }
       .plan-card.featured:hover { transform: translateY(-6px); }
       .contact-grid { grid-template-columns: 1fr; }
-      footer { flex-direction: column; align-items: flex-start; }
+      footer { flex-direction: column; align-items: flex-start; gap: 20px; padding: 32px 24px; }
       body { cursor: auto; }
       #cursor, #cursor-ring { display: none; }
     }
@@ -411,6 +474,10 @@
       .form-row { grid-template-columns: 1fr; }
       .hero-stats { gap: 20px; }
       .pricing-grid { grid-template-columns: 1fr; }
+      .nav-login span { display: none; }
+      .nav-login { padding: 8px 11px; }
+      footer { padding: 28px 16px; }
+      .footer-links { gap: 16px; }
     }
   </style>
 </head>
@@ -431,7 +498,16 @@
     <a href="#pricing">Tarifs</a>
     <a href="#faq">FAQ</a>
     <a href="#contact">Contact</a>
-    <a href="#download" class="nav-cta">Télécharger</a>
+  </div>
+  <div class="nav-right">
+    <a href="https://devhertox.github.io/arich_iptv/auth.html" class="nav-login" data-umami-event="nav-login">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      <span>Mon compte</span>
+    </a>
+    <a href="#download" class="nav-cta" data-umami-event="cta-download-nav">Télécharger</a>
   </div>
 </nav>
 
@@ -464,6 +540,16 @@
           Voir les offres →
         </a>
       </div>
+
+      <!-- LOGIN STRIP — accès rapide compte -->
+      <div class="hero-login-strip">
+        <span>Déjà client ?</span>
+        <a href="https://devhertox.github.io/arich_iptv/auth.html" data-umami-event="hero-login-strip">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Se connecter / Gérer mes playlists
+        </a>
+      </div>
+
       <div class="hero-stats">
         <div class="hero-stat">
           <span>Xtream</span>
@@ -578,8 +664,6 @@
   <p class="section-sub reveal" style="text-align:center;margin:0 auto;">Accès au player uniquement — apportez votre propre source IPTV.</p>
 
   <div class="pricing-grid">
-
-    <!-- Annuel -->
     <div class="plan-card reveal">
       <div class="plan-name">Annuel</div>
       <div class="plan-desc">Idéal pour tester le player</div>
@@ -598,7 +682,6 @@
       <button class="plan-btn outline" onclick="openContact('Annuel 2,99€')" data-umami-event="pricing-mensuel">Activer pour 2,99€/an</button>
     </div>
 
-    <!-- À vie — FEATURED -->
     <div class="plan-card featured reveal">
       <div class="plan-badge">🔥 Meilleur choix</div>
       <div class="plan-name">À vie</div>
@@ -619,13 +702,12 @@
     </div>
   </div>
 
-  <!-- Disclaimer pricing -->
   <div class="pricing-disclaimer reveal">
     <strong style="color:rgba(255,255,255,0.7);display:block;margin-bottom:6px;">⚠️ Important — À lire avant d'acheter</strong>
-    Arich IPTV est un <strong style="color:rgba(255,255,255,0.6)">lecteur multimédia</strong> uniquement. L'abonnement donne accès à l'application player. 
-    <strong style="color:rgba(255,255,255,0.6)">Aucun contenu, aucune chaîne, aucun film ne sont inclus.</strong> 
-    Vous devez posséder votre propre accès IPTV (Xtream Codes ou M3U) auprès d'un fournisseur tiers. 
-    La licence est liée à votre appareil via sa Device Key (visible dans Paramètres → Appareil). 
+    Arich IPTV est un <strong style="color:rgba(255,255,255,0.6)">lecteur multimédia</strong> uniquement. L'abonnement donne accès à l'application player.
+    <strong style="color:rgba(255,255,255,0.6)">Aucun contenu, aucune chaîne, aucun film ne sont inclus.</strong>
+    Vous devez posséder votre propre accès IPTV (Xtream Codes ou M3U) auprès d'un fournisseur tiers.
+    La licence est liée à votre appareil via sa Device Key (visible dans Paramètres → Appareil).
     Paiement via PayPal ou carte bancaire. Activation sous 2h après réception de votre Device Key.
   </div>
 
@@ -778,9 +860,13 @@
     <a href="#pricing">Tarifs</a>
     <a href="#faq">FAQ</a>
     <a href="#contact">Contact</a>
-    <a href="manage-playlist.html">PLaylists</a>
-    <a href="privacy-policy.html">Politique de confidentialité</a>
+    <a href="manage-playlist.html">Playlists</a>
+    <a href="privacy-policy.html">Confidentialité</a>
     <a href="#">CGU</a>
+    <a href="https://devhertox.github.io/arich_iptv/auth.html" class="footer-login-link" data-umami-event="footer-login">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="-webkit-text-fill-color:initial;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Mon compte →
+    </a>
   </div>
   <div class="footer-copy">
     © 2025 Arich IPTV · Lecteur multimédia uniquement · Aucun contenu fourni
@@ -851,7 +937,6 @@
       if (res.ok) {
         showToast('✓ Message envoyé !');
         e.target.reset();
-        // Event Umami
         if (window.umami) umami.track('form-sent', { plan: subject });
       } else {
         showToast('✗ Erreur, réessayez');
@@ -868,30 +953,25 @@
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  // ── Tracking temps passé sur le site (Supabase) ───────────────────────────
-  // Configure avec ton URL et clé anon Supabase
+  // ── Tracking sessions site (Supabase) ────────────────────────────────────
   const SUPABASE_URL  = 'https://aynucieohuowgkwyftiy.supabase.co';
   const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5bnVjaWVvaHVvd2drd3lmdGl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyOTIxMDMsImV4cCI6MjA4Nzg2ODEwM30.H43CVcyzEuYBQfBIlkn16r5uk768isHr4DeLduo1ETk';
 
   const _siteSession = {
-    start:     Date.now(),
-    pageviews: 1,
-    country:   null,
-    referrer:  document.referrer || 'direct',
-    path:      location.pathname,
+    start:    Date.now(),
+    referrer: document.referrer || 'direct',
+    path:     location.pathname,
+    country:  null,
   };
 
-  // Récupère le pays via IP (API publique, sans clé)
   fetch('https://ipapi.co/json/')
     .then(r => r.json())
     .then(d => { _siteSession.country = d.country_name || d.country; })
     .catch(() => {});
 
-  // Envoie une session à Supabase au moment où l'utilisateur quitte
   async function _sendSiteSession() {
     const duration = Math.round((Date.now() - _siteSession.start) / 1000);
-    if (duration < 3) return; // ignore les bounces < 3s
-
+    if (duration < 3) return;
     try {
       await fetch(`${SUPABASE_URL}/rest/v1/site_sessions`, {
         method: 'POST',
@@ -913,7 +993,6 @@
     } catch (_) {}
   }
 
-  // Envoie au chargement (pageview) et à la fermeture
   window.addEventListener('beforeunload', _sendSiteSession);
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') _sendSiteSession();
@@ -922,7 +1001,3 @@
 
 </body>
 </html>
-
-
-
-
