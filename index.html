@@ -908,15 +908,32 @@
   })();
 
   // ── Scroll reveal ─────────────────────────────────────────────────────────
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        obs.unobserve(e.target);
-      }
+  // Fallback immédiat : révèle tout ce qui est déjà dans le viewport au chargement
+function revealAll() {
+    document.querySelectorAll('.reveal').forEach(el => {
+      el.classList.add('visible');
     });
-  }, { threshold: 0, rootMargin: '0px 0px 0px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  }
+
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0, rootMargin: '0px' });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  } else {
+    revealAll();
+  }
+
+  // Sécurité : si après 1.5s rien n'est visible, on force tout
+  setTimeout(() => {
+    const hidden = document.querySelectorAll('.reveal:not(.visible)');
+    if (hidden.length > 20) revealAll();
+  }, 1500);
 
   // ── FAQ accordion ─────────────────────────────────────────────────────────
   function toggleFaq(el) {
@@ -1010,4 +1027,5 @@
           user_agent:       navigator.userAgent,
           created_at:       new Date().toISOString(),
         }),
+
 
