@@ -915,7 +915,7 @@
         obs.unobserve(e.target);
       }
     });
-  }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
+  }, { threshold: 0, rootMargin: '0px 0px 0px 0px' });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
   // ── FAQ accordion ─────────────────────────────────────────────────────────
@@ -1010,3 +1010,4 @@
           user_agent:       navigator.userAgent,
           created_at:       new Date().toISOString(),
         }),
+
