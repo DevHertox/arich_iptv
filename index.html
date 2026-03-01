@@ -100,7 +100,6 @@
     }
     .nav-cta:hover { box-shadow: 0 0 28px rgba(123,47,255,0.45); transform: scale(1.04); }
 
-    /* ── NAV LOGIN BUTTON ─────────────────────────────── */
     .nav-login {
       display: flex; align-items: center; gap: 8px;
       padding: 8px 16px; border-radius: 100px;
@@ -115,13 +114,10 @@
     .nav-login:hover {
       background: rgba(255,255,255,0.10);
       border-color: rgba(255,255,255,0.22);
-      color: white;
-      transform: translateY(-1px);
+      color: white; transform: translateY(-1px);
     }
     .nav-login svg { opacity: 0.7; flex-shrink: 0; }
     .nav-login:hover svg { opacity: 1; }
-
-    /* Nav right cluster */
     .nav-right { display: flex; align-items: center; gap: 10px; }
 
     /* ── SECTIONS ──────────────────────────────────── */
@@ -210,37 +206,24 @@
     }
     .btn-secondary:hover { border-color: rgba(255,255,255,0.25); color: white; transform: translateY(-2px); }
 
-    /* ── HERO LOGIN STRIP ─────────────────────────── */
     .hero-login-strip {
       display: inline-flex; align-items: center; gap: 12px;
-      margin-top: 28px;
-      padding: 12px 18px;
+      margin-top: 28px; padding: 12px 18px;
       background: rgba(123,47,255,0.07);
       border: 1px solid rgba(123,47,255,0.18);
-      border-radius: 14px;
-      font-size: 14px; color: var(--muted);
-      animation: fadeUp .7s .45s ease both;
-      width: fit-content;
+      border-radius: 14px; font-size: 14px; color: var(--muted);
+      animation: fadeUp .7s .45s ease both; width: fit-content;
     }
     .hero-login-strip a {
       color: white; font-weight: 600; text-decoration: none;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.14);
-      padding: 6px 14px; border-radius: 100px;
-      font-size: 13px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
+      padding: 6px 14px; border-radius: 100px; font-size: 13px;
       transition: background .2s, border-color .2s, transform .2s;
       display: flex; align-items: center; gap: 6px;
     }
-    .hero-login-strip a:hover {
-      background: rgba(255,255,255,0.13);
-      border-color: rgba(255,255,255,0.25);
-      transform: translateY(-1px);
-    }
+    .hero-login-strip a:hover { background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.25); transform: translateY(-1px); }
 
-    .hero-stats {
-      display: flex; gap: 32px; margin-top: 40px;
-      animation: fadeUp .7s .4s ease both;
-    }
+    .hero-stats { display: flex; gap: 32px; margin-top: 40px; animation: fadeUp .7s .4s ease both; }
     .hero-stat span:first-child { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: white; }
     .hero-stat span:last-child { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
 
@@ -291,7 +274,36 @@
     }
     .rating { display: flex; align-items: center; gap: 5px; }
     .stars { color: var(--gold); font-size: 12px; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── KEYFRAMES ─────────────────────────────────── */
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes aniUp    { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes aniLeft  { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes aniRight { from { opacity:0; transform:translateX(28px);  } to { opacity:1; transform:translateX(0); } }
+    @keyframes aniScale { from { opacity:0; transform:scale(0.93); }      to { opacity:1; transform:scale(1); } }
+
+    /* ── SCROLL ANIMATION SYSTEM ───────────────────── */
+    /* État initial : invisible */
+    [data-ani] {
+      opacity: 0;
+    }
+    /* Quand l'élément est entré dans le viewport : on lance l'anim */
+    [data-ani].ani-go {
+      animation-fill-mode: both;
+      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+      animation-duration: 0.7s;
+    }
+    [data-ani="up"].ani-go    { animation-name: aniUp; }
+    [data-ani="left"].ani-go  { animation-name: aniLeft; }
+    [data-ani="right"].ani-go { animation-name: aniRight; }
+    [data-ani="scale"].ani-go { animation-name: aniScale; }
+
+    /* Délais via data-delay (en ms, géré en JS inline style) */
+
+    /* plan-card featured garde son scale de base APRÈS l'anim */
+    .plan-card.featured[data-ani].ani-go {
+      animation-name: aniScale;
+    }
 
     /* ── SECTION LABELS ────────────────────────────── */
     .section-label { font-size: 11px; font-weight: 600; letter-spacing: 2px; color: var(--violet); text-transform: uppercase; margin-bottom: 14px; }
@@ -300,13 +312,10 @@
 
     /* ── DISCLAIMER BANNER ─────────────────────────── */
     .disclaimer-banner {
-      background: rgba(255,214,10,0.06);
-      border: 1px solid rgba(255,214,10,0.2);
-      border-radius: 14px;
-      padding: 16px 22px;
+      background: rgba(255,214,10,0.06); border: 1px solid rgba(255,214,10,0.2);
+      border-radius: 14px; padding: 16px 22px;
       display: flex; align-items: flex-start; gap: 12px;
-      font-size: 13px; color: var(--muted); line-height: 1.6;
-      margin-bottom: 20px;
+      font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px;
     }
     .disclaimer-banner .disc-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
     .disclaimer-banner strong { color: rgba(255,214,10,0.9); display: block; margin-bottom: 3px; font-size: 13px; }
@@ -375,12 +384,10 @@
 
     .pricing-disclaimer {
       max-width: 760px; margin: 28px auto 0;
-      background: rgba(123,47,255,0.05);
-      border: 1px solid rgba(123,47,255,0.15);
+      background: rgba(123,47,255,0.05); border: 1px solid rgba(123,47,255,0.15);
       border-radius: 12px; padding: 16px 20px;
       font-size: 12px; color: var(--muted); line-height: 1.7; text-align: left;
     }
-    .pricing-disclaimer a { color: var(--violet); }
 
     /* ── DOWNLOAD ──────────────────────────────────── */
     .dl-wrapper { background: var(--surface); border: 1px solid var(--border); border-radius: 32px; padding: 72px 48px; position: relative; overflow: hidden; }
@@ -429,40 +436,14 @@
     .footer-links { display: flex; gap: 28px; flex-wrap: wrap; align-items: center; }
     .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
     .footer-links a:hover { color: white; }
-
-    /* ── FOOTER LOGIN LINK ─────────────────────────── */
     .footer-login-link {
       display: inline-flex; align-items: center; gap: 6px;
       font-size: 13px; font-weight: 600;
-      background: var(--grad);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-decoration: none;
-      padding: 0;
-      transition: opacity .2s;
+      background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; text-decoration: none; padding: 0; transition: opacity .2s;
     }
     .footer-login-link:hover { opacity: 0.8; }
-
     .footer-copy { font-size: 12px; color: var(--muted); }
-
-    /* ── SCROLL REVEAL ─────────────────────────────── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity .65s ease, transform .65s ease;
-      will-change: opacity, transform;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    /* .plan-card.featured a transform:scale(1.03) de base — ne pas l'ecraser */
-    .plan-card.featured.reveal         { transform: scale(1.03) translateY(28px); }
-    .plan-card.featured.reveal.visible { transform: scale(1.03) translateY(0); }
-    @media (max-width: 900px) {
-      .plan-card.featured.reveal         { transform: translateY(28px); }
-      .plan-card.featured.reveal.visible { transform: translateY(0); }
-    }
 
     /* ── TOAST ─────────────────────────────────────── */
     #toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 24px; font-size: 14px; opacity: 0; transition: opacity .3s, transform .3s; z-index: 9999; pointer-events: none; white-space: nowrap; }
@@ -549,15 +530,9 @@
         Connectez votre propre accès IPTV (Xtream Codes ou M3U) et profitez d'une expérience de lecture premium. Design soigné, zapping rapide, multi-playlists.
       </p>
       <div class="hero-actions">
-        <a href="#download" class="btn-primary" data-umami-event="cta-download-hero">
-          ⬇ Télécharger l'app
-        </a>
-        <a href="#pricing" class="btn-secondary" data-umami-event="cta-pricing-hero">
-          Voir les offres →
-        </a>
+        <a href="#download" class="btn-primary" data-umami-event="cta-download-hero">⬇ Télécharger l'app</a>
+        <a href="#pricing" class="btn-secondary" data-umami-event="cta-pricing-hero">Voir les offres →</a>
       </div>
-
-      <!-- LOGIN STRIP — accès rapide compte -->
       <div class="hero-login-strip">
         <span>Déjà client ?</span>
         <a href="https://devhertox.github.io/arich_iptv/auth.html" data-umami-event="hero-login-strip">
@@ -565,20 +540,10 @@
           Se connecter / Gérer mes playlists
         </a>
       </div>
-
       <div class="hero-stats">
-        <div class="hero-stat">
-          <span>Xtream</span>
-          <span>& M3U natif</span>
-        </div>
-        <div class="hero-stat">
-          <span>4K / HD</span>
-          <span>Qualité max</span>
-        </div>
-        <div class="hero-stat">
-          <span>Android</span>
-          <span>6.0+</span>
-        </div>
+        <div class="hero-stat"><span>Xtream</span><span>& M3U natif</span></div>
+        <div class="hero-stat"><span>4K / HD</span><span>Qualité max</span></div>
+        <div class="hero-stat"><span>Android</span><span>6.0+</span></div>
       </div>
     </div>
     <div class="hero-phone">
@@ -635,37 +600,37 @@
 
 <!-- ── FEATURES ──────────────────────────────────── -->
 <section id="features">
-  <div class="section-label reveal">Pourquoi Arich IPTV</div>
-  <h2 class="reveal">Conçu pour <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">l'expérience</span><br>ultime.</h2>
-  <p class="section-sub reveal">Chaque détail est pensé pour que vous ne pensiez qu'à regarder.</p>
+  <div class="section-label" data-ani="up" data-delay="0">Pourquoi Arich IPTV</div>
+  <h2 data-ani="up" data-delay="80">Conçu pour <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">l'expérience</span><br>ultime.</h2>
+  <p class="section-sub" data-ani="up" data-delay="160">Chaque détail est pensé pour que vous ne pensiez qu'à regarder.</p>
 
   <div class="features-grid">
-    <div class="feat-card reveal">
+    <div class="feat-card" data-ani="up" data-delay="0">
       <div class="feat-icon" style="background:rgba(123,47,255,0.1);">🔌</div>
       <h3>Compatible Xtream & M3U</h3>
       <p>Connectez n'importe quel accès IPTV : URL Xtream Codes (login/mdp) ou lien M3U direct. Détection automatique du format.</p>
     </div>
-    <div class="feat-card reveal">
+    <div class="feat-card" data-ani="up" data-delay="80">
       <div class="feat-icon" style="background:rgba(10,132,255,0.1);">📋</div>
       <h3>Multi-playlists</h3>
       <p>Gérez plusieurs comptes IPTV en parallèle. Basculez d'un accès à l'autre en un tap, sans vous déconnecter.</p>
     </div>
-    <div class="feat-card reveal">
+    <div class="feat-card" data-ani="up" data-delay="160">
       <div class="feat-icon" style="background:rgba(48,209,88,0.1);">⚡</div>
       <h3>Zapping instantané</h3>
       <p>Player optimisé avec buffer réduit à 32 Mo. La vidéo démarre en quelques secondes, même en 4K.</p>
     </div>
-    <div class="feat-card reveal">
+    <div class="feat-card" data-ani="up" data-delay="0">
       <div class="feat-icon" style="background:rgba(255,214,10,0.1);">⭐</div>
       <h3>Favoris & Historique</h3>
       <p>Retrouvez vos chaînes préférées et reprenez exactement où vous en étiez, avec mémorisation de la position.</p>
     </div>
-    <div class="feat-card reveal">
+    <div class="feat-card" data-ani="up" data-delay="80">
       <div class="feat-icon" style="background:rgba(255,45,85,0.1);">📱</div>
       <h3>Android TV & Mobile</h3>
       <p>Interface adaptée au tactile et à la télécommande. Compatible Android TV, Google TV, Fire Stick avec sideload.</p>
     </div>
-    <div class="feat-card reveal">
+    <div class="feat-card" data-ani="up" data-delay="160">
       <div class="feat-icon" style="background:rgba(10,132,255,0.1);">🔑</div>
       <h3>Licence par appareil</h3>
       <p>Une licence = un appareil identifié par sa Device Key unique. Transfert possible sur demande.</p>
@@ -675,18 +640,16 @@
 
 <!-- ── PRICING ───────────────────────────────────── -->
 <section id="pricing" style="max-width:1200px;margin:0 auto;padding:120px 48px;">
-  <div class="section-label reveal" style="text-align:center;">Tarifs</div>
-  <h2 class="reveal" style="text-align:center;">Simple. Honnête.<br><span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Sans surprise.</span></h2>
-  <p class="section-sub reveal" style="text-align:center;margin:0 auto;">Accès au player uniquement — apportez votre propre source IPTV.</p>
+  <div class="section-label" data-ani="up" data-delay="0" style="text-align:center;">Tarifs</div>
+  <h2 data-ani="up" data-delay="80" style="text-align:center;">Simple. Honnête.<br><span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Sans surprise.</span></h2>
+  <p class="section-sub" data-ani="up" data-delay="160" style="text-align:center;margin:0 auto;">Accès au player uniquement — apportez votre propre source IPTV.</p>
 
   <div class="pricing-grid">
-    <div class="plan-card reveal">
+    <div class="plan-card" data-ani="left" data-delay="0">
       <div class="plan-name">Annuel</div>
       <div class="plan-desc">Idéal pour tester le player</div>
       <div class="plan-price">
-        <span class="currency">€</span>
-        <span class="amount">2,99</span>
-        <span class="period">/ an</span>
+        <span class="currency">€</span><span class="amount">2,99</span><span class="period">/ an</span>
       </div>
       <ul class="plan-features">
         <li><span class="check">✓</span> Player Xtream Codes & M3U</li>
@@ -698,14 +661,12 @@
       <button class="plan-btn outline" onclick="openContact('Annuel 2,99€')" data-umami-event="pricing-mensuel">Activer pour 2,99€/an</button>
     </div>
 
-    <div class="plan-card featured reveal">
+    <div class="plan-card featured" data-ani="scale" data-delay="120">
       <div class="plan-badge">🔥 Meilleur choix</div>
       <div class="plan-name">À vie</div>
       <div class="plan-desc">Payez une fois, profitez toujours</div>
       <div class="plan-price">
-        <span class="currency">€</span>
-        <span class="amount">4,99</span>
-        <span class="period">une seule fois</span>
+        <span class="currency">€</span><span class="amount">4,99</span><span class="period">une seule fois</span>
       </div>
       <ul class="plan-features">
         <li><span class="check">✓</span> Player Xtream Codes & M3U</li>
@@ -718,7 +679,7 @@
     </div>
   </div>
 
-  <div class="pricing-disclaimer reveal">
+  <div class="pricing-disclaimer" data-ani="up" data-delay="0">
     <strong style="color:rgba(255,255,255,0.7);display:block;margin-bottom:6px;">⚠️ Important — À lire avant d'acheter</strong>
     Arich IPTV est un <strong style="color:rgba(255,255,255,0.6)">lecteur multimédia</strong> uniquement. L'abonnement donne accès à l'application player.
     <strong style="color:rgba(255,255,255,0.6)">Aucun contenu, aucune chaîne, aucun film ne sont inclus.</strong>
@@ -726,7 +687,6 @@
     La licence est liée à votre appareil via sa Device Key (visible dans Paramètres → Appareil).
     Paiement via PayPal ou carte bancaire. Activation sous 2h après réception de votre Device Key.
   </div>
-
   <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:16px;">
     Satisfait ou remboursé sous 7 jours · Sans engagement pour le mensuel
   </p>
@@ -734,7 +694,7 @@
 
 <!-- ── DOWNLOAD ───────────────────────────────────── -->
 <section id="download" style="max-width:1200px;margin:0 auto;padding:0 48px 120px;">
-  <div class="dl-wrapper reveal">
+  <div class="dl-wrapper" data-ani="scale" data-delay="0">
     <div class="dl-glow"></div>
     <div style="position:relative;z-index:1;">
       <div class="section-label" style="text-align:center;">Téléchargement</div>
@@ -743,17 +703,11 @@
       <div class="dl-buttons">
         <a href="#" class="dl-btn dark" data-umami-event="download-apk">
           <div class="dl-icon">⬇</div>
-          <div class="dl-text">
-            <strong>Télécharger l'APK</strong>
-            <span>Android · v2.0.0 · 24 Mo</span>
-          </div>
+          <div class="dl-text"><strong>Télécharger l'APK</strong><span>Android · v2.0.0 · 24 Mo</span></div>
         </a>
         <a href="https://play.google.com/store" target="_blank" class="dl-btn dark-outline" data-umami-event="download-playstore">
           <div class="dl-icon" style="font-size:26px;">▶</div>
-          <div class="dl-text">
-            <strong>Google Play</strong>
-            <span>Bientôt disponible</span>
-          </div>
+          <div class="dl-text"><strong>Google Play</strong><span>Bientôt disponible</span></div>
         </a>
       </div>
       <p class="dl-note">Android 6.0+ requis · Activer "Sources inconnues" pour l'APK · Gratuit à télécharger, licence requise</p>
@@ -763,57 +717,36 @@
 
 <!-- ── FAQ ────────────────────────────────────────── -->
 <section id="faq" style="max-width:800px;">
-  <div class="section-label reveal">FAQ</div>
-  <h2 class="reveal">Questions <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">fréquentes.</span></h2>
+  <div class="section-label" data-ani="up" data-delay="0">FAQ</div>
+  <h2 data-ani="up" data-delay="80">Questions <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">fréquentes.</span></h2>
 
   <div class="faq-list">
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        Qu'est-ce qu'Arich IPTV exactement ?
-        <div class="faq-arrow">+</div>
-      </div>
+    <div class="faq-item" data-ani="up" data-delay="0">
+      <div class="faq-q" onclick="toggleFaq(this)">Qu'est-ce qu'Arich IPTV exactement ?<div class="faq-arrow">+</div></div>
       <div class="faq-a">Arich IPTV est un <strong>lecteur multimédia</strong> pour Android, similaire à VLC ou TiviMate. Il ne fournit aucun contenu. Vous connectez votre propre accès IPTV (un lien M3U ou des identifiants Xtream Codes obtenus auprès d'un fournisseur tiers), et l'application vous permet de lire ces flux avec une interface premium.</div>
     </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        Comment activer ma licence ?
-        <div class="faq-arrow">+</div>
-      </div>
+    <div class="faq-item" data-ani="up" data-delay="60">
+      <div class="faq-q" onclick="toggleFaq(this)">Comment activer ma licence ?<div class="faq-arrow">+</div></div>
       <div class="faq-a">Après téléchargement, ouvrez l'app → Paramètres → Appareil. Vous y trouverez votre <strong>Device Key</strong> unique (format ARICH-XXXX-XXXX-XXXX). Envoyez-la nous via le formulaire de contact ou WhatsApp avec votre preuve de paiement. L'activation est effectuée sous 2h.</div>
     </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        Est-ce que vous fournissez les chaînes ou l'accès IPTV ?
-        <div class="faq-arrow">+</div>
-      </div>
+    <div class="faq-item" data-ani="up" data-delay="120">
+      <div class="faq-q" onclick="toggleFaq(this)">Est-ce que vous fournissez les chaînes ou l'accès IPTV ?<div class="faq-arrow">+</div></div>
       <div class="faq-a">Non, absolument pas. Nous ne fournissons aucun contenu, aucune chaîne, aucun film. Arich IPTV est uniquement un lecteur. Vous devez disposer de votre propre abonnement IPTV auprès du fournisseur de votre choix pour utiliser l'application.</div>
     </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        Comment ajouter mon accès IPTV dans l'app ?
-        <div class="faq-arrow">+</div>
-      </div>
+    <div class="faq-item" data-ani="up" data-delay="0">
+      <div class="faq-q" onclick="toggleFaq(this)">Comment ajouter mon accès IPTV dans l'app ?<div class="faq-arrow">+</div></div>
       <div class="faq-a">Au premier lancement, l'app vous propose 3 modes : Xtream Codes (URL serveur + login + mot de passe), URL M3U directe, ou flux direct. Vous pouvez ensuite ajouter plusieurs playlists depuis Paramètres → Playlists → Ajouter une playlist.</div>
     </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        La licence est-elle liée à mon appareil ?
-        <div class="faq-arrow">+</div>
-      </div>
+    <div class="faq-item" data-ani="up" data-delay="60">
+      <div class="faq-q" onclick="toggleFaq(this)">La licence est-elle liée à mon appareil ?<div class="faq-arrow">+</div></div>
       <div class="faq-a">Oui. Chaque licence est liée à une Device Key unique générée par votre appareil Android. En cas de changement d'appareil (achat, factory reset), contactez le support pour transfert gratuit de la licence.</div>
     </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        Est-ce compatible avec ma Smart TV ?
-        <div class="faq-arrow">+</div>
-      </div>
+    <div class="faq-item" data-ani="up" data-delay="120">
+      <div class="faq-q" onclick="toggleFaq(this)">Est-ce compatible avec ma Smart TV ?<div class="faq-arrow">+</div></div>
       <div class="faq-a">L'application est disponible en APK Android. Si votre TV tourne sous Android TV ou Google TV, vous pouvez l'installer via sideload. Pour les autres TV, utilisez un boîtier Android (Fire Stick, MiBox, Chromecast avec Google TV, etc.).</div>
     </div>
-    <div class="faq-item reveal">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        Puis-je essayer avant d'acheter ?
-        <div class="faq-arrow">+</div>
-      </div>
+    <div class="faq-item" data-ani="up" data-delay="180">
+      <div class="faq-q" onclick="toggleFaq(this)">Puis-je essayer avant d'acheter ?<div class="faq-arrow">+</div></div>
       <div class="faq-a">Oui. L'application est gratuite à télécharger et peut être utilisée en mode limité sans licence. Pour une expérience complète, une période d'essai de 48h peut être accordée sur demande via le formulaire contact en indiquant votre Device Key.</div>
     </div>
   </div>
@@ -821,38 +754,29 @@
 
 <!-- ── CONTACT ────────────────────────────────────── -->
 <section id="contact" style="max-width:1100px;">
-  <div class="section-label reveal">Contact</div>
-  <h2 class="reveal">On est là <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">pour vous.</span></h2>
+  <div class="section-label" data-ani="up" data-delay="0">Contact</div>
+  <h2 data-ani="up" data-delay="80">On est là <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">pour vous.</span></h2>
 
   <div class="contact-grid">
-    <div class="contact-info reveal">
+    <div class="contact-info" data-ani="left" data-delay="0">
       <p style="font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:8px;">
         Support réactif, généralement sous 2h. Pensez à inclure votre Device Key pour toute demande d'activation ou de transfert de licence.
       </p>
       <a href="https://wa.me/33600000000" target="_blank" class="contact-chip" data-umami-event="contact-whatsapp">
         <div class="contact-chip-icon" style="background:rgba(37,211,102,0.1);">💬</div>
-        <div class="contact-chip-text">
-          <strong>WhatsApp</strong>
-          <span>Réponse rapide · +33 6 00 00 00 00</span>
-        </div>
+        <div class="contact-chip-text"><strong>WhatsApp</strong><span>Réponse rapide · +33 6 00 00 00 00</span></div>
       </a>
-      <a href="/cdn-cgi/l/email-protection#e18093888289cc88919597a191938e958e8fcf8c84" class="contact-chip" data-umami-event="contact-email">
+      <a href="mailto:contact@arich-iptv.com" class="contact-chip" data-umami-event="contact-email">
         <div class="contact-chip-icon" style="background:rgba(10,132,255,0.1);">✉️</div>
-        <div class="contact-chip-text">
-          <strong>Email</strong>
-          <span><span class="__cf_email__" data-cfemail="7011021913185d190004063000021f041f1e5e1d15">[email&#160;protected]</span></span>
-        </div>
+        <div class="contact-chip-text"><strong>Email</strong><span>contact@arich-iptv.com</span></div>
       </a>
       <a href="https://t.me/arichiptv" target="_blank" class="contact-chip" data-umami-event="contact-telegram">
         <div class="contact-chip-icon" style="background:rgba(10,132,255,0.08);">🛫</div>
-        <div class="contact-chip-text">
-          <strong>Telegram</strong>
-          <span>@arichiptv</span>
-        </div>
+        <div class="contact-chip-text"><strong>Telegram</strong><span>@arichiptv</span></div>
       </a>
     </div>
 
-    <form class="contact-form reveal" onsubmit="sendForm(event)">
+    <form class="contact-form" data-ani="right" data-delay="100" onsubmit="sendForm(event)">
       <div class="form-row">
         <input class="form-input" id="fname" placeholder="Votre prénom" />
         <input class="form-input" id="femail" type="email" placeholder="Email" />
@@ -884,19 +808,16 @@
       Mon compte →
     </a>
   </div>
-  <div class="footer-copy">
-    © 2025 Arich IPTV · Lecteur multimédia uniquement · Aucun contenu fourni
-  </div>
+  <div class="footer-copy">© 2025 Arich IPTV · Lecteur multimédia uniquement · Aucun contenu fourni</div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // ── Custom cursor ─────────────────────────────────────────────────────────
+<script>
+  // ── Custom cursor ────────────────────────────────────────────────────────
   const cursor = document.getElementById('cursor');
   const ring   = document.getElementById('cursor-ring');
   let cx = 0, cy = 0, rx = 0, ry = 0;
   document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; });
-  const interactiveEls = 'a,button,.feat-card,.faq-q,.plan-card,.contact-chip,.phone-channel';
-  document.querySelectorAll(interactiveEls).forEach(el => {
+  document.querySelectorAll('a,button,.feat-card,.faq-q,.plan-card,.contact-chip,.phone-channel').forEach(el => {
     el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
     el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
   });
@@ -907,35 +828,40 @@
     requestAnimationFrame(animateCursor);
   })();
 
-  // ── Scroll reveal ─────────────────────────────────────────────────────────
-  // Fallback immédiat : révèle tout ce qui est déjà dans le viewport au chargement
-function revealAll() {
-    document.querySelectorAll('.reveal').forEach(el => {
-      el.classList.add('visible');
+  // ── Scroll animation — système data-ani ─────────────────────────────────
+  // Principe : chaque élément [data-ani] démarre opacity:0 (CSS).
+  // Au scroll, dès qu'il entre dans le viewport, on lui ajoute .ani-go
+  // et on applique animation-delay via style inline (data-delay en ms).
+  // Aucun IntersectionObserver — on utilise getBoundingClientRect() sur scroll + load.
+
+  const aniEls = Array.from(document.querySelectorAll('[data-ani]'));
+
+  function checkAni() {
+    const wh = window.innerHeight;
+    aniEls.forEach(el => {
+      if (el.classList.contains('ani-go')) return; // déjà déclenché
+      const rect = el.getBoundingClientRect();
+      if (rect.top < wh - 40) {
+        const delay = el.dataset.delay || 0;
+        el.style.animationDelay = delay + 'ms';
+        el.classList.add('ani-go');
+      }
     });
   }
 
-  if ('IntersectionObserver' in window) {
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          obs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0, rootMargin: '0px' });
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  // Lancement au scroll et au resize
+  window.addEventListener('scroll', checkAni, { passive: true });
+  window.addEventListener('resize', checkAni, { passive: true });
+
+  // Lancement immédiat au chargement (éléments déjà visibles dès le départ)
+  // On attend que le DOM soit prêt + un micro-délai pour les layouts
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(checkAni, 50));
   } else {
-    revealAll();
+    setTimeout(checkAni, 50);
   }
 
-  // Sécurité : si après 1.5s rien n'est visible, on force tout
-  setTimeout(() => {
-    const hidden = document.querySelectorAll('.reveal:not(.visible)');
-    if (hidden.length > 20) revealAll();
-  }, 1500);
-
-  // ── FAQ accordion ─────────────────────────────────────────────────────────
+  // ── FAQ accordion ────────────────────────────────────────────────────────
   function toggleFaq(el) {
     const item = el.parentElement;
     const isOpen = item.classList.contains('open');
@@ -943,14 +869,14 @@ function revealAll() {
     if (!isOpen) item.classList.add('open');
   }
 
-  // ── Contact avec plan pré-rempli ──────────────────────────────────────────
+  // ── Contact avec plan pré-rempli ─────────────────────────────────────────
   function openContact(plan) {
     document.getElementById('fsubject').value = 'Activation licence — ' + plan;
     document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
     setTimeout(() => document.getElementById('fname').focus(), 800);
   }
 
-  // ── Form submit → Formspree ───────────────────────────────────────────────
+  // ── Form submit → Formspree ──────────────────────────────────────────────
   async function sendForm(e) {
     e.preventDefault();
     const name      = document.getElementById('fname').value.trim();
@@ -959,53 +885,28 @@ function revealAll() {
     const deviceKey = document.getElementById('fdevicekey').value.trim();
     const message   = document.getElementById('fmessage').value.trim();
     if (!name || !email || !message) { showToast('⚠️ Remplissez tous les champs obligatoires'); return; }
-
-    const body = {
-      name, email, subject, message,
-      deviceKey: deviceKey || 'Non renseignée',
-      _subject: `[Arich IPTV] ${subject}`,
-    };
-
     try {
       const res = await fetch('https://formspree.io/f/xgolqeyj', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ name, email, subject, message, deviceKey: deviceKey || 'Non renseignée', _subject: `[Arich IPTV] ${subject}` }),
       });
-      if (res.ok) {
-        showToast('✓ Message envoyé !');
-        e.target.reset();
-        if (window.umami) umami.track('form-sent', { plan: subject });
-      } else {
-        showToast('✗ Erreur, réessayez');
-      }
-    } catch {
-      showToast('✗ Erreur réseau');
-    }
+      if (res.ok) { showToast('✓ Message envoyé !'); e.target.reset(); }
+      else { showToast('✗ Erreur, réessayez'); }
+    } catch { showToast('✗ Erreur réseau'); }
   }
 
   function showToast(msg) {
     const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
+    t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  // ── Tracking sessions site (Supabase) ────────────────────────────────────
+  // ── Tracking sessions site (Supabase) ───────────────────────────────────
   const SUPABASE_URL  = 'https://aynucieohuowgkwyftiy.supabase.co';
   const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5bnVjaWVvaHVvd2drd3lmdGl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyOTIxMDMsImV4cCI6MjA4Nzg2ODEwM30.H43CVcyzEuYBQfBIlkn16r5uk768isHr4DeLduo1ETk';
-
-  const _siteSession = {
-    start:    Date.now(),
-    referrer: document.referrer || 'direct',
-    path:     location.pathname,
-    country:  null,
-  };
-
-  fetch('https://ipapi.co/json/')
-    .then(r => r.json())
-    .then(d => { _siteSession.country = d.country_name || d.country; })
-    .catch(() => {});
+  const _siteSession = { start: Date.now(), referrer: document.referrer || 'direct', path: location.pathname, country: null };
+  fetch('https://ipapi.co/json/').then(r => r.json()).then(d => { _siteSession.country = d.country_name || d.country; }).catch(() => {});
 
   async function _sendSiteSession() {
     const duration = Math.round((Date.now() - _siteSession.start) / 1000);
@@ -1013,19 +914,13 @@ function revealAll() {
     try {
       await fetch(`${SUPABASE_URL}/rest/v1/site_sessions`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_ANON,
-          'Authorization': `Bearer ${SUPABASE_ANON}`,
-          'Prefer': 'return=minimal',
-        },
-        body: JSON.stringify({
-          duration_seconds: duration,
-          country:          _siteSession.country,
-          referrer:         _siteSession.referrer,
-          path:             _siteSession.path,
-          user_agent:       navigator.userAgent,
-          created_at:       new Date().toISOString(),
-        }),
-
-
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}`, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ duration_seconds: duration, country: _siteSession.country, referrer: _siteSession.referrer, path: _siteSession.path, user_agent: navigator.userAgent, created_at: new Date().toISOString() }),
+      });
+    } catch {}
+  }
+  window.addEventListener('pagehide', _sendSiteSession);
+  window.addEventListener('beforeunload', _sendSiteSession);
+</script>
+</body>
+</html>
