@@ -19,29 +19,31 @@
   --surface2: rgba(255,255,255,0.06);
   --surface3: rgba(255,255,255,0.085);
   --border: rgba(255,255,255,0.09);
-  --border2: rgba(255,255,255,0.15);
-  --accent: #7c8fff;
-  --accent2: #b197fc;
-  --accent3: #38d9f5;
-  --gradient: linear-gradient(135deg, #7c8fff 0%, #b197fc 100%);
-  --gradient2: linear-gradient(135deg, #38d9f5 0%, #7c8fff 100%);
-  --gradient3: linear-gradient(135deg, #ff6b8a 0%, #b197fc 100%);
+  --border2: rgba(255,255,255,0.18);
+  --accent: #7B2FFF;
+  --accent2: #a855f7;
+  --accent3: #FF2D55;
+  --accent4: #38d9f5;
+  --gradient: linear-gradient(135deg, #7B2FFF 0%, #FF2D55 100%);
+  --gradient2: linear-gradient(135deg, #38d9f5 0%, #7B2FFF 100%);
+  --gradient3: linear-gradient(135deg, #FF2D55 0%, #a855f7 100%);
   --text: #eeeef5;
-  --text-sub: rgba(238,238,245,0.52);
+  --text-sub: rgba(238,238,245,0.55);
   --text-muted: rgba(238,238,245,0.32);
-  --success: #36d9a0;
-  --error: #ff6b8a;
-  --warn: #fbbf24;
+  --success: #30D158;
+  --error: #FF2D55;
+  --warn: #FFD60A;
+  --info: #0A84FF;
   --nav-h: 64px;
-  --sidebar-w: 248px;
-  --radius: 18px;
-  --radius-sm: 12px;
-  --radius-xs: 8px;
-  --ez: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --sidebar-w: 252px;
+  --radius: 16px;
+  --radius-sm: 11px;
+  --radius-xs: 7px;
+  --ez: cubic-bezier(0.22, 1, 0.36, 1);
   --ez-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-html { height: 100%; }
+html { height: 100%; scroll-behavior: smooth; }
 body {
   min-height: 100%; background: var(--bg);
   color: var(--text); font-family: 'DM Sans', sans-serif;
@@ -52,73 +54,60 @@ body {
 /* ═══ BACKGROUND ═══ */
 .bg-scene { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .orb {
-  position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.16;
+  position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.14;
   animation: orbDrift var(--d,14s) ease-in-out infinite alternate;
 }
-.orb-1 { width: 55vmax; height: 55vmax; background: radial-gradient(circle, #7c8fff, transparent 65%); top:-18vmax; left:-12vmax; --d:18s; }
-.orb-2 { width: 40vmax; height: 40vmax; background: radial-gradient(circle, #b197fc, transparent 65%); bottom:-10vmax; right:-8vmax; --d:13s; animation-delay:-6s; }
-.orb-3 { width: 30vmax; height: 30vmax; background: radial-gradient(circle, #38d9f5, transparent 65%); top:60%; left:40%; --d:22s; opacity: 0.08; animation-delay:-10s; }
-@keyframes orbDrift { to { transform: translate(22px,28px) scale(1.05); } }
+.orb-1 { width: 60vmax; height: 60vmax; background: radial-gradient(circle, #7B2FFF, transparent 65%); top:-22vmax; left:-15vmax; --d:20s; }
+.orb-2 { width: 45vmax; height: 45vmax; background: radial-gradient(circle, #FF2D55, transparent 65%); bottom:-12vmax; right:-10vmax; --d:15s; animation-delay:-8s; }
+.orb-3 { width: 30vmax; height: 30vmax; background: radial-gradient(circle, #38d9f5, transparent 65%); top:50%; left:45%; --d:24s; opacity: 0.07; animation-delay:-12s; }
+@keyframes orbDrift { to { transform: translate(25px, 32px) scale(1.06); } }
 
 .grain {
-  position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.018;
+  position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.022;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 250px;
+  background-size: 220px;
 }
 
 /* ═══ NAVBAR ═══ */
 .navbar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   height: var(--nav-h);
-  background: rgba(7,9,15,0.82);
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  background: rgba(7,9,15,0.85);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center;
   padding: 0 20px; gap: 12px;
 }
-.nav-logo {
-  display: flex; align-items: center; gap: 10px; text-decoration: none;
-  flex-shrink: 0;
-}
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
 .nav-gem {
   width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
   background: var(--gradient);
   display: flex; align-items: center; justify-content: center;
   font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: #fff;
-  box-shadow: 0 4px 18px rgba(124,143,255,0.4);
+  box-shadow: 0 4px 20px rgba(123,47,255,0.45);
 }
-.nav-brand {
-  font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
-  letter-spacing: -0.025em; color: var(--text); white-space: nowrap;
-}
+.nav-brand { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -0.025em; color: var(--text); white-space: nowrap; }
 .nav-brand em { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-style: normal; }
 .nav-spacer { flex: 1; }
-
 .nav-hamburger {
   display: none; background: none; border: none; cursor: pointer;
   color: var(--text); padding: 6px; border-radius: 8px;
   transition: background 0.2s; align-items: center;
 }
 .nav-hamburger:hover { background: var(--surface2); }
-
-/* Admin badge in nav */
 .nav-admin-badge {
   display: flex; align-items: center; gap: 6px;
   padding: 5px 12px; border-radius: 20px;
-  background: rgba(177,151,252,0.12);
-  border: 1px solid rgba(177,151,252,0.25);
-  font-size: 12px; font-weight: 600; color: var(--accent2);
-  letter-spacing: 0.03em;
+  background: rgba(123,47,255,0.15); border: 1px solid rgba(123,47,255,0.3);
+  font-size: 11.5px; font-weight: 600; color: var(--accent2); letter-spacing: 0.04em;
 }
-
 .user-badge {
   display: flex; align-items: center; gap: 8px;
   padding: 5px 10px 5px 5px;
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 999px; cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-  position: relative;
+  transition: background 0.2s, border-color 0.2s; position: relative;
 }
 .user-badge:hover { background: var(--surface2); border-color: var(--border2); }
 .user-avatar {
@@ -129,108 +118,70 @@ body {
 }
 .user-email { font-size: 13px; color: var(--text-sub); max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+/* USER MENU */
 .user-menu {
   position: fixed; top: calc(var(--nav-h) + 8px); right: 16px;
-  background: rgba(10,13,22,0.97);
-  border: 1px solid var(--border2);
-  border-radius: var(--radius-sm);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  padding: 6px; min-width: 200px;
-  display: none;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-  animation: dropIn 0.2s var(--ez) both;
-  z-index: 500;
+  background: rgba(8,10,18,0.98); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px); padding: 6px; min-width: 210px;
+  display: none; box-shadow: 0 24px 70px rgba(0,0,0,0.7);
+  animation: dropIn 0.22s var(--ez) both; z-index: 500;
 }
 .user-menu.open { display: block; }
-@keyframes dropIn { from { opacity:0; transform:translateY(-10px) scale(0.97); } to { opacity:1; transform:none; } }
-
-.menu-header {
-  padding: 10px 12px 8px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 4px;
-}
-.menu-header-label { font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+@keyframes dropIn { from { opacity:0; transform:translateY(-8px) scale(0.97); } to { opacity:1; transform:none; } }
+.menu-header { padding: 10px 12px 9px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+.menu-header-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; }
 .menu-header-email { font-size: 13px; color: var(--text); margin-top: 3px; word-break: break-all; }
-.menu-header-role {
-  display: inline-flex; align-items: center; gap: 5px;
-  margin-top: 6px; padding: 3px 8px; border-radius: 20px;
-  font-size: 11px; font-weight: 600;
-  background: rgba(177,151,252,0.12); color: var(--accent2);
-}
-
+.menu-header-role { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(123,47,255,0.15); color: var(--accent2); }
 .menu-item {
   display: flex; align-items: center; gap: 10px;
   padding: 9px 12px; border-radius: 8px; cursor: pointer;
-  font-size: 14px; color: var(--text-sub);
+  font-size: 13.5px; color: var(--text-sub);
   transition: color 0.15s, background 0.15s;
   border: none; background: none; width: 100%; text-align: left;
   font-family: 'DM Sans', sans-serif;
 }
 .menu-item:hover { color: var(--text); background: var(--surface2); }
-.menu-item.danger:hover { color: var(--error); background: rgba(255,107,138,0.08); }
+.menu-item.danger:hover { color: var(--error); background: rgba(255,45,85,0.1); }
 .menu-divider { height: 1px; background: var(--border); margin: 4px 0; }
 
 /* ═══ LAYOUT ═══ */
-.layout {
-  position: relative; z-index: 2;
-  padding-top: var(--nav-h);
-  min-height: 100vh;
-  display: flex;
-}
+.layout { position: relative; z-index: 2; padding-top: var(--nav-h); min-height: 100vh; display: flex; }
 
+/* ═══ SIDEBAR ═══ */
 .sidebar {
   width: var(--sidebar-w); flex-shrink: 0;
   position: fixed; top: var(--nav-h); left: 0; bottom: 0;
   padding: 20px 10px;
-  background: rgba(7,9,15,0.7);
+  background: rgba(7,9,15,0.75);
   border-right: 1px solid var(--border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   overflow-y: auto; overflow-x: hidden;
   display: flex; flex-direction: column; gap: 2px;
   transition: transform 0.3s var(--ez);
 }
-
-.sidebar-section {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--text-muted);
-  padding: 10px 12px 5px;
-  margin-top: 6px;
-}
+.sidebar-section { font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); padding: 10px 12px 5px; margin-top: 6px; }
 .sidebar-section:first-child { margin-top: 0; }
-
 .s-link {
   display: flex; align-items: center; gap: 10px;
   padding: 9px 12px; border-radius: 10px; cursor: pointer;
-  font-size: 13.5px; color: var(--text-sub); font-weight: 500;
+  font-size: 13px; color: var(--text-sub); font-weight: 500;
   transition: color 0.15s, background 0.15s;
   border: none; background: none; width: 100%; text-align: left;
   font-family: 'DM Sans', sans-serif; text-decoration: none;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .s-link:hover { color: var(--text); background: var(--surface); }
-.s-link.active { color: var(--accent); background: rgba(124,143,255,0.12); }
-.s-link svg { flex-shrink: 0; opacity: 0.65; }
+.s-link.active { color: #fff; background: rgba(123,47,255,0.18); }
+.s-link svg { flex-shrink: 0; opacity: 0.6; }
 .s-link.active svg { opacity: 1; }
-
-.s-badge {
-  margin-left: auto; font-size: 11px; font-weight: 600;
-  padding: 2px 7px; border-radius: 20px;
-  background: rgba(124,143,255,0.18); color: var(--accent);
-  flex-shrink: 0;
-}
-.s-badge.admin { background: rgba(177,151,252,0.15); color: var(--accent2); }
-
+.s-badge { margin-left: auto; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 20px; background: rgba(123,47,255,0.18); color: var(--accent2); flex-shrink: 0; }
+.s-badge.green { background: rgba(48,209,88,0.15); color: var(--success); }
+.s-badge.red { background: rgba(255,45,85,0.15); color: var(--error); }
 .sidebar-divider { height: 1px; background: var(--border); margin: 8px 12px; }
 
-.main {
-  flex: 1; margin-left: var(--sidebar-w);
-  padding: 32px 28px;
-  max-width: 100%;
-  overflow-x: hidden;
-  min-width: 0;
-}
+/* ═══ MAIN ═══ */
+.main { flex: 1; margin-left: var(--sidebar-w); padding: 32px 28px; max-width: 100%; overflow-x: hidden; min-width: 0; }
 
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 900px) {
@@ -238,122 +189,82 @@ body {
   .sidebar.open { transform: translateX(0); }
   .main { margin-left: 0; }
   .nav-hamburger { display: flex; }
-  .sidebar-overlay {
-    position: fixed; inset: 0; z-index: 89;
-    background: rgba(0,0,0,0.55); display: none;
-    backdrop-filter: blur(3px);
-  }
+  .sidebar-overlay { position: fixed; inset: 0; z-index: 89; background: rgba(0,0,0,0.6); display: none; backdrop-filter: blur(3px); }
   .sidebar-overlay.show { display: block; }
 }
-
 @media (max-width: 640px) {
-  .main { padding: 18px 14px; }
+  .main { padding: 16px 12px; }
   .navbar { padding: 0 12px; }
   .user-email { display: none; }
   .nav-admin-badge span { display: none; }
 }
 
 /* ═══ SECTIONS ═══ */
-.section { display: none; animation: secIn 0.32s var(--ez) both; }
+.section { display: none; animation: secIn 0.3s var(--ez) both; }
 .section.active { display: block; }
-@keyframes secIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+@keyframes secIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
 
 /* ═══ PAGE HEADER ═══ */
-.page-header {
-  margin-bottom: 28px;
-  display: flex; align-items: flex-start; justify-content: space-between;
-  gap: 16px; flex-wrap: wrap;
-}
-.page-title {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(20px, 3.5vw, 26px);
-  font-weight: 700; letter-spacing: -0.03em;
-  line-height: 1.2;
-}
-.page-sub { font-size: 13.5px; color: var(--text-sub); margin-top: 5px; }
+.page-header { margin-bottom: 28px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.page-title { font-family: 'Syne', sans-serif; font-size: clamp(19px, 3.5vw, 25px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; }
+.page-sub { font-size: 13px; color: var(--text-sub); margin-top: 5px; }
 
 /* ═══ CARDS ═══ */
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: 22px;
-  box-shadow: 0 6px 28px rgba(0,0,0,0.18);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px); padding: 22px;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.2);
 }
-
 .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
 .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
 .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
 
 /* ═══ STAT CARDS ═══ */
 .stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px 22px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px 22px;
   display: flex; flex-direction: column; gap: 10px;
   position: relative; overflow: hidden;
-  transition: border-color 0.2s, transform 0.22s;
+  transition: border-color 0.25s, transform 0.25s var(--ez);
   cursor: default;
 }
-.stat-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-.stat-card::after {
-  content: ''; position: absolute; inset: 0;
-  background: var(--card-gradient, var(--gradient));
-  opacity: 0.04; pointer-events: none;
+.stat-card:hover { border-color: rgba(123,47,255,0.3); transform: translateY(-2px); }
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: var(--card-line, var(--gradient)); opacity: 0.6;
 }
-.stat-icon {
-  width: 38px; height: 38px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; background: rgba(124,143,255,0.1);
-}
-.stat-value {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(24px, 4vw, 30px); font-weight: 700; letter-spacing: -0.04em;
-  line-height: 1;
-}
-.stat-label { font-size: 12.5px; color: var(--text-sub); }
-.stat-delta {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 11.5px; font-weight: 500; padding: 3px 8px; border-radius: 6px;
-  width: fit-content;
-}
-.stat-delta.up { color: var(--success); background: rgba(54,217,160,0.12); }
+.stat-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; background: rgba(123,47,255,0.1); }
+.stat-value { font-family: 'Syne', sans-serif; font-size: clamp(22px, 4vw, 30px); font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
+.stat-label { font-size: 12px; color: var(--text-sub); }
+.stat-delta { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 6px; width: fit-content; }
+.stat-delta.up { color: var(--success); background: rgba(48,209,88,0.12); }
 .stat-delta.neutral { color: var(--text-muted); background: var(--surface2); }
+.stat-delta.down { color: var(--error); background: rgba(255,45,85,0.12); }
 
 /* ═══ TABLE ═══ */
 .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius-sm); }
 table { width: 100%; border-collapse: collapse; min-width: 400px; }
-th {
-  font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
-  text-transform: uppercase; color: var(--text-muted);
-  padding: 10px 14px; text-align: left;
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-}
-td {
-  padding: 12px 14px; font-size: 13.5px; color: var(--text-sub);
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
+th { font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+td { padding: 12px 14px; font-size: 13px; color: var(--text-sub); border-bottom: 1px solid rgba(255,255,255,0.035); max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: rgba(255,255,255,0.025); color: var(--text); }
+tr:hover td { background: rgba(255,255,255,0.02); color: var(--text); }
 .td-name { color: var(--text); font-weight: 500; }
-.td-actions { display: flex; gap: 6px; flex-wrap: wrap; white-space: nowrap; max-width: none; overflow: visible; }
+.td-actions { display: flex; gap: 5px; flex-wrap: wrap; white-space: nowrap; max-width: none; overflow: visible; }
 
 /* ═══ BADGES ═══ */
-.badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
-  white-space: nowrap; flex-shrink: 0;
-}
-.badge.active   { background: rgba(54,217,160,0.12); color: var(--success); }
-.badge.expired  { background: rgba(255,107,138,0.12); color: var(--error); }
-.badge.pending  { background: rgba(251,191,36,0.12); color: var(--warn); }
-.badge.m3u      { background: rgba(56,217,245,0.12); color: var(--accent3); }
-.badge.xtream   { background: rgba(177,151,252,0.12); color: var(--accent2); }
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+.badge.active   { background: rgba(48,209,88,0.12);   color: var(--success); }
+.badge.inactive { background: rgba(255,45,85,0.12);   color: var(--error); }
+.badge.expired  { background: rgba(255,45,85,0.12);   color: var(--error); }
+.badge.pending  { background: rgba(255,214,10,0.12);  color: var(--warn); }
+.badge.banned   { background: rgba(255,45,85,0.18);   color: var(--error); border: 1px solid rgba(255,45,85,0.3); }
+.badge.m3u      { background: rgba(56,217,245,0.12);  color: var(--accent4); }
+.badge.xtream   { background: rgba(123,47,255,0.12);  color: var(--accent2); }
+.badge.admin    { background: rgba(123,47,255,0.15);  color: var(--accent2); }
+.badge.refund   { background: rgba(255,214,10,0.12);  color: var(--warn); }
+.badge.dot { padding: 3px 9px 3px 6px; }
+.badge.dot::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; }
 
 /* ═══ BUTTONS ═══ */
 .btn {
@@ -362,98 +273,77 @@ tr:hover td { background: rgba(255,255,255,0.025); color: var(--text); }
   padding: 9px 16px; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center; gap: 7px;
   transition: transform 0.18s var(--ez-spring), box-shadow 0.18s, opacity 0.18s, background 0.18s;
-  letter-spacing: 0.01em; user-select: none; white-space: nowrap;
-  position: relative; overflow: hidden;
+  letter-spacing: 0.01em; user-select: none; white-space: nowrap; position: relative; overflow: hidden;
 }
-.btn:active { transform: scale(0.96); }
+.btn:active { transform: scale(0.96) !important; }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-
-.btn-primary {
-  background: var(--gradient); color: #fff;
-  box-shadow: 0 4px 18px rgba(124,143,255,0.3);
-}
-.btn-primary:not(:disabled):hover { box-shadow: 0 6px 26px rgba(124,143,255,0.5); transform: translateY(-1px); }
-
-.btn-ghost {
-  background: var(--surface); border: 1px solid var(--border); color: var(--text-sub);
-}
+.btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 4px 18px rgba(123,47,255,0.3); }
+.btn-primary:not(:disabled):hover { box-shadow: 0 6px 28px rgba(123,47,255,0.5); transform: translateY(-1px); }
+.btn-ghost { background: var(--surface); border: 1px solid var(--border); color: var(--text-sub); }
 .btn-ghost:hover { color: var(--text); background: var(--surface2); border-color: var(--border2); }
-
-.btn-danger { background: rgba(255,107,138,0.1); border: 1px solid rgba(255,107,138,0.18); color: var(--error); }
-.btn-danger:hover { background: rgba(255,107,138,0.2); }
-
+.btn-danger { background: rgba(255,45,85,0.1); border: 1px solid rgba(255,45,85,0.2); color: var(--error); }
+.btn-danger:hover { background: rgba(255,45,85,0.22); border-color: rgba(255,45,85,0.35); }
+.btn-success { background: rgba(48,209,88,0.1); border: 1px solid rgba(48,209,88,0.2); color: var(--success); }
+.btn-success:hover { background: rgba(48,209,88,0.2); }
+.btn-warn { background: rgba(255,214,10,0.1); border: 1px solid rgba(255,214,10,0.2); color: var(--warn); }
+.btn-warn:hover { background: rgba(255,214,10,0.2); }
 .btn-sm { padding: 5px 11px; font-size: 12px; border-radius: 7px; }
+.btn-xs { padding: 4px 8px; font-size: 11px; border-radius: 6px; }
 
 /* ═══ FORM ═══ */
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 @media (max-width: 580px) { .form-grid { grid-template-columns: 1fr; } }
-
 .field { display: flex; flex-direction: column; gap: 7px; }
 .field.full { grid-column: 1/-1; }
-label { font-size: 12px; font-weight: 600; color: rgba(238,238,245,0.58); letter-spacing: 0.04em; text-transform: uppercase; }
-
+label { font-size: 11.5px; font-weight: 600; color: rgba(238,238,245,0.55); letter-spacing: 0.05em; text-transform: uppercase; }
 input[type="text"], input[type="url"], input[type="email"],
 input[type="password"], input[type="number"], select, textarea {
   width: 100%; padding: 11px 13px;
-  background: rgba(255,255,255,0.042);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text); font-family: 'DM Sans', sans-serif;
-  font-size: 14px; outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-  -webkit-appearance: none;
+  background: rgba(255,255,255,0.042); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; -webkit-appearance: none;
 }
 input::placeholder, textarea::placeholder { color: var(--text-muted); }
 input:focus, select:focus, textarea:focus {
-  border-color: rgba(124,143,255,0.5);
-  box-shadow: 0 0 0 3px rgba(124,143,255,0.11);
-  background: rgba(255,255,255,0.062);
+  border-color: rgba(123,47,255,0.5); box-shadow: 0 0 0 3px rgba(123,47,255,0.1);
+  background: rgba(255,255,255,0.06);
 }
 select { cursor: pointer; }
 select option { background: #0c0f1a; }
 textarea { resize: vertical; min-height: 80px; }
 
 /* ═══ MESSAGES ═══ */
-.msg {
-  border-radius: var(--radius-sm); font-size: 13.5px; line-height: 1.55;
-  padding: 11px 14px; display: none; align-items: flex-start; gap: 8px;
-}
+.msg { border-radius: var(--radius-sm); font-size: 13.5px; line-height: 1.55; padding: 11px 14px; display: none; align-items: flex-start; gap: 8px; }
 .msg.show { display: flex; animation: msgIn 0.3s var(--ez) both; }
-.msg.error   { background: rgba(255,107,138,0.1); border: 1px solid rgba(255,107,138,0.2); color: var(--error); }
-.msg.success { background: rgba(54,217,160,0.1); border: 1px solid rgba(54,217,160,0.2); color: var(--success); }
-.msg.info    { background: rgba(124,143,255,0.1); border: 1px solid rgba(124,143,255,0.2); color: var(--accent); }
+.msg.error   { background: rgba(255,45,85,0.1);  border: 1px solid rgba(255,45,85,0.22);  color: var(--error); }
+.msg.success { background: rgba(48,209,88,0.1);  border: 1px solid rgba(48,209,88,0.22);  color: var(--success); }
+.msg.info    { background: rgba(123,47,255,0.1); border: 1px solid rgba(123,47,255,0.22); color: var(--accent2); }
 @keyframes msgIn { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:none; } }
 
 /* ═══ MODAL ═══ */
 .modal-backdrop {
   position: fixed; inset: 0; z-index: 300;
-  background: rgba(0,0,0,0.65);
-  backdrop-filter: blur(8px);
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
   display: flex; align-items: center; justify-content: center;
-  padding: 16px; opacity: 0; pointer-events: none;
-  transition: opacity 0.25s;
+  padding: 16px; opacity: 0; pointer-events: none; transition: opacity 0.25s;
 }
 .modal-backdrop.open { opacity: 1; pointer-events: all; }
 .modal {
-  background: rgba(10,13,22,0.97);
-  border: 1px solid var(--border2);
-  border-radius: var(--radius);
-  padding: 28px;
-  width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;
-  box-shadow: 0 28px 80px rgba(0,0,0,0.65);
-  transform: scale(0.95) translateY(20px);
-  transition: transform 0.25s var(--ez);
+  background: rgba(8,10,18,0.98); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: 28px;
+  width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 30px 90px rgba(0,0,0,0.7);
+  transform: scale(0.95) translateY(20px); transition: transform 0.25s var(--ez);
 }
 .modal-backdrop.open .modal { transform: none; }
-.modal-head {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 22px;
-}
+.modal.modal-lg { max-width: 700px; }
+.modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
 .modal-title { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 700; letter-spacing: -0.03em; }
 .modal-close {
   width: 32px; height: 32px; border-radius: 8px;
-  background: var(--surface); border: 1px solid var(--border);
-  cursor: pointer; color: var(--text-sub); font-size: 16px;
+  background: var(--surface); border: 1px solid var(--border); cursor: pointer;
+  color: var(--text-sub); font-size: 16px;
   display: flex; align-items: center; justify-content: center;
   transition: color 0.2s, background 0.2s;
 }
@@ -461,11 +351,7 @@ textarea { resize: vertical; min-height: 80px; }
 .modal-actions { display: flex; gap: 10px; margin-top: 22px; justify-content: flex-end; flex-wrap: wrap; }
 
 /* ═══ SPINNER ═══ */
-.spin {
-  width: 15px; height: 15px; border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.25); border-top-color: #fff;
-  animation: spin 0.65s linear infinite; display: none; flex-shrink: 0;
-}
+.spin { width: 15px; height: 15px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.25); border-top-color: #fff; animation: spin 0.65s linear infinite; display: none; flex-shrink: 0; }
 .btn.loading .spin { display: inline-block; }
 .btn.loading .blbl { display: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -478,116 +364,98 @@ textarea { resize: vertical; min-height: 80px; }
 .empty { text-align: center; padding: 52px 20px; color: var(--text-muted); }
 .empty-icon { font-size: 44px; margin-bottom: 12px; opacity: 0.45; }
 .empty h3 { font-family: 'Syne', sans-serif; font-size: 17px; color: var(--text-sub); margin-bottom: 7px; }
-.empty p { font-size: 13.5px; line-height: 1.6; max-width: 300px; margin: 0 auto; }
+.empty p { font-size: 13px; line-height: 1.6; max-width: 300px; margin: 0 auto; }
 
 /* ═══ LOADING ═══ */
-.loading-state {
-  display: flex; align-items: center; justify-content: center;
-  padding: 52px 20px; gap: 12px; color: var(--text-muted); font-size: 14px;
-}
-.big-spin {
-  width: 22px; height: 22px; border-radius: 50%;
-  border: 2px solid rgba(124,143,255,0.3); border-top-color: var(--accent);
-  animation: spin 0.7s linear infinite;
-}
+.loading-state { display: flex; align-items: center; justify-content: center; padding: 52px 20px; gap: 12px; color: var(--text-muted); font-size: 14px; }
+.big-spin { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(123,47,255,0.3); border-top-color: var(--accent); animation: spin 0.7s linear infinite; }
 
 /* ═══ TABS ═══ */
-.tabs {
-  display: flex; gap: 3px; padding: 4px;
-  background: rgba(255,255,255,0.04);
-  border-radius: 12px; width: fit-content;
-  margin-bottom: 22px; flex-wrap: wrap;
-}
-.tab {
-  padding: 7px 15px; border-radius: 9px; cursor: pointer;
-  font-size: 13px; font-weight: 500; color: var(--text-sub);
-  transition: color 0.18s, background 0.18s;
-  border: none; background: none; font-family: 'DM Sans', sans-serif;
-  white-space: nowrap;
-}
+.tabs { display: flex; gap: 3px; padding: 4px; background: rgba(255,255,255,0.04); border-radius: 12px; width: fit-content; margin-bottom: 22px; flex-wrap: wrap; }
+.tab { padding: 7px 15px; border-radius: 9px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text-sub); transition: color 0.18s, background 0.18s; border: none; background: none; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
 .tab:hover { color: var(--text); }
 .tab.active { background: rgba(255,255,255,0.09); color: var(--text); }
-.tab.admin-tab.active { background: rgba(177,151,252,0.15); color: var(--accent2); }
 
 /* ═══ TOP BAR ═══ */
-.top-bar {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 16px; flex-wrap: wrap;
-}
+.top-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
 .search-wrap { position: relative; flex: 1; min-width: 180px; max-width: 300px; }
 .search-wrap svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); opacity: 0.4; pointer-events: none; }
-.search-input {
-  width: 100%; padding: 9px 13px 9px 36px; border-radius: 10px;
-  background: var(--surface); border: 1px solid var(--border);
-  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13.5px;
-  outline: none; transition: border-color 0.2s;
-}
-.search-input:focus { border-color: rgba(124,143,255,0.5); }
+.search-input { width: 100%; padding: 9px 13px 9px 36px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; transition: border-color 0.2s; }
+.search-input:focus { border-color: rgba(123,47,255,0.45); }
 .search-input::placeholder { color: var(--text-muted); }
-
-/* ═══ ACCESS DENIED ═══ */
-.access-denied {
-  text-align: center; padding: 60px 20px;
-}
-.access-denied .lock-icon { font-size: 56px; margin-bottom: 16px; }
-.access-denied h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 10px; color: var(--error); }
-.access-denied p { font-size: 14px; color: var(--text-sub); line-height: 1.7; max-width: 380px; margin: 0 auto; }
-
-/* ═══ PROFILE CARD ═══ */
-.profile-card {
-  display: flex; align-items: center; gap: 18px;
-  padding: 22px; margin-bottom: 22px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-}
-.profile-avatar {
-  width: 56px; height: 56px; border-radius: 50%;
-  background: var(--gradient);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif;
-  font-size: 22px; font-weight: 700; color: #fff; flex-shrink: 0;
-  box-shadow: 0 6px 22px rgba(124,143,255,0.4);
-}
-.profile-info h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 600; }
-.profile-info p { font-size: 13px; color: var(--text-sub); margin-top: 3px; }
-.profile-role-badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  margin-top: 8px; padding: 3px 10px; border-radius: 20px;
-  font-size: 11px; font-weight: 600;
-}
 
 /* ═══ TOAST ═══ */
 .toast {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
-  background: rgba(10,13,22,0.95); border: 1px solid var(--border2);
-  border-radius: 12px; padding: 12px 20px;
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: rgba(8,10,18,0.96); border: 1px solid var(--border2);
+  border-radius: 12px; padding: 12px 22px;
   font-size: 13.5px; color: var(--text);
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 9px;
   opacity: 0; transition: opacity 0.3s, transform 0.3s;
   z-index: 999; pointer-events: none; white-space: nowrap;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 14px 44px rgba(0,0,0,0.55);
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* ═══ SKELETON ═══ */
 .skeleton {
   background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s infinite;
-  border-radius: 8px;
+  background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 8px;
 }
 @keyframes shimmer { to { background-position: -200% 0; } }
 
-/* ═══ SECTION headers / sub-cards ═══ */
-.card-title {
-  font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600;
-  margin-bottom: 18px; letter-spacing: -0.02em;
-}
-.sub-card {
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 16px;
-}
+/* ═══ MISC ═══ */
+.card-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 18px; letter-spacing: -0.02em; }
+.sub-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; }
+.divider { height: 1px; background: var(--border); margin: 18px 0; }
+
+/* ═══ PROFILE CARD ═══ */
+.profile-card { display: flex; align-items: center; gap: 18px; padding: 22px; margin-bottom: 22px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.profile-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: #fff; flex-shrink: 0; box-shadow: 0 6px 22px rgba(123,47,255,0.4); }
+.profile-info h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 600; }
+.profile-info p { font-size: 13px; color: var(--text-sub); margin-top: 3px; }
+
+/* ═══ USER DETAIL PANEL ═══ */
+.user-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+@media (max-width: 480px) { .user-detail-grid { grid-template-columns: 1fr; } }
+
+/* ═══ CONFIRM BOX ═══ */
+.confirm-box { background: rgba(255,45,85,0.06); border: 1px solid rgba(255,45,85,0.18); border-radius: var(--radius-sm); padding: 16px; margin-top: 14px; }
+.confirm-box p { font-size: 13.5px; color: var(--text-sub); line-height: 1.6; }
+
+/* ═══ NOTE DISPLAY ═══ */
+.note-display { background: rgba(255,214,10,0.06); border: 1px solid rgba(255,214,10,0.15); border-radius: var(--radius-xs); padding: 10px 13px; font-size: 12.5px; color: rgba(255,214,10,0.9); line-height: 1.5; margin-top: 6px; }
+
+/* ═══ FILTER CHIPS ═══ */
+.filter-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.chip { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text-sub); transition: all 0.18s; user-select: none; }
+.chip:hover { border-color: var(--border2); color: var(--text); }
+.chip.active { background: rgba(123,47,255,0.18); border-color: rgba(123,47,255,0.4); color: var(--accent2); }
+.chip.danger.active { background: rgba(255,45,85,0.15); border-color: rgba(255,45,85,0.35); color: var(--error); }
+.chip.success.active { background: rgba(48,209,88,0.12); border-color: rgba(48,209,88,0.3); color: var(--success); }
+
+/* ═══ METRIC MINI ═══ */
+.metric-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.metric-row:last-child { border-bottom: none; }
+.metric-label { font-size: 13px; color: var(--text-sub); }
+.metric-val { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; }
+
+/* ═══ TIMELINE ═══ */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.tl-item { display: flex; gap: 14px; padding-bottom: 18px; position: relative; }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-item:not(:last-child)::before { content:''; position:absolute; left:15px; top:32px; width:1px; bottom:0; background: var(--border); }
+.tl-dot { width: 30px; height: 30px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; z-index: 1; }
+.tl-body { flex: 1; }
+.tl-title { font-size: 13.5px; font-weight: 500; color: var(--text); }
+.tl-date { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+
+/* ═══ PROGRESS BAR ═══ */
+.progress-bar { height: 6px; border-radius: 3px; background: var(--surface2); overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; background: var(--gradient); transition: width 0.8s var(--ez); }
+
+/* ═══ GRAND DIVIDER ═══ */
+.section-sep { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin: 26px 0 14px; padding-left: 2px; }
 </style>
 </head>
 <body>
@@ -599,8 +467,6 @@ textarea { resize: vertical; min-height: 80px; }
 </div>
 <div class="grain"></div>
 <div class="toast" id="toast"></div>
-
-<!-- SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
 <!-- ═══════════ NAVBAR ═══════════ -->
@@ -608,22 +474,18 @@ textarea { resize: vertical; min-height: 80px; }
   <button class="nav-hamburger" onclick="toggleSidebar()" aria-label="Menu">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
-
   <a class="nav-logo" href="https://devhertox.github.io/arich_iptv/">
     <div class="nav-gem">A</div>
     <div class="nav-brand"><em>ARICH</em> IPTV</div>
   </a>
-
   <div class="nav-spacer"></div>
-
   <div id="nav-admin-badge" style="display:none;">
     <div class="nav-admin-badge">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
       <span>Admin</span>
     </div>
   </div>
-
-  <div style="position:relative; margin-left:10px;" id="nav-auth-zone"></div>
+  <div style="position:relative;margin-left:10px;" id="nav-auth-zone"></div>
 </nav>
 
 <!-- USER MENU -->
@@ -633,11 +495,11 @@ textarea { resize: vertical; min-height: 80px; }
     <div class="menu-header-email" id="menu-email"></div>
     <div class="menu-header-role" id="menu-role" style="display:none;"></div>
   </div>
-  <button class="menu-item" onclick="showSection('profile'); closeUserMenu();">
+  <button class="menu-item" onclick="showSection('profile');closeUserMenu();">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     Mon profil
   </button>
-  <button class="menu-item" onclick="showSection('settings'); closeUserMenu();">
+  <button class="menu-item" onclick="showSection('settings');closeUserMenu();">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     Paramètres
   </button>
@@ -650,454 +512,381 @@ textarea { resize: vertical; min-height: 80px; }
 
 <!-- ═══════════ LAYOUT ═══════════ -->
 <div class="layout">
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-section">Mon espace</div>
+  <button class="s-link active" id="sl-playlists" onclick="showSection('playlists')">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    Mes playlists
+    <span class="s-badge" id="pl-count-badge">–</span>
+  </button>
+  <button class="s-link" id="sl-profile" onclick="showSection('profile')">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Mon profil
+  </button>
+  <button class="s-link" id="sl-support" onclick="showSection('support')">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    Support
+  </button>
+  <button class="s-link" id="sl-settings" onclick="showSection('settings')">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Paramètres
+  </button>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-section">Mon espace</div>
-
-    <button class="s-link active" id="sl-playlists" onclick="showSection('playlists')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      Mes playlists
-      <span class="s-badge" id="pl-count-badge">–</span>
+  <div id="sidebar-admin-section" style="display:none;">
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">Administration</div>
+    <button class="s-link" id="sl-admin-users" onclick="showSection('admin-users')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Utilisateurs
+      <span class="s-badge" id="users-count-badge">–</span>
     </button>
-
-    <button class="s-link" id="sl-profile" onclick="showSection('profile')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Mon profil
+    <button class="s-link" id="sl-admin-playlists" onclick="showSection('admin-playlists')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 2l-4 5-4-5"/></svg>
+      Toutes les playlists
     </button>
-
-    <button class="s-link" id="sl-support" onclick="showSection('support')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      Support
+    <button class="s-link" id="sl-admin-stats" onclick="showSection('admin-stats')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Statistiques
     </button>
-
-    <button class="s-link" id="sl-settings" onclick="showSection('settings')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      Paramètres
+    <button class="s-link" id="sl-admin-logs" onclick="showSection('admin-logs')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Logs d'activité
     </button>
+  </div>
+</aside>
 
-    <!-- Admin section — hidden by default, shown if admin -->
-    <div id="sidebar-admin-section" style="display:none;">
-      <div class="sidebar-divider"></div>
-      <div class="sidebar-section">Administration</div>
+<main class="main">
 
-      <button class="s-link" id="sl-admin-users" onclick="showSection('admin-users')">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Utilisateurs
-        <span class="s-badge admin" id="users-count-badge">–</span>
-      </button>
+<!-- ═══ PLAYLISTS ═══ -->
+<section class="section active" id="sec-playlists">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Mes playlists 📋</div>
+      <div class="page-sub">Gérez vos sources IPTV liées à vos appareils.</div>
+    </div>
+    <button class="btn btn-primary" onclick="openAddModal()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Ajouter
+    </button>
+  </div>
+  <div id="pl-msg" class="msg" style="margin-bottom:16px;"></div>
+  <div class="top-bar">
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" id="pl-search" type="text" placeholder="Rechercher une playlist…" oninput="filterPlaylists()">
+    </div>
+    <div class="filter-chips" style="margin:0;">
+      <div class="chip active" id="chip-all" onclick="setPlFilter('all')">Toutes</div>
+      <div class="chip" id="chip-m3u" onclick="setPlFilter('m3u')">M3U</div>
+      <div class="chip" id="chip-xtream" onclick="setPlFilter('xtream')">Xtream</div>
+    </div>
+  </div>
+  <div class="card">
+    <div id="pl-loading" class="loading-state"><div class="big-spin"></div> Chargement…</div>
+    <div id="pl-table-wrap" style="display:none;">
+      <div class="table-wrap">
+        <table id="pl-table">
+          <thead><tr>
+            <th>Nom</th><th>Type</th><th>Serveur / URL</th>
+            <th>Chaînes</th><th>Statut</th><th>Ajouté</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="pl-tbody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="pl-empty" style="display:none;">
+        <div class="empty-icon">📭</div>
+        <h3>Aucune playlist</h3>
+        <p>Vos playlists apparaîtront ici une fois ajoutées depuis l'app.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-      <button class="s-link" id="sl-admin-playlists" onclick="showSection('admin-playlists')">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 2l-4 5-4-5"/></svg>
-        Toutes les playlists
-      </button>
+<!-- ═══ PROFILE ═══ -->
+<section class="section" id="sec-profile">
+  <div class="page-header">
+    <div><div class="page-title">Mon profil 👤</div><div class="page-sub">Informations de votre compte.</div></div>
+  </div>
+  <div class="profile-card" id="profile-card">
+    <div class="profile-avatar" id="profile-avatar">?</div>
+    <div class="profile-info">
+      <h3 id="profile-name">—</h3>
+      <p id="profile-email-display">—</p>
+      <div style="margin-top:8px;" id="profile-role-badge"></div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Informations du compte</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="metric-row"><span class="metric-label">Email</span><span class="metric-val" id="info-email" style="font-size:13px;font-family:'DM Sans',sans-serif;">—</span></div>
+        <div class="metric-row"><span class="metric-label">Membre depuis</span><span class="metric-val" id="info-created" style="font-size:13px;font-family:'DM Sans',sans-serif;">—</span></div>
+        <div class="metric-row"><span class="metric-label">Dernière connexion</span><span class="metric-val" id="info-last-login" style="font-size:13px;font-family:'DM Sans',sans-serif;">—</span></div>
+        <div class="metric-row"><span class="metric-label">Méthode</span><span class="metric-val" id="info-provider" style="font-size:13px;font-family:'DM Sans',sans-serif;">—</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Mes stats</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="metric-row"><span class="metric-label">Playlists</span><span class="metric-val" id="profile-pl-count">–</span></div>
+        <div class="metric-row"><span class="metric-label">M3U</span><span class="metric-val" id="profile-m3u-count">–</span></div>
+        <div class="metric-row"><span class="metric-label">Xtream</span><span class="metric-val" id="profile-xtream-count">–</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-      <button class="s-link" id="sl-admin-stats" onclick="showSection('admin-stats')">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        Statistiques
-      </button>
-
-      <button class="s-link" id="sl-admin-logs" onclick="showSection('admin-logs')">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        Logs d'activité
+<!-- ═══ SUPPORT ═══ -->
+<section class="section" id="sec-support">
+  <div class="page-header">
+    <div><div class="page-title">Support 💬</div><div class="page-sub">Besoin d'aide ? On vous répond rapidement.</div></div>
+  </div>
+  <div class="grid-2" style="margin-bottom:22px;">
+    <a href="https://wa.me/33600000000" target="_blank" class="card" style="text-decoration:none;display:flex;align-items:center;gap:16px;transition:border-color 0.2s,transform 0.2s;" onmouseover="this.style.borderColor='rgba(37,211,102,0.4)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''">
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(37,211,102,0.1);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">💬</div>
+      <div><div style="font-weight:600;margin-bottom:3px;">WhatsApp</div><div style="font-size:13px;color:var(--text-sub);">Réponse rapide</div></div>
+    </a>
+    <a href="https://t.me/arichiptv" target="_blank" class="card" style="text-decoration:none;display:flex;align-items:center;gap:16px;transition:border-color 0.2s,transform 0.2s;" onmouseover="this.style.borderColor='rgba(10,132,255,0.4)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''">
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">✈️</div>
+      <div><div style="font-weight:600;margin-bottom:3px;">Telegram</div><div style="font-size:13px;color:var(--text-sub);">@arichiptv</div></div>
+    </a>
+  </div>
+  <div class="card">
+    <div class="card-title">Envoyer un message</div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="field"><label>Sujet</label><input type="text" id="support-subject" placeholder="Problème de connexion / Activation…"></div>
+      <div class="field"><label>Message</label><textarea id="support-message" rows="5" placeholder="Décrivez votre problème. Incluez votre Device Key si lié à l'app Android."></textarea></div>
+      <div id="support-msg" class="msg"></div>
+      <button class="btn btn-primary" style="width:fit-content;" onclick="sendSupportMessage()">
+        <span class="spin"></span><span class="blbl">Envoyer →</span>
       </button>
     </div>
-  </aside>
+  </div>
+</section>
 
-  <!-- MAIN -->
-  <main class="main">
-
-    <!-- ═══ PLAYLISTS ═══ -->
-    <section class="section active" id="sec-playlists">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Mes playlists 📋</div>
-          <div class="page-sub">Gérez vos sources IPTV — liées à vos appareils.</div>
-        </div>
-        <button class="btn btn-primary" onclick="openAddModal()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          <span>Ajouter</span>
+<!-- ═══ SETTINGS ═══ -->
+<section class="section" id="sec-settings">
+  <div class="page-header">
+    <div><div class="page-title">Paramètres ⚙️</div><div class="page-sub">Gérez vos préférences de compte.</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Sécurité</div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div class="field"><label>Email actuel</label><input type="email" id="settings-email" readonly style="opacity:0.6;cursor:not-allowed;"></div>
+        <div class="field"><label>Nouveau mot de passe</label><input type="password" id="settings-pw" placeholder="Laisser vide pour ne pas changer"></div>
+        <div id="settings-msg" class="msg"></div>
+        <button class="btn btn-primary" style="width:fit-content;" onclick="saveSettings()">
+          <span class="spin"></span><span class="blbl">Mettre à jour</span>
         </button>
       </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--error);">Zone de danger ⚠️</div>
+      <p style="font-size:13px;color:var(--text-sub);margin-bottom:18px;line-height:1.65;">Ces actions sont irréversibles. Réfléchissez avant de continuer.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="btn btn-ghost" onclick="doLogout()" style="justify-content:flex-start;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Se déconnecter
+        </button>
+        <button class="btn btn-danger" onclick="confirmDeleteAccount()" style="justify-content:flex-start;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Supprimer mon compte
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
 
-      <div id="pl-msg" class="msg" style="margin-bottom:16px;"></div>
-
-      <div class="top-bar">
-        <div class="search-wrap">
+<!-- ═══ ADMIN: USERS ═══ -->
+<section class="section" id="sec-admin-users">
+  <div class="page-header">
+    <div><div class="page-title">Utilisateurs 👥</div><div class="page-sub">Gestion complète de tous les comptes inscrits.</div></div>
+    <button class="btn btn-ghost btn-sm" onclick="usersLoaded=false;loadAdminUsers();">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Actualiser
+    </button>
+  </div>
+  <div class="grid-4" style="margin-bottom:22px;">
+    <div class="stat-card" style="--card-line:var(--gradient);">
+      <div class="stat-icon">👤</div>
+      <div class="stat-value" id="au-total">–</div>
+      <div class="stat-label">Total utilisateurs</div>
+    </div>
+    <div class="stat-card" style="--card-line:var(--gradient2);">
+      <div class="stat-icon">✅</div>
+      <div class="stat-value" id="au-confirmed">–</div>
+      <div class="stat-label">Emails confirmés</div>
+    </div>
+    <div class="stat-card" style="--card-line:var(--gradient3);">
+      <div class="stat-icon">🚫</div>
+      <div class="stat-value" id="au-banned">–</div>
+      <div class="stat-label">Bannis</div>
+    </div>
+    <div class="stat-card" style="--card-line:var(--gradient);">
+      <div class="stat-icon">📅</div>
+      <div class="stat-value" id="au-today">–</div>
+      <div class="stat-label">Inscrits aujourd'hui</div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+      <div class="card-title" style="margin-bottom:0;">Tous les comptes</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <div class="filter-chips" style="margin:0;">
+          <div class="chip active" id="uf-all" onclick="setUserFilter('all')">Tous</div>
+          <div class="chip danger" id="uf-banned" onclick="setUserFilter('banned')">Bannis</div>
+          <div class="chip success" id="uf-active" onclick="setUserFilter('active')">Actifs</div>
+        </div>
+        <div class="search-wrap" style="max-width:220px;min-width:160px;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input class="search-input" id="pl-search" type="text" placeholder="Rechercher une playlist…" oninput="filterPlaylists()">
+          <input class="search-input" id="users-search" type="text" placeholder="Rechercher…" oninput="filterUsers()">
         </div>
       </div>
+    </div>
+    <div id="users-loading" class="loading-state"><div class="big-spin"></div> Chargement…</div>
+    <div id="users-card" style="display:none;">
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Email</th><th>Fournisseur</th><th>Statut</th>
+            <th>Créé le</th><th>Notes</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="users-tbody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="users-empty" style="display:none;">
+        <div class="empty-icon">👥</div><h3>Aucun utilisateur trouvé</h3>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- ═══ ADMIN: ALL PLAYLISTS ═══ -->
+<section class="section" id="sec-admin-playlists">
+  <div class="page-header">
+    <div><div class="page-title">Toutes les playlists 📱</div><div class="page-sub">Vue globale de toutes les playlists.</div></div>
+    <button class="btn btn-ghost btn-sm" onclick="aplLoaded=false;loadAdminPlaylists();">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Actualiser
+    </button>
+  </div>
+  <div class="grid-3" style="margin-bottom:22px;">
+    <div class="stat-card" style="--card-line:var(--gradient);"><div class="stat-icon">📋</div><div class="stat-value" id="apl-total">–</div><div class="stat-label">Total playlists</div></div>
+    <div class="stat-card" style="--card-line:var(--gradient2);"><div class="stat-icon">🔗</div><div class="stat-value" id="apl-m3u">–</div><div class="stat-label">M3U</div></div>
+    <div class="stat-card" style="--card-line:var(--gradient3);"><div class="stat-icon">📡</div><div class="stat-value" id="apl-xtream">–</div><div class="stat-label">Xtream</div></div>
+  </div>
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+      <div class="card-title" style="margin-bottom:0;">Liste complète</div>
+      <div class="search-wrap" style="max-width:240px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" id="apl-search" type="text" placeholder="Rechercher…" oninput="filterAdminPlaylists()">
+      </div>
+    </div>
+    <div id="apl-loading" class="loading-state"><div class="big-spin"></div> Chargement…</div>
+    <div id="apl-content" style="display:none;">
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Nom</th><th>Type</th><th>Device ID</th>
+            <th>Chaînes</th><th>Statut</th><th>Créé le</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="apl-tbody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="apl-empty" style="display:none;">
+        <div class="empty-icon">📭</div><h3>Aucune playlist</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ADMIN: STATS ═══ -->
+<section class="section" id="sec-admin-stats">
+  <div class="page-header">
+    <div><div class="page-title">Statistiques 📊</div><div class="page-sub">Métriques de l'application en temps réel.</div></div>
+    <button class="btn btn-ghost btn-sm" onclick="statsLoaded=false;loadStats();">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Actualiser
+    </button>
+  </div>
+  <div id="stats-loading" class="loading-state"><div class="big-spin"></div> Chargement…</div>
+  <div id="stats-content" style="display:none;">
+    <div class="grid-3" style="margin-bottom:22px;">
+      <div class="stat-card" style="--card-line:var(--gradient);">
+        <div class="stat-icon">📥</div>
+        <div class="stat-value" id="kpi-installs">–</div>
+        <div class="stat-label">Installations app</div>
+        <div class="stat-delta up" id="kpi-installs-delta">+0 ce mois</div>
+      </div>
+      <div class="stat-card" style="--card-line:var(--gradient2);">
+        <div class="stat-icon">🚀</div>
+        <div class="stat-value" id="kpi-sessions">–</div>
+        <div class="stat-label">Sessions app</div>
+        <div class="stat-delta up" id="kpi-sessions-delta">+0 ce mois</div>
+      </div>
+      <div class="stat-card" style="--card-line:var(--gradient3);">
+        <div class="stat-icon">📋</div>
+        <div class="stat-value" id="kpi-playlists">–</div>
+        <div class="stat-label">Playlists créées</div>
+        <div class="stat-delta neutral">Total</div>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-bottom:22px;">
       <div class="card">
-        <div id="pl-loading" class="loading-state">
-          <div class="big-spin"></div> Chargement…
-        </div>
-        <div id="pl-table-wrap" style="display:none;">
-          <div class="table-wrap">
-            <table id="pl-table">
-              <thead>
-                <tr>
-                  <th>Nom</th>
-                  <th>Type</th>
-                  <th>Serveur / URL</th>
-                  <th>Statut</th>
-                  <th>Ajouté</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="pl-tbody"></tbody>
-            </table>
-          </div>
-          <div class="empty" id="pl-empty" style="display:none;">
-            <div class="empty-icon">📭</div>
-            <h3>Aucune playlist</h3>
-            <p>Vos playlists apparaîtront ici une fois ajoutées depuis l'app.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ PROFILE ═══ -->
-    <section class="section" id="sec-profile">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Mon profil 👤</div>
-          <div class="page-sub">Informations de votre compte.</div>
-        </div>
-      </div>
-
-      <div class="profile-card" id="profile-card">
-        <div class="profile-avatar" id="profile-avatar">?</div>
-        <div class="profile-info">
-          <h3 id="profile-name">—</h3>
-          <p id="profile-email-display">—</p>
-          <div class="profile-role-badge" id="profile-role-badge" style="display:none;"></div>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">Informations du compte</div>
-          <div style="display:flex;flex-direction:column;gap:14px;">
-            <div class="sub-card">
-              <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Email</div>
-              <div style="font-size:14px;" id="info-email">—</div>
-            </div>
-            <div class="sub-card">
-              <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Membre depuis</div>
-              <div style="font-size:14px;" id="info-created">—</div>
-            </div>
-            <div class="sub-card">
-              <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Dernière connexion</div>
-              <div style="font-size:14px;" id="info-last-login">—</div>
-            </div>
-            <div class="sub-card">
-              <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;">Méthode de connexion</div>
-              <div style="font-size:14px;" id="info-provider">—</div>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Statistiques</div>
-          <div style="display:flex;flex-direction:column;gap:14px;">
-            <div class="sub-card" style="display:flex;justify-content:space-between;align-items:center;">
-              <div>
-                <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Playlists</div>
-                <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:700;" id="profile-pl-count">–</div>
-              </div>
-              <div style="font-size:30px;opacity:0.4;">📋</div>
-            </div>
-            <div class="sub-card">
-              <div style="font-size:12px;color:var(--text-sub);line-height:1.6;">
-                Vos playlists sont synchronisées avec l'app ARICH IPTV sur vos appareils Android.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ SUPPORT ═══ -->
-    <section class="section" id="sec-support">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Support 💬</div>
-          <div class="page-sub">Besoin d'aide ? On vous répond en moins de 2h.</div>
-        </div>
-      </div>
-      <div class="grid-2" style="margin-bottom:22px;">
-        <a href="https://wa.me/33600000000" target="_blank" class="card" style="text-decoration:none;display:flex;align-items:center;gap:16px;transition:border-color 0.2s,transform 0.2s;cursor:pointer;" onmouseover="this.style.borderColor='rgba(37,211,102,0.4)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''">
-          <div style="width:44px;height:44px;border-radius:12px;background:rgba(37,211,102,0.12);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">💬</div>
-          <div>
-            <div style="font-weight:600;margin-bottom:3px;">WhatsApp</div>
-            <div style="font-size:13px;color:var(--text-sub);">Réponse rapide · +33 6 00 00 00 00</div>
-          </div>
-        </a>
-        <a href="https://t.me/arichiptv" target="_blank" class="card" style="text-decoration:none;display:flex;align-items:center;gap:16px;transition:border-color 0.2s,transform 0.2s;cursor:pointer;" onmouseover="this.style.borderColor='rgba(10,132,255,0.4)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''">
-          <div style="width:44px;height:44px;border-radius:12px;background:rgba(10,132,255,0.1);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">✈️</div>
-          <div>
-            <div style="font-weight:600;margin-bottom:3px;">Telegram</div>
-            <div style="font-size:13px;color:var(--text-sub);">@arichiptv</div>
-          </div>
-        </a>
+        <div class="card-title">Activité — 30 derniers jours</div>
+        <div class="chart-wrap"><canvas id="chart-line"></canvas></div>
       </div>
       <div class="card">
-        <div class="card-title">Envoyer un message</div>
-        <div style="display:flex;flex-direction:column;gap:14px;">
-          <div class="field">
-            <label>Sujet</label>
-            <input type="text" id="support-subject" placeholder="Problème de connexion / Activation licence…">
-          </div>
-          <div class="field">
-            <label>Message</label>
-            <textarea id="support-message" rows="5" placeholder="Décrivez votre problème en détail. Incluez votre Device Key si c'est lié à l'app Android."></textarea>
-          </div>
-          <div id="support-msg" class="msg"></div>
-          <button class="btn btn-primary" style="width:fit-content;" onclick="sendSupportMessage()">
-            <span class="spin"></span>
-            <span class="blbl">Envoyer →</span>
-          </button>
-        </div>
+        <div class="card-title">Répartition globale</div>
+        <div class="chart-wrap" style="height:210px;"><canvas id="chart-donut"></canvas></div>
       </div>
-    </section>
-
-    <!-- ═══ SETTINGS ═══ -->
-    <section class="section" id="sec-settings">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Paramètres ⚙️</div>
-          <div class="page-sub">Gérez vos préférences de compte.</div>
-        </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Derniers événements</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Événement</th><th>Valeur</th><th>Date</th><th>Appareil</th></tr></thead>
+          <tbody id="stats-events-tbody"></tbody>
+        </table>
       </div>
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-title">Sécurité</div>
-          <div style="display:flex;flex-direction:column;gap:14px;">
-            <div class="field">
-              <label>Email actuel</label>
-              <input type="email" id="settings-email" readonly style="opacity:0.6;cursor:not-allowed;">
-            </div>
-            <div class="field">
-              <label>Nouveau mot de passe</label>
-              <input type="password" id="settings-pw" placeholder="Laisser vide pour ne pas changer">
-            </div>
-            <div id="settings-msg" class="msg"></div>
-            <button class="btn btn-primary" style="width:fit-content;" onclick="saveSettings()">
-              <span class="spin"></span>
-              <span class="blbl">Mettre à jour</span>
-            </button>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title" style="color:var(--error);">Zone de danger ⚠️</div>
-          <p style="font-size:13.5px;color:var(--text-sub);margin-bottom:18px;line-height:1.65;">Ces actions sont irréversibles. Réfléchissez avant de continuer.</p>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <button class="btn btn-ghost" onclick="doLogout()" style="justify-content:flex-start;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-              Se déconnecter
-            </button>
-            <button class="btn btn-danger" onclick="confirmDeleteAccount()" style="justify-content:flex-start;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-              Supprimer mon compte
-            </button>
-          </div>
-        </div>
+      <div class="empty" id="stats-empty" style="display:none;">
+        <div class="empty-icon">📊</div><h3>Aucune donnée</h3>
+        <p>Les stats apparaîtront dès que l'app sera utilisée.</p>
       </div>
-    </section>
+    </div>
+  </div>
+  <div id="stats-error" class="msg error" style="margin-top:12px;"></div>
+</section>
 
-    <!-- ═══ ADMIN: USERS ═══ -->
-    <section class="section" id="sec-admin-users">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Utilisateurs 👥</div>
-          <div class="page-sub">Liste de tous les comptes inscrits.</div>
-        </div>
+<!-- ═══ ADMIN: LOGS ═══ -->
+<section class="section" id="sec-admin-logs">
+  <div class="page-header">
+    <div><div class="page-title">Logs d'activité 📄</div><div class="page-sub">Historique des actions admin sur le panel.</div></div>
+    <button class="btn btn-ghost btn-sm" onclick="logsLoaded=false;loadLogs();">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Actualiser
+    </button>
+  </div>
+  <div class="card">
+    <div id="logs-loading" class="loading-state"><div class="big-spin"></div> Chargement…</div>
+    <div id="logs-content" style="display:none;">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Action</th><th>Effectué par</th><th>Cible</th><th>Date</th><th>Détails</th></tr></thead>
+          <tbody id="logs-tbody"></tbody>
+        </table>
       </div>
-
-      <div class="grid-4" style="margin-bottom:22px;">
-        <div class="stat-card" style="--card-gradient:var(--gradient);">
-          <div class="stat-icon">👤</div>
-          <div class="stat-value" id="au-total">–</div>
-          <div class="stat-label">Total utilisateurs</div>
-        </div>
-        <div class="stat-card" style="--card-gradient:var(--gradient2);">
-          <div class="stat-icon">🟢</div>
-          <div class="stat-value" id="au-confirmed">–</div>
-          <div class="stat-label">Emails confirmés</div>
-        </div>
-        <div class="stat-card" style="--card-gradient:var(--gradient3);">
-          <div class="stat-icon">🔑</div>
-          <div class="stat-value" id="au-google">–</div>
-          <div class="stat-label">Connexions Google</div>
-        </div>
-        <div class="stat-card" style="--card-gradient:var(--gradient);">
-          <div class="stat-icon">📅</div>
-          <div class="stat-value" id="au-today">–</div>
-          <div class="stat-label">Inscrits aujourd'hui</div>
-        </div>
+      <div class="empty" id="logs-empty" style="display:none;">
+        <div class="empty-icon">📄</div><h3>Aucun log disponible</h3>
+        <p>Les logs des actions admin apparaîtront ici.</p>
       </div>
+    </div>
+  </div>
+</section>
 
-      <div class="card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-          <div class="card-title" style="margin-bottom:0;">Tous les comptes</div>
-          <div class="search-wrap" style="max-width:240px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input class="search-input" id="users-search" type="text" placeholder="Rechercher…" oninput="filterUsers()">
-          </div>
-        </div>
-        <div id="users-loading" class="loading-state"><div class="big-spin"></div> Chargement…</div>
-        <div id="users-card" style="display:none;">
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Email</th>
-                  <th>Fournisseur</th>
-                  <th>Créé le</th>
-                  <th>Dernière connexion</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="users-tbody"></tbody>
-            </table>
-          </div>
-          <div class="empty" id="users-empty" style="display:none;">
-            <div class="empty-icon">👥</div>
-            <h3>Aucun utilisateur trouvé</h3>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ ADMIN: ALL PLAYLISTS ═══ -->
-    <section class="section" id="sec-admin-playlists">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Toutes les playlists 📱</div>
-          <div class="page-sub">Vue globale de toutes les playlists de l'app.</div>
-        </div>
-      </div>
-      <div class="card">
-        <div id="apl-loading" class="loading-state"><div class="big-spin"></div> Chargement…</div>
-        <div id="apl-content" style="display:none;">
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Nom</th>
-                  <th>Type</th>
-                  <th>Device ID</th>
-                  <th>Chaînes</th>
-                  <th>Statut</th>
-                  <th>Créé le</th>
-                </tr>
-              </thead>
-              <tbody id="apl-tbody"></tbody>
-            </table>
-          </div>
-          <div class="empty" id="apl-empty" style="display:none;">
-            <div class="empty-icon">📭</div>
-            <h3>Aucune playlist</h3>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ ADMIN: STATS ═══ -->
-    <section class="section" id="sec-admin-stats">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Statistiques 📊</div>
-          <div class="page-sub">Métriques de l'application en temps réel.</div>
-        </div>
-      </div>
-
-      <div id="stats-loading" class="loading-state"><div class="big-spin"></div> Chargement des statistiques…</div>
-
-      <div id="stats-content" style="display:none;">
-        <div class="grid-3" style="margin-bottom:22px;">
-          <div class="stat-card" style="--card-gradient:var(--gradient);">
-            <div class="stat-icon">📥</div>
-            <div class="stat-value" id="kpi-installs">–</div>
-            <div class="stat-label">Installations app</div>
-            <div class="stat-delta up" id="kpi-installs-delta">+0 ce mois</div>
-          </div>
-          <div class="stat-card" style="--card-gradient:var(--gradient2);">
-            <div class="stat-icon">🚀</div>
-            <div class="stat-value" id="kpi-sessions">–</div>
-            <div class="stat-label">Sessions app</div>
-            <div class="stat-delta up" id="kpi-sessions-delta">+0 ce mois</div>
-          </div>
-          <div class="stat-card" style="--card-gradient:var(--gradient3);">
-            <div class="stat-icon">👤</div>
-            <div class="stat-value" id="kpi-users">–</div>
-            <div class="stat-label">Utilisateurs inscrits</div>
-            <div class="stat-delta neutral">Total</div>
-          </div>
-        </div>
-
-        <div class="grid-2" style="margin-bottom:22px;">
-          <div class="card">
-            <div class="card-title">Activité — 30 derniers jours</div>
-            <div class="chart-wrap"><canvas id="chart-line"></canvas></div>
-          </div>
-          <div class="card">
-            <div class="card-title">Répartition des événements</div>
-            <div class="chart-wrap" style="height:210px;"><canvas id="chart-donut"></canvas></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">Derniers événements</div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>Événement</th><th>Valeur</th><th>Date</th><th>Appareil</th></tr>
-              </thead>
-              <tbody id="stats-events-tbody"></tbody>
-            </table>
-          </div>
-          <div class="empty" id="stats-empty" style="display:none;">
-            <div class="empty-icon">📊</div>
-            <h3>Aucune donnée</h3>
-            <p>Les stats apparaîtront dès que l'app sera utilisée.</p>
-          </div>
-        </div>
-      </div>
-
-      <div id="stats-error" class="msg error" style="margin-top:12px;"></div>
-    </section>
-
-    <!-- ═══ ADMIN: LOGS ═══ -->
-    <section class="section" id="sec-admin-logs">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Logs d'activité 📄</div>
-          <div class="page-sub">Historique des actions sur le panel.</div>
-        </div>
-      </div>
-      <div class="card">
-        <div id="logs-loading" class="loading-state"><div class="big-spin"></div> Chargement…</div>
-        <div id="logs-content" style="display:none;">
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>Action</th><th>Utilisateur</th><th>Date</th><th>Détails</th></tr>
-              </thead>
-              <tbody id="logs-tbody"></tbody>
-            </table>
-          </div>
-          <div class="empty" id="logs-empty" style="display:none;">
-            <div class="empty-icon">📄</div>
-            <h3>Aucun log disponible</h3>
-            <p>Les logs apparaîtront quand il y aura de l'activité.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
+</main>
 </div>
 
 <!-- ═══════════ MODAL: ADD PLAYLIST ═══════════ -->
@@ -1109,49 +898,34 @@ textarea { resize: vertical; min-height: 80px; }
     </div>
     <div id="add-msg" class="msg" style="margin-bottom:14px;"></div>
     <div class="form-grid">
-      <div class="field">
-        <label>Nom *</label>
-        <input type="text" id="add-name" placeholder="Ma playlist IPTV">
-      </div>
-      <div class="field">
-        <label>Type *</label>
+      <div class="field"><label>Nom *</label><input type="text" id="add-name" placeholder="Ma playlist IPTV"></div>
+      <div class="field"><label>Type *</label>
         <select id="add-type" onchange="toggleAddType()">
           <option value="m3u">M3U URL</option>
           <option value="xtream">Xtream Codes</option>
         </select>
       </div>
       <div class="field full" id="add-url-field">
-        <label>URL M3U *</label>
-        <input type="url" id="add-url" placeholder="http://exemple.com/playlist.m3u">
+        <label>URL M3U *</label><input type="url" id="add-url" placeholder="http://exemple.com/playlist.m3u">
       </div>
       <div class="field full" id="add-xtream-fields" style="display:none;">
         <div class="form-grid">
-          <div class="field">
-            <label>Serveur *</label>
-            <input type="url" id="add-server" placeholder="http://serveur.com">
-          </div>
-          <div class="field">
-            <label>Nom d'utilisateur *</label>
-            <input type="text" id="add-user" placeholder="username">
-          </div>
-          <div class="field full">
-            <label>Mot de passe *</label>
-            <input type="password" id="add-pass" placeholder="password">
-          </div>
+          <div class="field"><label>Serveur *</label><input type="url" id="add-server" placeholder="http://serveur.com"></div>
+          <div class="field"><label>Nom d'utilisateur *</label><input type="text" id="add-user" placeholder="username"></div>
+          <div class="field full"><label>Mot de passe *</label><input type="password" id="add-pass" placeholder="password"></div>
         </div>
       </div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('modal-add')">Annuler</button>
       <button class="btn btn-primary" id="btn-add-pl" onclick="addPlaylist()">
-        <span class="spin"></span>
-        <span class="blbl">Ajouter</span>
+        <span class="spin"></span><span class="blbl">Ajouter</span>
       </button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════ MODAL: EDIT ═══════════ -->
+<!-- ═══════════ MODAL: EDIT PLAYLIST ═══════════ -->
 <div class="modal-backdrop" id="modal-edit">
   <div class="modal">
     <div class="modal-head">
@@ -1161,52 +935,147 @@ textarea { resize: vertical; min-height: 80px; }
     <div id="edit-msg" class="msg" style="margin-bottom:14px;"></div>
     <input type="hidden" id="edit-id">
     <div class="form-grid">
-      <div class="field full">
-        <label>Nom *</label>
-        <input type="text" id="edit-name">
-      </div>
-      <div class="field full" id="edit-url-field">
-        <label>URL M3U</label>
-        <input type="url" id="edit-url">
-      </div>
+      <div class="field full"><label>Nom *</label><input type="text" id="edit-name"></div>
+      <div class="field full" id="edit-url-field"><label>URL M3U</label><input type="url" id="edit-url"></div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('modal-edit')">Annuler</button>
       <button class="btn btn-primary" id="btn-edit-pl" onclick="saveEdit()">
-        <span class="spin"></span>
-        <span class="blbl">Sauvegarder</span>
+        <span class="spin"></span><span class="blbl">Sauvegarder</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: USER DETAIL ═══════════ -->
+<div class="modal-backdrop" id="modal-user-detail">
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="udetail-title">Utilisateur</div>
+        <div id="udetail-email" style="font-size:13px;color:var(--text-sub);margin-top:3px;"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-user-detail')">✕</button>
+    </div>
+    
+    <!-- Actions rapides -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+      <button class="btn btn-sm" id="udetail-ban-btn" onclick="toggleBanUser()">
+        <span class="blbl">🚫 Bannir</span>
+      </button>
+      <button class="btn btn-warn btn-sm" onclick="openRefundModal()">
+        💰 Marquer remboursé
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="openNoteModal()">
+        📝 Ajouter une note
+      </button>
+      <button class="btn btn-danger btn-sm" onclick="deleteUserAdmin()">
+        🗑️ Supprimer le compte
+      </button>
+    </div>
+
+    <div class="user-detail-grid">
+      <div>
+        <div class="section-sep">Infos compte</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="metric-row"><span class="metric-label">Email</span><span id="udet-email" style="font-size:12.5px;">—</span></div>
+          <div class="metric-row"><span class="metric-label">Inscrit le</span><span id="udet-created" style="font-size:12.5px;">—</span></div>
+          <div class="metric-row"><span class="metric-label">Dernière connexion</span><span id="udet-login" style="font-size:12.5px;">—</span></div>
+          <div class="metric-row"><span class="metric-label">Méthode</span><span id="udet-provider" style="font-size:12.5px;">—</span></div>
+          <div class="metric-row"><span class="metric-label">Statut</span><span id="udet-status">—</span></div>
+          <div class="metric-row"><span class="metric-label">Remboursé</span><span id="udet-refund">—</span></div>
+        </div>
+        <div id="udet-note-wrap" style="display:none;margin-top:12px;">
+          <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Note admin</div>
+          <div class="note-display" id="udet-note"></div>
+        </div>
+      </div>
+      <div>
+        <div class="section-sep">Playlists de l'utilisateur</div>
+        <div id="udet-playlists-loading" class="loading-state" style="padding:20px;"><div class="big-spin"></div></div>
+        <div id="udet-playlists-list" style="display:none;max-height:280px;overflow-y:auto;"></div>
+        <div class="empty" id="udet-playlists-empty" style="display:none;padding:20px;">
+          <div class="empty-icon" style="font-size:28px;">📭</div>
+          <h3 style="font-size:14px;">Aucune playlist</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: NOTE ═══════════ -->
+<div class="modal-backdrop" id="modal-note">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">📝 Note admin</div>
+      <button class="modal-close" onclick="closeModal('modal-note')">✕</button>
+    </div>
+    <div class="field">
+      <label>Note interne (visible uniquement par les admins)</label>
+      <textarea id="note-content" rows="4" placeholder="Remboursé le 01/01 · problème de connexion · suivi Telegram…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-note')">Annuler</button>
+      <button class="btn btn-primary" id="btn-save-note" onclick="saveNote()">
+        <span class="spin"></span><span class="blbl">Enregistrer</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL: REFUND ═══════════ -->
+<div class="modal-backdrop" id="modal-refund">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">💰 Marquer un remboursement</div>
+      <button class="modal-close" onclick="closeModal('modal-refund')">✕</button>
+    </div>
+    <div id="refund-user-info" style="font-size:13px;color:var(--text-sub);margin-bottom:16px;"></div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="field">
+        <label>Montant remboursé (€)</label>
+        <input type="number" id="refund-amount" placeholder="4.99" step="0.01" min="0">
+      </div>
+      <div class="field">
+        <label>Raison / Remarque</label>
+        <textarea id="refund-reason" rows="3" placeholder="Remboursé suite à problème d'activation…"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-refund')">Annuler</button>
+      <button class="btn btn-warn" id="btn-save-refund" onclick="saveRefund()">
+        <span class="spin"></span><span class="blbl">💰 Confirmer le remboursement</span>
       </button>
     </div>
   </div>
 </div>
 
 <script>
-/* ══════════════════════════ CONFIG ══════════════════════════ */
+/* ════════════════════════════ CONFIG ════════════════════════════ */
 const SUPABASE_URL  = 'https://aynucieohuowgkwyftiy.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5bnVjaWVvaHVvd2drd3lmdGl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyOTIxMDMsImV4cCI6MjA4Nzg2ODEwM30.H43CVcyzEuYBQfBIlkn16r5uk768isHr4DeLduo1ETk';
 const AUTH_URL      = 'https://devhertox.github.io/arich_iptv/auth.html';
-
-// ⬇ Mets ton email admin ici (ou une liste)
 const ADMIN_EMAILS  = ['charibossollati.ismael@gmail.com'];
 
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-let currentUser = null;
-let isAdmin = false;
+let currentUser  = null;
+let isAdmin      = false;
 let allPlaylists = [];
-let allUsers = [];
-let charts = {};
+let allUsers     = [];
+let allAdminPlaylists = [];
+let charts       = {};
+let currentDetailUser = null;
+let plFilter     = 'all';
+let userFilter   = 'all';
 
-/* ══════════════════════════ INIT ══════════════════════════ */
+/* ════════════════════════════ INIT ════════════════════════════ */
 async function init() {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) { window.location.href = AUTH_URL; return; }
   currentUser = session.user;
-
-  // Check admin
   isAdmin = ADMIN_EMAILS.includes(currentUser.email);
-
   renderNav();
   renderSidebar();
   fillProfileInfo();
@@ -1223,19 +1092,15 @@ function renderNav() {
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
     </div>`;
   document.getElementById('menu-email').textContent = currentUser.email || '';
-
   if (isAdmin) {
     document.getElementById('nav-admin-badge').style.display = 'flex';
-    const roleEl = document.getElementById('menu-role');
-    roleEl.innerHTML = '⭐ Administrateur';
-    roleEl.style.display = 'inline-flex';
+    const r = document.getElementById('menu-role');
+    r.innerHTML = '⭐ Administrateur'; r.style.display = 'inline-flex';
   }
 }
 
 function renderSidebar() {
-  if (isAdmin) {
-    document.getElementById('sidebar-admin-section').style.display = 'block';
-  }
+  if (isAdmin) document.getElementById('sidebar-admin-section').style.display = 'block';
 }
 
 function fillProfileInfo() {
@@ -1243,149 +1108,124 @@ function fillProfileInfo() {
   const created = currentUser.created_at ? new Date(currentUser.created_at).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' }) : '—';
   const lastLogin = currentUser.last_sign_in_at ? new Date(currentUser.last_sign_in_at).toLocaleString('fr-FR') : '—';
   const provider = currentUser.app_metadata?.provider || 'email';
-  const providerLabel = provider === 'google' ? '🔵 Google OAuth' : '📧 Email / Mot de passe';
-
-  // Profile card
   document.getElementById('profile-avatar').textContent = email[0].toUpperCase();
   document.getElementById('profile-name').textContent = currentUser.user_metadata?.full_name || email.split('@')[0];
   document.getElementById('profile-email-display').textContent = email;
   document.getElementById('info-email').textContent = email;
   document.getElementById('info-created').textContent = created;
   document.getElementById('info-last-login').textContent = lastLogin;
-  document.getElementById('info-provider').textContent = providerLabel;
+  document.getElementById('info-provider').textContent = provider === 'google' ? '🔵 Google OAuth' : '📧 Email / Mot de passe';
   document.getElementById('settings-email').value = email;
-
   if (isAdmin) {
-    const badge = document.getElementById('profile-role-badge');
-    badge.innerHTML = '⭐ Administrateur';
-    badge.style.cssText += 'background:rgba(177,151,252,0.15);color:var(--accent2);display:inline-flex;';
+    document.getElementById('profile-role-badge').innerHTML = '<span class="badge admin">⭐ Administrateur</span>';
   }
 }
 
-/* ══════════════════════════ USER MENU ══════════════════════════ */
-function toggleUserMenu(e) {
-  e.stopPropagation();
-  document.getElementById('user-menu').classList.toggle('open');
-}
+/* ════════════════════════════ USER MENU ════════════════════════════ */
+function toggleUserMenu(e) { e.stopPropagation(); document.getElementById('user-menu').classList.toggle('open'); }
 function closeUserMenu() { document.getElementById('user-menu').classList.remove('open'); }
 document.addEventListener('click', closeUserMenu);
-async function doLogout() {
-  await sb.auth.signOut();
-  window.location.href = AUTH_URL;
-}
+async function doLogout() { await sb.auth.signOut(); window.location.href = AUTH_URL; }
 
-/* ══════════════════════════ SIDEBAR ══════════════════════════ */
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('show');
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('overlay').classList.remove('show');
-}
+/* ════════════════════════════ SIDEBAR ════════════════════════════ */
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
 
-/* ══════════════════════════ SECTIONS ══════════════════════════ */
+/* ════════════════════════════ SECTIONS ════════════════════════════ */
 const sections = {
-  playlists:       { sec:'sec-playlists',       sl:'sl-playlists',       onLoad: null },
-  profile:         { sec:'sec-profile',          sl:'sl-profile',          onLoad: null },
-  support:         { sec:'sec-support',          sl:'sl-support',          onLoad: null },
-  settings:        { sec:'sec-settings',         sl:'sl-settings',         onLoad: null },
-  'admin-users':   { sec:'sec-admin-users',      sl:'sl-admin-users',      onLoad: loadAdminUsers,    adminOnly: true },
-  'admin-playlists':{ sec:'sec-admin-playlists', sl:'sl-admin-playlists',  onLoad: loadAdminPlaylists, adminOnly: true },
-  'admin-stats':   { sec:'sec-admin-stats',      sl:'sl-admin-stats',      onLoad: loadStats,         adminOnly: true },
-  'admin-logs':    { sec:'sec-admin-logs',       sl:'sl-admin-logs',       onLoad: loadLogs,          adminOnly: true },
+  playlists:         { sec:'sec-playlists',        sl:'sl-playlists',        onLoad: null },
+  profile:           { sec:'sec-profile',           sl:'sl-profile',          onLoad: null },
+  support:           { sec:'sec-support',           sl:'sl-support',          onLoad: null },
+  settings:          { sec:'sec-settings',          sl:'sl-settings',         onLoad: null },
+  'admin-users':     { sec:'sec-admin-users',       sl:'sl-admin-users',      onLoad: loadAdminUsers,    adminOnly: true },
+  'admin-playlists': { sec:'sec-admin-playlists',   sl:'sl-admin-playlists',  onLoad: loadAdminPlaylists, adminOnly: true },
+  'admin-stats':     { sec:'sec-admin-stats',       sl:'sl-admin-stats',      onLoad: loadStats,         adminOnly: true },
+  'admin-logs':      { sec:'sec-admin-logs',        sl:'sl-admin-logs',       onLoad: loadLogs,          adminOnly: true },
 };
 
 function showSection(name) {
   const def = sections[name];
   if (!def) return;
-
-  // Admin only guard
-  if (def.adminOnly && !isAdmin) {
-    showToast('⛔ Accès réservé aux administrateurs');
-    return;
-  }
-
-  // Hide all sections, deactivate links
+  if (def.adminOnly && !isAdmin) { showToast('⛔ Accès réservé aux administrateurs'); return; }
   Object.values(sections).forEach(d => {
-    const secEl = document.getElementById(d.sec);
-    const slEl  = document.getElementById(d.sl);
-    if (secEl) secEl.classList.remove('active');
-    if (slEl)  slEl.classList.remove('active');
+    const s = document.getElementById(d.sec); const l = document.getElementById(d.sl);
+    if (s) s.classList.remove('active'); if (l) l.classList.remove('active');
   });
-
   document.getElementById(def.sec).classList.add('active');
   document.getElementById(def.sl)?.classList.add('active');
   closeSidebar();
-
   if (def.onLoad) def.onLoad();
-
-  // Update profile pl count
   if (name === 'profile') {
+    const m3u = allPlaylists.filter(p => (p.type||'m3u') !== 'xtream').length;
+    const xt  = allPlaylists.filter(p => p.type === 'xtream').length;
     document.getElementById('profile-pl-count').textContent = allPlaylists.length;
+    document.getElementById('profile-m3u-count').textContent = m3u;
+    document.getElementById('profile-xtream-count').textContent = xt;
   }
 }
 
-/* ══════════════════════════ PLAYLISTS ══════════════════════════ */
+/* ════════════════════════════ PLAYLISTS (USER) ════════════════════════════ */
 async function loadPlaylists() {
   document.getElementById('pl-loading').style.display = 'flex';
   document.getElementById('pl-table-wrap').style.display = 'none';
-
-  // Table has no user_id — we fetch ALL, no filter (or filter by device if needed)
-  // For now: show all playlists the current user's device has added
-  // If you want per-user: add a user_id column in Supabase and do .eq('user_id', currentUser.id)
-  const { data, error } = await sb.from('playlists')
-    .select('*')
-    .order('created_at', { ascending: false });
-
+  const { data, error } = await sb.from('playlists').select('*').order('created_at', { ascending: false });
   document.getElementById('pl-loading').style.display = 'none';
   document.getElementById('pl-table-wrap').style.display = 'block';
-
   if (error) { showMsg('pl-msg', 'Erreur : ' + error.message, 'error'); return; }
-
   allPlaylists = data || [];
   document.getElementById('pl-count-badge').textContent = allPlaylists.length;
-  renderPlaylists(allPlaylists);
+  applyPlFilters();
 }
+
+function setPlFilter(f) {
+  plFilter = f;
+  ['all','m3u','xtream'].forEach(id => {
+    document.getElementById('chip-'+id)?.classList.toggle('active', id === f);
+  });
+  applyPlFilters();
+}
+
+function applyPlFilters() {
+  const q = (document.getElementById('pl-search')?.value || '').toLowerCase();
+  let rows = allPlaylists;
+  if (plFilter !== 'all') rows = rows.filter(p => (p.type||'m3u') === plFilter);
+  if (q) rows = rows.filter(p => (p.name||'').toLowerCase().includes(q) || (p.m3u_url||p.xtream_host||'').toLowerCase().includes(q));
+  renderPlaylists(rows);
+}
+function filterPlaylists() { applyPlFilters(); }
 
 function renderPlaylists(rows) {
   const tbody = document.getElementById('pl-tbody');
   const empty = document.getElementById('pl-empty');
   tbody.innerHTML = '';
-
   if (!rows.length) { empty.style.display = 'block'; return; }
   empty.style.display = 'none';
-
   rows.forEach(pl => {
-    const date = pl.created_at ? new Date(pl.created_at).toLocaleDateString('fr-FR') : '—';
-    const url  = pl.m3u_url || pl.xtream_host || '';
-    const type = pl.type === 'xtream' ? 'xtream' : 'm3u';
+    const date     = pl.created_at ? new Date(pl.created_at).toLocaleDateString('fr-FR') : '—';
+    const url      = pl.m3u_url || pl.xtream_host || '';
+    const type     = pl.type === 'xtream' ? 'xtream' : 'm3u';
     const isActive = pl.is_active !== false;
+    const channels = pl.total_channels != null ? fmtNum(pl.total_channels) : '—';
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="td-name">${esc(pl.name || '—')}</td>
       <td><span class="badge ${type}">${type === 'xtream' ? 'Xtream' : 'M3U'}</span></td>
-      <td style="font-size:12px;font-family:monospace;color:var(--text-muted);" title="${esc(url)}">${esc(url.slice(0, 36)) || '—'}${url.length > 36 ? '…' : ''}</td>
-      <td><span class="badge ${isActive ? 'active' : 'expired'}">${isActive ? 'Actif' : 'Inactif'}</span></td>
+      <td style="font-size:11.5px;font-family:monospace;color:var(--text-muted);" title="${esc(url)}">${esc(url.slice(0,34))}${url.length>34?'…':''}</td>
+      <td>${channels}</td>
+      <td><span class="badge ${isActive?'active dot':'inactive dot'}">${isActive?'Actif':'Inactif'}</span></td>
       <td>${date}</td>
       <td class="td-actions">
-        <button class="btn btn-ghost btn-sm" onclick='openEditModal(${JSON.stringify(pl)})'>✏️</button>
-        <button class="btn btn-danger btn-sm" onclick="deletePl('${pl.id}')">🗑️</button>
+        <button class="btn btn-ghost btn-xs" onclick='openEditModal(${JSON.stringify(pl)})'>✏️ Éditer</button>
+        <button class="btn btn-danger btn-xs" onclick="deletePl('${pl.id}')">🗑️</button>
       </td>`;
     tbody.appendChild(tr);
   });
 }
 
-function filterPlaylists() {
-  const q = document.getElementById('pl-search').value.toLowerCase();
-  const filtered = q ? allPlaylists.filter(p => (p.name||'').toLowerCase().includes(q) || (p.m3u_url||p.xtream_host||'').toLowerCase().includes(q)) : allPlaylists;
-  renderPlaylists(filtered);
-}
-
 function toggleAddType() {
-  const type = document.getElementById('add-type').value;
-  document.getElementById('add-url-field').style.display     = type === 'm3u' ? 'flex' : 'none';
-  document.getElementById('add-xtream-fields').style.display = type === 'xtream' ? 'block' : 'none';
+  const t = document.getElementById('add-type').value;
+  document.getElementById('add-url-field').style.display     = t === 'm3u' ? 'flex' : 'none';
+  document.getElementById('add-xtream-fields').style.display = t === 'xtream' ? 'block' : 'none';
 }
 
 async function addPlaylist() {
@@ -1393,7 +1233,6 @@ async function addPlaylist() {
   const name = document.getElementById('add-name').value.trim();
   const type = document.getElementById('add-type').value;
   if (!name) { showMsg('add-msg', 'Le nom est obligatoire.'); return; }
-
   let row = { name, type, is_active: true };
   if (type === 'm3u') {
     const url = document.getElementById('add-url').value.trim();
@@ -1404,15 +1243,11 @@ async function addPlaylist() {
     const user   = document.getElementById('add-user').value.trim();
     const pass   = document.getElementById('add-pass').value.trim();
     if (!server || !user || !pass) { showMsg('add-msg', 'Serveur, utilisateur et mot de passe requis.'); return; }
-    row.xtream_host     = server;
-    row.xtream_username = user;
-    row.xtream_password = pass;
+    row.xtream_host = server; row.xtream_username = user; row.xtream_password = pass;
   }
-
   setLoading('btn-add-pl', true);
   const { error } = await sb.from('playlists').insert([row]);
   setLoading('btn-add-pl', false);
-
   if (error) { showMsg('add-msg', 'Erreur : ' + error.message); return; }
   closeModal('modal-add');
   showToast('✅ Playlist ajoutée !');
@@ -1433,13 +1268,11 @@ async function saveEdit() {
   const name = document.getElementById('edit-name').value.trim();
   const url  = document.getElementById('edit-url').value.trim();
   if (!name) { showMsg('edit-msg', 'Le nom est obligatoire.'); return; }
-
   setLoading('btn-edit-pl', true);
   const updates = { name, updated_at: new Date().toISOString() };
   if (url) updates.m3u_url = url;
   const { error } = await sb.from('playlists').update(updates).eq('id', id);
   setLoading('btn-edit-pl', false);
-
   if (error) { showMsg('edit-msg', 'Erreur : ' + error.message); return; }
   closeModal('modal-edit');
   showToast('✅ Playlist mise à jour !');
@@ -1447,20 +1280,22 @@ async function saveEdit() {
 }
 
 async function deletePl(id) {
-  if (!confirm('Supprimer cette playlist ?')) return;
+  if (!confirm('Supprimer cette playlist définitivement ?')) return;
   const { error } = await sb.from('playlists').delete().eq('id', id);
   if (error) { showMsg('pl-msg', 'Erreur : ' + error.message, 'error'); return; }
   showToast('🗑️ Playlist supprimée');
   loadPlaylists();
 }
 
-/* ══════════════════════════ ADMIN: USERS ══════════════════════════ */
+/* ════════════════════════════ ADMIN: USERS ════════════════════════════ */
 let usersLoaded = false;
 async function loadAdminUsers() {
   if (usersLoaded) return;
   usersLoaded = true;
+  document.getElementById('users-loading').style.display = 'flex';
+  document.getElementById('users-card').style.display = 'none';
 
-  // Try profiles table first, then fallback
+  // Try profiles table (must have: id, email, created_at, last_sign_in_at, provider, is_banned, admin_note, refunded)
   const { data, error } = await sb.from('profiles')
     .select('*').order('created_at', { ascending: false }).limit(500);
 
@@ -1469,116 +1304,344 @@ async function loadAdminUsers() {
 
   if (error || !data || !data.length) {
     document.getElementById('users-empty').style.display = 'block';
-    document.getElementById('au-total').textContent = '0';
-    document.getElementById('au-confirmed').textContent = '0';
-    document.getElementById('au-google').textContent = '0';
-    document.getElementById('au-today').textContent = '0';
+    ['au-total','au-confirmed','au-banned','au-today'].forEach(id => document.getElementById(id).textContent = '0');
     document.getElementById('users-count-badge').textContent = '0';
     return;
   }
 
   allUsers = data;
-  const today = new Date().toDateString();
-  const totalToday = data.filter(u => u.created_at && new Date(u.created_at).toDateString() === today).length;
-  const googleCount = data.filter(u => u.provider === 'google' || (u.raw_app_meta_data || '').includes('google')).length;
+  const today     = new Date().toDateString();
+  const todayCount = data.filter(u => u.created_at && new Date(u.created_at).toDateString() === today).length;
+  const bannedCount = data.filter(u => u.is_banned).length;
+  const confirmedCount = data.filter(u => u.email_confirmed_at || u.confirmed_at).length;
 
-  document.getElementById('au-total').textContent = fmtNum(data.length);
-  document.getElementById('au-confirmed').textContent = fmtNum(data.filter(u => u.email_confirmed_at || u.confirmed_at).length);
-  document.getElementById('au-google').textContent = fmtNum(googleCount);
-  document.getElementById('au-today').textContent = fmtNum(totalToday);
+  document.getElementById('au-total').textContent     = fmtNum(data.length);
+  document.getElementById('au-confirmed').textContent = fmtNum(confirmedCount);
+  document.getElementById('au-banned').textContent    = fmtNum(bannedCount);
+  document.getElementById('au-today').textContent     = fmtNum(todayCount);
   document.getElementById('users-count-badge').textContent = fmtNum(data.length);
 
-  renderUsers(data);
+  applyUserFilters();
 }
+
+function setUserFilter(f) {
+  userFilter = f;
+  ['all','banned','active'].forEach(id => {
+    const el = document.getElementById('uf-'+id);
+    if (el) el.classList.toggle('active', id === f);
+  });
+  applyUserFilters();
+}
+
+function applyUserFilters() {
+  const q = (document.getElementById('users-search')?.value || '').toLowerCase();
+  let rows = allUsers;
+  if (userFilter === 'banned') rows = rows.filter(u => u.is_banned);
+  if (userFilter === 'active') rows = rows.filter(u => !u.is_banned);
+  if (q) rows = rows.filter(u => (u.email||'').toLowerCase().includes(q));
+  renderUsers(rows);
+}
+function filterUsers() { applyUserFilters(); }
 
 function renderUsers(rows) {
   const tbody = document.getElementById('users-tbody');
   const empty = document.getElementById('users-empty');
   tbody.innerHTML = '';
-
   if (!rows.length) { empty.style.display = 'block'; return; }
   empty.style.display = 'none';
-
   rows.forEach(u => {
-    const email   = u.email || u.id || '—';
-    const created = u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR') : '—';
-    const lastLog = u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString('fr-FR') : '—';
+    const email    = u.email || u.id || '—';
+    const created  = u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR') : '—';
     const provider = u.provider || 'email';
     const provLabel = provider === 'google' ? '🔵 Google' : '📧 Email';
+    const banned   = u.is_banned;
+    const refunded = u.refunded;
+    const hasNote  = u.admin_note && u.admin_note.trim();
+    const statusBadge = banned
+      ? '<span class="badge banned">🚫 Banni</span>'
+      : '<span class="badge active dot">Actif</span>';
+    const noteBadge = hasNote ? '📝' : '';
+    const refundBadge = refunded ? '<span class="badge refund">💰 Remboursé</span>' : '';
     tbody.innerHTML += `
       <tr>
         <td class="td-name">${esc(email)}</td>
         <td>${provLabel}</td>
+        <td>${statusBadge} ${refundBadge}</td>
         <td>${created}</td>
-        <td>${lastLog}</td>
-        <td><button class="btn btn-ghost btn-sm" onclick="copyToClipboard('${esc(email)}')">📋 Copier</button></td>
+        <td style="color:var(--warn);">${noteBadge}</td>
+        <td class="td-actions">
+          <button class="btn btn-ghost btn-xs" onclick="openUserDetail(${JSON.stringify(u).replace(/"/g,'&quot;')})">👁️ Détail</button>
+          <button class="btn btn-xs ${banned ? 'btn-success' : 'btn-danger'}" onclick="quickToggleBan('${u.id}', ${banned})">${banned ? '✅ Débannir' : '🚫 Bannir'}</button>
+        </td>
       </tr>`;
   });
 }
 
-function filterUsers() {
-  const q = document.getElementById('users-search').value.toLowerCase();
-  const filtered = q ? allUsers.filter(u => (u.email||'').toLowerCase().includes(q)) : allUsers;
-  renderUsers(filtered);
+/* ════════════════════════════ USER DETAIL MODAL ════════════════════════════ */
+function openUserDetail(u) {
+  currentDetailUser = u;
+  document.getElementById('udetail-title').textContent = u.email?.split('@')[0] || 'Utilisateur';
+  document.getElementById('udetail-email').textContent = u.email || '—';
+  document.getElementById('udet-email').textContent    = u.email || '—';
+  document.getElementById('udet-created').textContent  = u.created_at ? new Date(u.created_at).toLocaleString('fr-FR') : '—';
+  document.getElementById('udet-login').textContent    = u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleString('fr-FR') : '—';
+  document.getElementById('udet-provider').textContent = (u.provider === 'google') ? '🔵 Google OAuth' : '📧 Email';
+  document.getElementById('udet-status').innerHTML     = u.is_banned
+    ? '<span class="badge banned">🚫 Banni</span>'
+    : '<span class="badge active dot">Actif</span>';
+  document.getElementById('udet-refund').innerHTML = u.refunded
+    ? `<span class="badge refund">💰 ${u.refund_amount ? u.refund_amount + '€' : 'Remboursé'}</span>`
+    : '<span style="color:var(--text-muted);font-size:12px;">Non remboursé</span>';
+
+  // Note
+  const noteWrap = document.getElementById('udet-note-wrap');
+  const noteEl   = document.getElementById('udet-note');
+  if (u.admin_note && u.admin_note.trim()) {
+    noteEl.textContent = u.admin_note;
+    noteWrap.style.display = 'block';
+  } else {
+    noteWrap.style.display = 'none';
+  }
+
+  // Ban button
+  const banBtn = document.getElementById('udetail-ban-btn');
+  if (u.is_banned) {
+    banBtn.className = 'btn btn-success btn-sm';
+    banBtn.querySelector('.blbl').textContent = '✅ Débannir';
+  } else {
+    banBtn.className = 'btn btn-danger btn-sm';
+    banBtn.querySelector('.blbl').textContent = '🚫 Bannir';
+  }
+
+  // Load user playlists
+  loadUserPlaylists(u.id);
+  openModal('modal-user-detail');
 }
 
-/* ══════════════════════════ ADMIN: ALL PLAYLISTS ══════════════════════════ */
+async function loadUserPlaylists(userId) {
+  document.getElementById('udet-playlists-loading').style.display = 'flex';
+  document.getElementById('udet-playlists-list').style.display = 'none';
+  document.getElementById('udet-playlists-empty').style.display = 'none';
+
+  // Try to fetch playlists linked to this user
+  const { data, error } = await sb.from('playlists').select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+
+  document.getElementById('udet-playlists-loading').style.display = 'none';
+
+  if (error || !data || !data.length) {
+    document.getElementById('udet-playlists-empty').style.display = 'block';
+    return;
+  }
+
+  const list = document.getElementById('udet-playlists-list');
+  list.style.display = 'block';
+  list.innerHTML = data.map(pl => {
+    const type = pl.type === 'xtream' ? 'xtream' : 'm3u';
+    const isActive = pl.is_active !== false;
+    return `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);">${esc(pl.name||'—')}</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${esc((pl.m3u_url||pl.xtream_host||'').slice(0,40))}</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
+          <span class="badge ${type}">${type==='xtream'?'Xtream':'M3U'}</span>
+          <button class="btn btn-danger btn-xs" onclick="deleteAdminPl('${pl.id}')">🗑️</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function deleteAdminPl(id) {
+  if (!confirm('Supprimer cette playlist ?')) return;
+  const { error } = await sb.from('playlists').delete().eq('id', id);
+  if (error) { showToast('❌ Erreur : ' + error.message); return; }
+  showToast('🗑️ Playlist supprimée');
+  await logAdminAction('delete_playlist', { playlist_id: id, target_user: currentDetailUser?.email });
+  if (currentDetailUser) loadUserPlaylists(currentDetailUser.id);
+  aplLoaded = false; // reset admin playlists cache
+}
+
+async function toggleBanUser() {
+  if (!currentDetailUser) return;
+  await doToggleBan(currentDetailUser.id, currentDetailUser.is_banned, currentDetailUser.email);
+  // Refresh
+  const updated = allUsers.find(u => u.id === currentDetailUser.id);
+  if (updated) {
+    currentDetailUser = updated;
+    openUserDetail(currentDetailUser);
+  }
+}
+
+async function quickToggleBan(userId, isBanned, email) {
+  await doToggleBan(userId, isBanned, email);
+}
+
+async function doToggleBan(userId, isBanned, email) {
+  const newBanned = !isBanned;
+  const { error } = await sb.from('profiles').update({ is_banned: newBanned }).eq('id', userId);
+  if (error) { showToast('❌ Erreur : ' + error.message); return; }
+  // Update local cache
+  const idx = allUsers.findIndex(u => u.id === userId);
+  if (idx !== -1) allUsers[idx].is_banned = newBanned;
+  if (currentDetailUser?.id === userId) currentDetailUser.is_banned = newBanned;
+  showToast(newBanned ? '🚫 Utilisateur banni' : '✅ Utilisateur débanni');
+  await logAdminAction(newBanned ? 'ban_user' : 'unban_user', { target: email || userId });
+  applyUserFilters();
+  // Reload stats for badge
+  const bannedCount = allUsers.filter(u => u.is_banned).length;
+  document.getElementById('au-banned').textContent = fmtNum(bannedCount);
+}
+
+async function deleteUserAdmin() {
+  if (!currentDetailUser) return;
+  if (!confirm(`Supprimer définitivement le compte de ${currentDetailUser.email} ? Cette action est IRRÉVERSIBLE.`)) return;
+  const { error } = await sb.from('profiles').delete().eq('id', currentDetailUser.id);
+  if (error) { showToast('❌ Erreur : ' + error.message); return; }
+  await logAdminAction('delete_user', { target: currentDetailUser.email });
+  showToast('🗑️ Compte supprimé');
+  closeModal('modal-user-detail');
+  usersLoaded = false;
+  loadAdminUsers();
+}
+
+/* ════════════════════════════ NOTES ════════════════════════════ */
+function openNoteModal() {
+  if (!currentDetailUser) return;
+  document.getElementById('note-content').value = currentDetailUser.admin_note || '';
+  openModal('modal-note');
+}
+
+async function saveNote() {
+  const note = document.getElementById('note-content').value.trim();
+  setLoading('btn-save-note', true);
+  const { error } = await sb.from('profiles').update({ admin_note: note }).eq('id', currentDetailUser.id);
+  setLoading('btn-save-note', false);
+  if (error) { showToast('❌ Erreur : ' + error.message); return; }
+  currentDetailUser.admin_note = note;
+  const idx = allUsers.findIndex(u => u.id === currentDetailUser.id);
+  if (idx !== -1) allUsers[idx].admin_note = note;
+  await logAdminAction('add_note', { target: currentDetailUser.email });
+  closeModal('modal-note');
+  openUserDetail(currentDetailUser);
+  showToast('📝 Note enregistrée');
+}
+
+/* ════════════════════════════ REFUND ════════════════════════════ */
+function openRefundModal() {
+  if (!currentDetailUser) return;
+  document.getElementById('refund-user-info').textContent = 'Utilisateur : ' + (currentDetailUser.email || '—');
+  document.getElementById('refund-amount').value = '';
+  document.getElementById('refund-reason').value = '';
+  openModal('modal-refund');
+}
+
+async function saveRefund() {
+  const amount = parseFloat(document.getElementById('refund-amount').value) || 0;
+  const reason = document.getElementById('refund-reason').value.trim();
+  setLoading('btn-save-refund', true);
+  const note = (currentDetailUser.admin_note || '') + `\n[REMBOURSEMENT ${new Date().toLocaleDateString('fr-FR')}] ${amount}€ — ${reason}`.trim();
+  const { error } = await sb.from('profiles').update({ refunded: true, refund_amount: amount, admin_note: note }).eq('id', currentDetailUser.id);
+  setLoading('btn-save-refund', false);
+  if (error) { showToast('❌ Erreur : ' + error.message); return; }
+  currentDetailUser.refunded = true; currentDetailUser.refund_amount = amount; currentDetailUser.admin_note = note;
+  const idx = allUsers.findIndex(u => u.id === currentDetailUser.id);
+  if (idx !== -1) { allUsers[idx].refunded = true; allUsers[idx].refund_amount = amount; allUsers[idx].admin_note = note; }
+  await logAdminAction('refund_user', { target: currentDetailUser.email, amount, reason });
+  closeModal('modal-refund');
+  openUserDetail(currentDetailUser);
+  showToast('💰 Remboursement enregistré');
+}
+
+/* ════════════════════════════ ADMIN: ALL PLAYLISTS ════════════════════════════ */
 let aplLoaded = false;
 async function loadAdminPlaylists() {
   if (aplLoaded) return;
   aplLoaded = true;
+  document.getElementById('apl-loading').style.display = 'flex';
+  document.getElementById('apl-content').style.display = 'none';
 
   const { data, error } = await sb.from('playlists').select('*').order('created_at', { ascending: false });
-
   document.getElementById('apl-loading').style.display = 'none';
   document.getElementById('apl-content').style.display = 'block';
 
   if (error || !data || !data.length) {
     document.getElementById('apl-empty').style.display = 'block';
+    ['apl-total','apl-m3u','apl-xtream'].forEach(id => document.getElementById(id).textContent = '0');
     return;
   }
 
+  allAdminPlaylists = data;
+  const m3uCount = data.filter(p => (p.type||'m3u') !== 'xtream').length;
+  const xtCount  = data.filter(p => p.type === 'xtream').length;
+  document.getElementById('apl-total').textContent  = fmtNum(data.length);
+  document.getElementById('apl-m3u').textContent    = fmtNum(m3uCount);
+  document.getElementById('apl-xtream').textContent = fmtNum(xtCount);
+  renderAdminPlaylists(data);
+}
+
+function filterAdminPlaylists() {
+  const q = (document.getElementById('apl-search')?.value || '').toLowerCase();
+  const rows = q ? allAdminPlaylists.filter(p => (p.name||'').toLowerCase().includes(q) || (p.m3u_url||p.xtream_host||'').toLowerCase().includes(q)) : allAdminPlaylists;
+  renderAdminPlaylists(rows);
+}
+
+function renderAdminPlaylists(data) {
   const tbody = document.getElementById('apl-tbody');
+  const empty = document.getElementById('apl-empty');
   tbody.innerHTML = '';
+  if (!data.length) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
   data.forEach(pl => {
-    const date = pl.created_at ? new Date(pl.created_at).toLocaleDateString('fr-FR') : '—';
-    const type = pl.type === 'xtream' ? 'xtream' : 'm3u';
+    const date     = pl.created_at ? new Date(pl.created_at).toLocaleDateString('fr-FR') : '—';
+    const type     = pl.type === 'xtream' ? 'xtream' : 'm3u';
     const isActive = pl.is_active !== false;
-    const deviceId = (pl.device_id || '—').toString().slice(0, 12) + (pl.device_id ? '…' : '');
+    const devId    = pl.device_id ? String(pl.device_id).slice(0,12) + '…' : '—';
     tbody.innerHTML += `
       <tr>
-        <td class="td-name">${esc(pl.name || '—')}</td>
-        <td><span class="badge ${type}">${type === 'xtream' ? 'Xtream' : 'M3U'}</span></td>
-        <td style="font-size:11.5px;font-family:monospace;color:var(--text-muted);">${esc(deviceId)}</td>
-        <td>${pl.total_channels != null ? fmtNum(pl.total_channels) : '—'}</td>
-        <td><span class="badge ${isActive ? 'active' : 'expired'}">${isActive ? 'Actif' : 'Inactif'}</span></td>
+        <td class="td-name">${esc(pl.name||'—')}</td>
+        <td><span class="badge ${type}">${type==='xtream'?'Xtream':'M3U'}</span></td>
+        <td style="font-size:11px;font-family:monospace;color:var(--text-muted);">${esc(devId)}</td>
+        <td>${pl.total_channels!=null?fmtNum(pl.total_channels):'—'}</td>
+        <td><span class="badge ${isActive?'active dot':'inactive dot'}">${isActive?'Actif':'Inactif'}</span></td>
         <td>${date}</td>
+        <td class="td-actions">
+          <button class="btn btn-danger btn-xs" onclick="adminDeletePl('${pl.id}')">🗑️</button>
+        </td>
       </tr>`;
   });
 }
 
-/* ══════════════════════════ ADMIN: STATS ══════════════════════════ */
+async function adminDeletePl(id) {
+  if (!confirm('Supprimer cette playlist ?')) return;
+  const { error } = await sb.from('playlists').delete().eq('id', id);
+  if (error) { showToast('❌ ' + error.message); return; }
+  showToast('🗑️ Playlist supprimée');
+  await logAdminAction('admin_delete_playlist', { playlist_id: id });
+  aplLoaded = false;
+  loadAdminPlaylists();
+}
+
+/* ════════════════════════════ ADMIN: STATS ════════════════════════════ */
 let statsLoaded = false;
 async function loadStats() {
   if (statsLoaded) return;
-
   document.getElementById('stats-loading').style.display = 'flex';
   document.getElementById('stats-content').style.display = 'none';
   document.getElementById('stats-error').style.display = 'none';
 
   try {
-    // Fetch app_stats (try multiple table names)
     let statsRows = [];
-    for (const tbl of ['app_stats', 'app_events', 'analytics', 'events']) {
+    for (const tbl of ['app_stats','app_events','analytics','events']) {
       const { data, error } = await sb.from(tbl).select('*').order('created_at', { ascending: false }).limit(200);
       if (!error && data) { statsRows = data; break; }
     }
-
-    const { count: userCount } = await sb.from('playlists').select('*', { count: 'exact', head: true });
-
+    const { count: plCount } = await sb.from('playlists').select('*', { count: 'exact', head: true });
     document.getElementById('stats-loading').style.display = 'none';
     statsLoaded = true;
-    processStatsData(statsRows, userCount || 0);
+    processStatsData(statsRows, plCount || 0);
   } catch (e) {
     document.getElementById('stats-loading').style.display = 'none';
     const errEl = document.getElementById('stats-error');
@@ -1587,137 +1650,141 @@ async function loadStats() {
   }
 }
 
-function processStatsData(rows, playlistCount) {
+function processStatsData(rows, plCount) {
   document.getElementById('stats-content').style.display = 'block';
-
-  let installs = 0, sessions = 0, installsThisMonth = 0, sessionsThisMonth = 0;
-  const now = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  let installs = 0, sessions = 0, installsMonth = 0, sessionsMonth = 0;
+  const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0,0,0,0);
   const days = {};
   for (let i = 29; i >= 0; i--) {
     const d = new Date(); d.setDate(d.getDate() - i);
     days[d.toISOString().slice(0,10)] = { installs: 0, sessions: 0 };
   }
-
   if (rows.length === 1 && rows[0].app_installs != null) {
     installs = Number(rows[0].app_installs) || 0;
     sessions = Number(rows[0].app_sessions) || 0;
   } else {
     rows.forEach(r => {
-      if (r.app_installs != null) { installs = Math.max(installs, Number(r.app_installs)); }
-      if (r.app_sessions != null) { sessions = Math.max(sessions, Number(r.app_sessions)); }
-      const evt = (r.event_type || r.event || r.type || '').toLowerCase();
-      const val = Number(r.value || r.count || 1);
-      const date = r.created_at ? new Date(r.created_at) : null;
-      const dKey = date ? date.toISOString().slice(0,10) : null;
-      const isMonth = date && date >= monthStart;
+      if (r.app_installs != null) installs = Math.max(installs, Number(r.app_installs));
+      if (r.app_sessions != null) sessions = Math.max(sessions, Number(r.app_sessions));
+      const evt   = (r.event_type || r.event || r.type || '').toLowerCase();
+      const val   = Number(r.value || r.count || 1);
+      const date  = r.created_at ? new Date(r.created_at) : null;
+      const dKey  = date ? date.toISOString().slice(0,10) : null;
+      const inM   = date && date >= monthStart;
       if (evt.includes('install') && r.app_installs == null) {
-        installs += val; if (isMonth) installsThisMonth += val;
+        installs += val; if (inM) installsMonth += val;
         if (dKey && days[dKey]) days[dKey].installs += val;
       }
       if (evt.includes('session') && r.app_sessions == null) {
-        sessions += val; if (isMonth) sessionsThisMonth += val;
+        sessions += val; if (inM) sessionsMonth += val;
         if (dKey && days[dKey]) days[dKey].sessions += val;
       }
     });
   }
-
-  document.getElementById('kpi-installs').textContent = fmtNum(installs);
-  document.getElementById('kpi-sessions').textContent = fmtNum(sessions);
-  document.getElementById('kpi-users').textContent = fmtNum(playlistCount);
-  document.getElementById('kpi-installs-delta').textContent = `+${installsThisMonth} ce mois`;
-  document.getElementById('kpi-sessions-delta').textContent = `+${sessionsThisMonth} ce mois`;
-
-  renderCharts(days, installs, sessions);
-
+  document.getElementById('kpi-installs').textContent       = fmtNum(installs);
+  document.getElementById('kpi-sessions').textContent       = fmtNum(sessions);
+  document.getElementById('kpi-playlists').textContent      = fmtNum(plCount);
+  document.getElementById('kpi-installs-delta').textContent = `+${installsMonth} ce mois`;
+  document.getElementById('kpi-sessions-delta').textContent = `+${sessionsMonth} ce mois`;
+  renderCharts(days, installs, sessions, plCount);
   const tbody = document.getElementById('stats-events-tbody');
   const empty = document.getElementById('stats-empty');
   if (!rows.length) { empty.style.display = 'block'; return; }
   empty.style.display = 'none';
   tbody.innerHTML = '';
-  rows.slice(0, 40).forEach(r => {
+  rows.slice(0, 50).forEach(r => {
     const date = r.created_at ? new Date(r.created_at).toLocaleString('fr-FR') : '—';
     const evt  = r.event_type || r.event || r.type || '—';
-    const val  = r.value || r.count || r.app_installs || '—';
+    const val  = r.value ?? r.count ?? r.app_installs ?? '—';
     const dev  = r.device || r.platform || '—';
-    tbody.innerHTML += `
-      <tr>
-        <td><span class="badge" style="background:rgba(124,143,255,0.1);color:var(--accent);">${esc(evt)}</span></td>
-        <td>${esc(String(val))}</td>
-        <td>${date}</td>
-        <td style="font-size:12px;color:var(--text-muted);">${esc(String(dev).slice(0,40))}</td>
-      </tr>`;
+    tbody.innerHTML += `<tr>
+      <td><span class="badge" style="background:rgba(123,47,255,0.1);color:var(--accent2);">${esc(evt)}</span></td>
+      <td>${esc(String(val))}</td><td>${date}</td>
+      <td style="font-size:11.5px;color:var(--text-muted);">${esc(String(dev).slice(0,40))}</td>
+    </tr>`;
   });
 }
 
-function renderCharts(days, installs, sessions) {
-  Object.values(charts).forEach(c => c.destroy());
-  charts = {};
-
+function renderCharts(days, installs, sessions, plCount) {
+  Object.values(charts).forEach(c => c.destroy()); charts = {};
   const labels = Object.keys(days).map(d => d.slice(5));
+  const gridColor = 'rgba(255,255,255,0.04)';
+  const tickColor = 'rgba(238,238,245,0.28)';
   const baseOpts = {
     responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { labels: { color: 'rgba(238,238,245,0.55)', font: { family: 'DM Sans', size: 11 } } } },
+    plugins: { legend: { labels: { color: 'rgba(238,238,245,0.55)', font: { family: 'DM Sans', size: 11 }, padding: 12 } } },
     scales: {
-      x: { ticks: { color: 'rgba(238,238,245,0.3)', font: { size: 10 }, maxTicksLimit: 7 }, grid: { color: 'rgba(255,255,255,0.04)' } },
-      y: { ticks: { color: 'rgba(238,238,245,0.3)', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }
+      x: { ticks: { color: tickColor, font: { size: 10 }, maxTicksLimit: 8 }, grid: { color: gridColor } },
+      y: { ticks: { color: tickColor, font: { size: 10 } }, grid: { color: gridColor }, beginAtZero: true }
     }
   };
-
   charts.line = new Chart(document.getElementById('chart-line'), {
-    type: 'bar',
-    data: {
+    type: 'bar', data: {
       labels,
       datasets: [
-        { label: 'Installations', data: Object.values(days).map(d => d.installs), backgroundColor: 'rgba(124,143,255,0.5)', borderColor: '#7c8fff', borderWidth: 2, borderRadius: 5 },
-        { label: 'Sessions',      data: Object.values(days).map(d => d.sessions), backgroundColor: 'rgba(177,151,252,0.4)', borderColor: '#b197fc', borderWidth: 2, borderRadius: 5 }
+        { label: 'Installations', data: Object.values(days).map(d => d.installs), backgroundColor: 'rgba(123,47,255,0.5)', borderColor: '#7B2FFF', borderWidth: 2, borderRadius: 5 },
+        { label: 'Sessions',      data: Object.values(days).map(d => d.sessions), backgroundColor: 'rgba(255,45,85,0.4)',  borderColor: '#FF2D55', borderWidth: 2, borderRadius: 5 }
       ]
-    },
-    options: baseOpts
+    }, options: baseOpts
   });
-
   charts.donut = new Chart(document.getElementById('chart-donut'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Installations', 'Sessions'],
-      datasets: [{ data: [Math.max(installs,1), Math.max(sessions,1)], backgroundColor: ['rgba(124,143,255,0.75)','rgba(56,217,245,0.65)'], borderColor: ['#7c8fff','#38d9f5'], borderWidth: 2, hoverOffset: 8 }]
+    type: 'doughnut', data: {
+      labels: ['Installations', 'Sessions', 'Playlists'],
+      datasets: [{ data: [Math.max(installs,1), Math.max(sessions,1), Math.max(plCount,1)],
+        backgroundColor: ['rgba(123,47,255,0.75)','rgba(255,45,85,0.65)','rgba(56,217,245,0.55)'],
+        borderColor: ['#7B2FFF','#FF2D55','#38d9f5'], borderWidth: 2, hoverOffset: 10 }]
     },
-    options: {
-      responsive: true, maintainAspectRatio: false, cutout: '66%',
+    options: { responsive: true, maintainAspectRatio: false, cutout: '68%',
       plugins: { legend: { position: 'bottom', labels: { color: 'rgba(238,238,245,0.55)', font: { family: 'DM Sans', size: 11 }, padding: 14 } } }
     }
   });
 }
 
-/* ══════════════════════════ ADMIN: LOGS ══════════════════════════ */
+/* ════════════════════════════ ADMIN: LOGS ════════════════════════════ */
 let logsLoaded = false;
 async function loadLogs() {
   if (logsLoaded) return;
   logsLoaded = true;
+  document.getElementById('logs-loading').style.display = 'flex';
+  document.getElementById('logs-content').style.display = 'none';
 
-  const { data, error } = await sb.from('admin_logs').select('*').order('created_at', { ascending: false }).limit(100);
+  const { data, error } = await sb.from('admin_logs').select('*').order('created_at', { ascending: false }).limit(150);
   document.getElementById('logs-loading').style.display = 'none';
   document.getElementById('logs-content').style.display = 'block';
 
-  if (error || !data || !data.length) {
-    document.getElementById('logs-empty').style.display = 'block';
-    return;
-  }
-
+  if (error || !data || !data.length) { document.getElementById('logs-empty').style.display = 'block'; return; }
   const tbody = document.getElementById('logs-tbody');
+  const actionIcons = { ban_user:'🚫', unban_user:'✅', delete_user:'🗑️', add_note:'📝', refund_user:'💰', delete_playlist:'🗑️', admin_delete_playlist:'🗑️' };
   data.forEach(l => {
-    const date = l.created_at ? new Date(l.created_at).toLocaleString('fr-FR') : '—';
-    tbody.innerHTML += `
-      <tr>
-        <td><span class="badge" style="background:rgba(124,143,255,0.1);color:var(--accent);">${esc(l.action || '—')}</span></td>
-        <td>${esc(l.user_email || l.user_id || '—')}</td>
-        <td>${date}</td>
-        <td style="font-size:12px;color:var(--text-muted);">${esc(JSON.stringify(l.details || '').slice(0,60))}</td>
-      </tr>`;
+    const date   = l.created_at ? new Date(l.created_at).toLocaleString('fr-FR') : '—';
+    const action = l.action || '—';
+    const icon   = actionIcons[action] || '📋';
+    const det    = l.details ? JSON.stringify(l.details).slice(0,55) : '—';
+    tbody.innerHTML += `<tr>
+      <td><span class="badge" style="background:rgba(123,47,255,0.1);color:var(--accent2);">${icon} ${esc(action)}</span></td>
+      <td class="td-name">${esc(l.admin_email || l.admin_id || '—')}</td>
+      <td style="font-size:12px;color:var(--text-muted);">${esc(l.target_user || l.target || '—')}</td>
+      <td>${date}</td>
+      <td style="font-size:11.5px;color:var(--text-muted);font-family:monospace;">${esc(det)}</td>
+    </tr>`;
   });
 }
 
-/* ══════════════════════════ SETTINGS ══════════════════════════ */
+/* ════════════════════════════ LOG HELPER ════════════════════════════ */
+async function logAdminAction(action, details = {}) {
+  try {
+    await sb.from('admin_logs').insert([{
+      action,
+      admin_email: currentUser?.email,
+      admin_id:    currentUser?.id,
+      target_user: details.target || null,
+      details,
+      created_at: new Date().toISOString()
+    }]);
+  } catch (_) { /* silent */ }
+}
+
+/* ════════════════════════════ SETTINGS ════════════════════════════ */
 async function saveSettings() {
   clearMsg('settings-msg');
   const pw = document.getElementById('settings-pw').value;
@@ -1730,70 +1797,58 @@ async function saveSettings() {
 }
 
 async function confirmDeleteAccount() {
-  if (!confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.')) return;
-  showToast('ℹ️ Pour supprimer votre compte, contactez le support via la page Support.');
+  showToast('ℹ️ Pour supprimer votre compte, contactez le support.');
 }
 
-/* ══════════════════════════ SUPPORT ══════════════════════════ */
+/* ════════════════════════════ SUPPORT ════════════════════════════ */
 async function sendSupportMessage() {
-  const subject = document.getElementById('support-subject').value.trim();
   const message = document.getElementById('support-message').value.trim();
   if (!message) { showMsg('support-msg', 'Le message est obligatoire.', 'error'); return; }
-
   showMsg('support-msg', '✅ Message envoyé ! Nous vous répondrons par email sous 2h.', 'success');
   document.getElementById('support-subject').value = '';
   document.getElementById('support-message').value = '';
 }
 
-/* ══════════════════════════ MODALS ══════════════════════════ */
-function openModal(id) { document.getElementById(id).classList.add('open'); }
+/* ════════════════════════════ MODALS ════════════════════════════ */
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function openAddModal() {
   ['add-name','add-url','add-server','add-user','add-pass'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
   document.getElementById('add-type').value = 'm3u';
-  toggleAddType();
-  clearMsg('add-msg');
-  openModal('modal-add');
+  toggleAddType(); clearMsg('add-msg'); openModal('modal-add');
 }
 document.querySelectorAll('.modal-backdrop').forEach(b => {
   b.addEventListener('click', e => { if (e.target === b) b.classList.remove('open'); });
 });
 
-/* ══════════════════════════ HELPERS ══════════════════════════ */
+/* ════════════════════════════ HELPERS ════════════════════════════ */
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function fmtNum(n) { return n >= 1000 ? (n/1000).toFixed(1)+'k' : String(n); }
 
 function showMsg(id, text, type = 'error') {
-  const el = document.getElementById(id);
-  if (!el) return;
+  const el = document.getElementById(id); if (!el) return;
   el.textContent = text; el.className = 'msg ' + type + ' show';
 }
 function clearMsg(id) {
-  const el = document.getElementById(id);
-  if (el) { el.className = 'msg'; el.textContent = ''; }
+  const el = document.getElementById(id); if (el) { el.className = 'msg'; el.textContent = ''; }
 }
 function setLoading(btnId, on) {
-  const btn = document.getElementById(btnId);
-  if (!btn) return;
+  const btn = document.getElementById(btnId); if (!btn) return;
   btn.disabled = on; btn.classList.toggle('loading', on);
 }
-
-function showToast(msg, duration = 3200) {
+function showToast(msg, duration = 3500) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), duration);
 }
-
 function copyToClipboard(text) {
   navigator.clipboard.writeText(text).then(() => showToast('📋 Copié !'));
 }
 
-/* ══════════════════════════ AUTH LISTENER ══════════════════════════ */
-sb.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_OUT') window.location.href = AUTH_URL;
-});
+/* ════════════════════════════ AUTH LISTENER ════════════════════════════ */
+sb.auth.onAuthStateChange((event) => { if (event === 'SIGNED_OUT') window.location.href = AUTH_URL; });
 
-/* ══════════════════════════ START ══════════════════════════ */
+/* ════════════════════════════ START ════════════════════════════ */
 init();
 </script>
 </body>
