@@ -305,7 +305,7 @@ textarea{resize:vertical;min-height:80px}
   <button class="hamburger" onclick="toggleSB()">
     <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
-  <a class="nav-logo" href="https://devhertox.github.io/arich_iptv/">
+  <a class="nav-logo" href="https://arich.fr/">
     <div class="nav-gem">A</div>
     <div class="nav-brand"><em>ARICH</em> IPTV</div>
   </a>
@@ -374,13 +374,22 @@ textarea{resize:vertical;min-height:80px}
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
     <span class="label">Feature Flags</span>
   </button>
+  <button class="s-item" id="sl-killswitch" onclick="show('killswitch')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+    <span class="label">Kill Switch</span>
+    <span class="s-badge" style="background:rgba(255,45,85,.2);color:var(--r)" id="sb-kill">OFF</span>
+  </button>
+  <button class="s-item" id="sl-broadcast" onclick="show('broadcast')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></svg>
+    <span class="label">Broadcast</span>
+  </button>
   <button class="s-item" id="sl-logs" onclick="show('logs')">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
     <span class="label">Logs admin</span>
   </button>
   <div style="flex:1"></div>
   <div style="padding:10px 10px 14px;">
-    <a href="https://devhertox.github.io/arich_iptv/" style="display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);padding:7px 10px;border-radius:8px;transition:all .18s;" onmouseover="this.style.background='var(--glass)';this.style.color='var(--sub)'" onmouseout="this.style.background='';this.style.color='var(--muted)'">
+    <a href="https://arich.fr/" style="display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);padding:7px 10px;border-radius:8px;transition:all .18s;" onmouseover="this.style.background='var(--glass)';this.style.color='var(--sub)'" onmouseout="this.style.background='';this.style.color='var(--muted)'">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       Espace utilisateur
     </a>
@@ -772,6 +781,79 @@ textarea{resize:vertical;min-height:80px}
   </div>
 </section>
 
+<!-- ══════ KILL SWITCH ══════ -->
+<section class="sec" id="sec-killswitch">
+  <div class="ph"><div class="ph-left"><h1>Kill Switch 🔪</h1><p>Arrêtez l'app en cas d'urgence.</p></div>
+    <div class="ph-actions"><button class="btn btn-danger btn-sm" id="btn-killswitch" onclick="toggleKillSwitch()"><span class="spin" id="killswitch-spin"></span><span class="blbl">🔪 Activer</span></button></div>
+  </div>
+  <div class="card">
+    <div class="card-title">État du Kill Switch</div>
+    <div id="killswitch-status" style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+      <div style="width:30px;height:30px;border-radius:8px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">🔪</div>
+      <div style="font-size:10.5px;color:var(--muted);">État actuel : <span id="killswitch-state">Désactivé</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ BROADCAST ══════ -->
+<section class="sec" id="sec-broadcast">
+  <div class="ph"><div class="ph-left"><h1>Broadcast 📢</h1><p>Messages in-app affichés à tous les utilisateurs au lancement.</p></div>
+    <div class="ph-actions"><button class="btn btn-primary btn-sm" id="btn-broadcast" onclick="sendBroadcast()"><span class="spin" id="broadcast-spin"></span><span class="blbl">📢 Envoyer</span></button></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Composer un broadcast</div>
+      <div style="display:flex;flex-direction:column;gap:13px;">
+        <div class="field"><label>Titre *</label><input type="text" id="broadcast-title" placeholder="Nouvelle mise à jour !"></div>
+        <div class="field"><label>Message *</label><textarea id="broadcast-body" rows="3" placeholder="ARICH IPTV v2.0 est disponible…"></textarea></div>
+        <div class="form-grid">
+          <div class="field"><label>Type</label>
+            <select id="broadcast-type">
+              <option value="info">ℹ️ Info</option>
+              <option value="warning">⚠️ Avertissement</option>
+              <option value="promo">🎁 Promotion</option>
+              <option value="update">🆕 Mise à jour</option>
+            </select>
+          </div>
+          <div class="field"><label>Priorité</label>
+            <select id="broadcast-priority">
+              <option value="normal">Normale</option>
+              <option value="high">Haute (popup forcé)</option>
+              <option value="low">Basse</option>
+            </select>
+          </div>
+          <div class="field"><label>Segment cible</label>
+            <select id="broadcast-segment">
+              <option value="all">Tous les utilisateurs</option>
+              <option value="active">Licences actives</option>
+              <option value="trial">En période trial</option>
+              <option value="expired">Licences expirées</option>
+            </select>
+          </div>
+          <div class="field"><label>Expire dans (jours)</label><input type="number" id="broadcast-expiry-days" value="7" min="1" max="90"></div>
+        </div>
+        <div id="broadcast-msg" class="msg"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Aperçu</div>
+      <div style="background:rgba(123,47,255,.06);border:1px solid rgba(123,47,255,.15);border-radius:var(--r12);padding:16px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;">A</div>
+          <div style="flex:1;"><div style="font-size:10.5px;color:var(--muted);">ARICH IPTV · Broadcast</div></div>
+        </div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:5px;" id="broadcast-prev-title">Titre du message</div>
+        <div style="font-size:12.5px;color:var(--sub);line-height:1.55;" id="broadcast-prev-body">Le contenu apparaîtra ici…</div>
+      </div>
+      <div style="font-size:11.5px;color:var(--muted);line-height:1.6;">
+        Les broadcasts sont affichés dans l'app au lancement via un <strong>dialog in-app</strong>.<br>
+        Chaque utilisateur ne voit le message qu'<strong>une seule fois</strong>.<br>
+        Les messages expirent automatiquement après la durée configurée.
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══════ LOGS ══════ -->
 <section class="sec" id="sec-logs">
   <div class="ph"><div class="ph-left"><h1>Logs admin 📄</h1><p>Toutes les actions effectuées sur le panel.</p></div>
@@ -944,7 +1026,6 @@ textarea{resize:vertical;min-height:80px}
 ════════════════════════════════════════ */
 const SB_URL  = 'https://aynucieohuowgkwyftiy.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5bnVjaWVvaHVvd2drd3lmdGl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyOTIxMDMsImV4cCI6MjA4Nzg2ODEwM30.H43CVcyzEuYBQfBIlkn16r5uk768isHr4DeLduo1ETk';
-const SB_SERVICE = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5bnVjaWVvaHVvd2drd3lmdGl5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjI5MjEwMywiZXhwIjoyMDg3ODY4MTAzfQ.ozs_QlD3-hBsW6amlfQ__gqXDSa3YWErJdeYE03KUlI';
 const EDGE_BASE = 'https://aynucieohuowgkwyftiy.supabase.co/functions/v1';
 
 const FLAGS_DEF = [
@@ -968,18 +1049,12 @@ let devicesLoaded=false, licLoaded=false, plLoaded=false, promosLoaded=false;
 let logsLoaded=false, dashLoaded=false, analyticsLoaded=false, revenueLoaded=false;
 let allLogs = [];
 
-/* ════════════════════════════════════════
-   CLOCK
-════════════════════════════════════════ */
 function updateClock() {
   const el = document.getElementById('nav-time');
   if (el) el.textContent = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
 setInterval(updateClock,1000); updateClock();
 
-/* ════════════════════════════════════════
-   SHA-256 LOGIN (custom admin_users table)
-════════════════════════════════════════ */
 async function sha256(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
@@ -997,15 +1072,13 @@ async function doLogin() {
   btn.disabled=true; spin.style.display='inline-block'; lbl.textContent='Vérification…';
   try {
     const hash = await sha256(password);
-    // Try login by username OR email
     const { data, error } = await sb
       .from('admin_users')
       .select('*')
-      .or(`username.eq.${username},email.eq.${username}`)
+      .or(`username.eq."${username}",email.eq."${username}"`)
       .single();
     if (error || !data) { showAuthErr('Identifiant introuvable'); return; }
     if (data.password_hash !== hash) { showAuthErr('Mot de passe incorrect'); return; }
-    // Update last_login
     await sb.from('admin_users').update({ last_login: new Date().toISOString() }).eq('id', data.id);
     adminUser = data;
     sessionStorage.setItem('arich_admin', JSON.stringify({ id:data.id, email:data.email, username:data.username, role:data.role }));
@@ -1040,7 +1113,6 @@ function launchApp() {
   loadDashboard();
 }
 
-// Check session on load
 window.addEventListener('DOMContentLoaded', () => {
   const saved = sessionStorage.getItem('arich_admin');
   if (saved) {
@@ -1048,14 +1120,10 @@ window.addEventListener('DOMContentLoaded', () => {
     catch(e) { sessionStorage.removeItem('arich_admin'); }
   }
 });
-
-/* ════════════════════════════════════════
-   SIDEBAR / NAVIGATION
-════════════════════════════════════════ */
 function toggleSB() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sov').classList.toggle('show'); }
 function closeSB()  { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sov').classList.remove('show'); }
 
-const SECTIONS = ['dashboard','revenue','analytics','devices','licenses','playlists','promos','notifs','emails','config','flags','logs'];
+const SECTIONS = ['dashboard','revenue','analytics','devices','licenses','playlists','promos','notifs','emails','config','flags','killswitch','broadcast','logs'];
 const ON_LOAD = {
   dashboard: loadDashboard,
   revenue:   loadRevenue,
@@ -1068,6 +1136,8 @@ const ON_LOAD = {
   emails:    loadEmailsHistory,
   config:    loadConfig,
   flags:     loadFlags,
+  killswitch:loadKillSwitch,
+  broadcast: loadBroadcast,
   logs:      loadLogs,
 };
 
@@ -1081,10 +1151,6 @@ function show(name) {
   closeSB();
   if (ON_LOAD[name]) ON_LOAD[name]();
 }
-
-/* ════════════════════════════════════════
-   DASHBOARD
-════════════════════════════════════════ */
 async function loadDashboard() {
   if (dashLoaded) return; dashLoaded = true;
   try {
@@ -1120,7 +1186,6 @@ async function loadDashboard() {
     setText('sb-devices', fmtN(devices.length));
     setText('sb-exp', fmtN(expiring));
 
-    // Maintenance banner
     const cfg = await sb.from('app_config').select('*').in('key',['maintenance','maintenance_message']);
     const cfgMap = Object.fromEntries((cfg.data||[]).map(r=>[r.key,r.value]));
     if (cfgMap['maintenance'] === 'true') {
@@ -1132,7 +1197,6 @@ async function loadDashboard() {
 
     renderDashCharts(devices, lics);
 
-    // Recent devices
     const rd = document.getElementById('recent-devices-list');
     const last5 = [...devices].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).slice(0,5);
     rd.innerHTML = last5.length ? last5.map(d => `
@@ -1147,7 +1211,6 @@ async function loadDashboard() {
         ${d.is_banned?'<span class="badge b-red">Banni</span>':'<span class="badge b-green b-dot">Actif</span>'}
       </div>`).join('') : '<div style="color:var(--muted);font-size:13px;padding:12px 0;">Aucun device.</div>';
 
-    // Recent logs
     const rl = document.getElementById('recent-logs-list');
     const logs = logsRes.data || [];
     const li = {ban_device:'🚫',unban_device:'✅',delete_device:'🗑️',add_note:'📝',add_license:'🎫',save_config:'⚙️',send_notification:'🔔'};
@@ -1194,9 +1257,6 @@ function renderDashCharts(devices, lics) {
 
 function refreshDashboard() { dashLoaded=false; destroyCharts(); loadDashboard(); }
 
-/* ════════════════════════════════════════
-   REVENUS (depuis table payments)
-════════════════════════════════════════ */
 async function loadRevenue() {
   if (revenueLoaded) return; revenueLoaded = true;
   document.getElementById('pay-loading').style.display = 'flex';
@@ -1214,7 +1274,6 @@ async function loadRevenue() {
     const refundAmt = refunded.reduce((s,p)=>s+(p.amount_eur||0),0);
     const netRev    = totalRev - refundAmt;
 
-    // MRR/ARR: annual plans contribute 2.99/12 monthly, lifetime 0
     const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0,0,0,0);
     const thisMonthC = completed.filter(p=>p.created_at&&new Date(p.created_at)>=monthStart).length;
     const annualC    = completed.filter(p=>p.plan==='annual').length;
@@ -1232,7 +1291,6 @@ async function loadRevenue() {
     setText('r-lifetime-count', lifetimeC);
     setText('r-month-count', thisMonthC);
 
-    // Revenue chart — group by month
     const months = {};
     completed.forEach(p => {
       const m = p.created_at?.slice(0,7);
@@ -1283,9 +1341,6 @@ function renderPayments(rows) {
   });
 }
 
-/* ════════════════════════════════════════
-   ANALYTIQUES (devices.country + app_stats + app_sessions)
-════════════════════════════════════════ */
 async function loadAnalytics() {
   if (analyticsLoaded) return; analyticsLoaded = true;
   try {
@@ -1304,7 +1359,6 @@ async function loadAnalytics() {
     const activeDev= devices.filter(d=>d.last_seen_at&&new Date(d.last_seen_at)>=in30).length;
     const retention= devices.length ? Math.round(activeDev/devices.length*100) : 0;
 
-    // Countries from devices
     const countryCounts = {};
     devices.forEach(d => {
       if (d.country) countryCounts[d.country] = (countryCounts[d.country]||0)+1;
@@ -1316,7 +1370,6 @@ async function loadAnalytics() {
     setText('a-retention', retention+'%');
     setText('a-countries', fmtN(uniqueCountries));
 
-    // Sessions bar chart (last 30 days)
     const days = getLast30Days();
     sessions.forEach(s => { const k=s.created_at?.slice(0,10); if(k&&days[k]!==undefined) days[k]++; });
     charts.aBar = new Chart(document.getElementById('chart-analytics-bar'), {
@@ -1326,7 +1379,6 @@ async function loadAnalytics() {
       }]}, options:chartOpts()
     });
 
-    // Countries list
     const sorted = Object.entries(countryCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
     const maxC   = sorted[0]?.[1] || 1;
     const flags  = {France:'🇫🇷',Algérie:'🇩🇿',Maroc:'🇲🇦',Belgique:'🇧🇪',Tunisie:'🇹🇳','United Kingdom':'🇬🇧',Espagne:'🇪🇸',Italie:'🇮🇹'};
@@ -1340,7 +1392,6 @@ async function loadAnalytics() {
         </div>`).join('')
       : '<div style="color:var(--muted);font-size:13px;padding:12px 0;">Aucune donnée de pays. Le champ country sera rempli via geo-ip au prochain login de chaque device.</div>';
 
-    // Brands donut
     const brandCounts = {};
     devices.forEach(d=>{ if(d.device_brand) brandCounts[d.device_brand]=(brandCounts[d.device_brand]||0)+1; });
     const topBrands = Object.entries(brandCounts).sort((a,b)=>b[1]-a[1]).slice(0,6);
@@ -1357,7 +1408,6 @@ async function loadAnalytics() {
       });
     }
 
-    // Funnel
     const plRes = await sb.from('playlists').select('id',{count:'exact'});
     const plCount = plRes.count || 0;
     const funnelData = [
@@ -1377,9 +1427,6 @@ async function loadAnalytics() {
   } catch(e) { toast('❌ Analytics : '+e.message); }
 }
 
-/* ════════════════════════════════════════
-   DEVICES
-════════════════════════════════════════ */
 async function loadDevices() {
   if (devicesLoaded) return; devicesLoaded = true;
   document.getElementById('dev-loading').style.display = 'flex';
@@ -1390,7 +1437,6 @@ async function loadDevices() {
   if (error) { toast('❌ '+error.message); return; }
   allDevices = data || [];
 
-  // Also load licenses for cross-ref
   const { data: lics } = await sb.from('licenses').select('*');
   allLicenses = lics || [];
 
@@ -1447,7 +1493,7 @@ function renderDevices(rows) {
       <td>${licBadge}</td>
       <td style="font-size:11.5px;color:var(--muted);">${seen}</td>
       <td class="td-actions">
-        <button class="btn btn-ghost btn-xs" onclick='openDevice(${JSON.stringify(d).replace(/'/g,"\\'")}')>👁️</button>
+        <button class="btn btn-ghost btn-xs" onclick='openDevice(${JSON.stringify(d).replace(/'/g,"\\'")})'}>👁️</button>
         <button class="btn btn-xs ${d.is_banned?'btn-success':'btn-danger'}" onclick="quickBanDevice('${d.id}',${d.is_banned},'${esc(d.device_name||d.id)}')">
           ${d.is_banned?'✅':'🚫'}
         </button>
@@ -1456,7 +1502,6 @@ function renderDevices(rows) {
   });
 }
 
-/* ── Device Detail ── */
 function openDevice(d) {
   currentDevice = d;
   const lic = allLicenses.find(l=>l.device_id===d.id);
@@ -1469,7 +1514,7 @@ function openDevice(d) {
   setText('ddet-android-ver', d.android_version||'—');
   setText('ddet-app-ver', d.app_version||'—');
   setText('ddet-ip', d.ip_address||'—');
-  setText('ddet-country', d.country||(d.country_code?`(${d.country_code})`:'—'));
+  setText('ddet-country', d.country || (d.country_code ? `(${d.country_code})` : '—'));
   setText('ddet-first-seen', d.first_seen_at?new Date(d.first_seen_at).toLocaleString('fr-FR'):'—');
   setText('ddet-last-seen', d.last_seen_at?new Date(d.last_seen_at).toLocaleString('fr-FR'):'—');
 
@@ -1870,33 +1915,40 @@ async function sendNotification() {
   const title    = document.getElementById('notif-title').value.trim();
   const body     = document.getElementById('notif-body').value.trim();
   const target   = document.getElementById('notif-target').value;
-  const image_url= document.getElementById('notif-image').value.trim()||undefined;
+  const imageUrl = document.getElementById('notif-image')?.value?.trim() || undefined;
   if (!title||!body) { showMsg('notif-msg','Titre et message obligatoires','msg-error'); return; }
   setLoading('btn-send-notif', true);
   try {
-    // 1. Insérer dans notifications table pour récupérer l'ID
-    const { data: notifRow, error: insErr } = await sb.from('notifications').insert([{
-      title, body, image_url:image_url||null, target,
-      sent_by:adminUser?.email||'admin', status:'pending',
-      created_at:new Date().toISOString()
-    }]).select().single();
-    if (insErr) throw new Error(insErr.message);
-
-    // 2. Appeler l'Edge Function send-notification
-    const res = await fetch(`${EDGE_BASE}/send-notification`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SB_ANON,'Authorization':'Bearer '+SB_ANON},
-      body:JSON.stringify({ notification_id:notifRow.id, title, body, target, image_url })
+    // Appeler la nouvelle Edge Function V1
+    const session = await sb.auth.getSession();
+    const accessToken = session.data.session?.access_token;
+    
+    if (!accessToken) throw new Error('Non authentifié');
+    
+    const res = await fetch(`${EDGE_BASE}/push-notification-v1`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        title,
+        body,
+        imageUrl,
+        targetSegment: target,
+        priority: 'high'
+      })
     });
+    
     const result = await res.json();
-    if (!res.ok) throw new Error(result.error||'Erreur Edge Function');
+    if (!res.ok) throw new Error(result.error || 'Erreur Edge Function');
 
-    await logAction('send_notification','—',{title,target,sent:result.sent,tokens:result.tokens_found});
-    showMsg('notif-msg',`✅ Envoyée à ${result.tokens_found||0} devices (${result.sent||0} tokens)`, 'msg-success');
+    await logAction('send_notification','—',{title,target,sent:result.sent,failed:result.failed});
+    showMsg('notif-msg',`✅ Envoyée à ${result.sent||0} devices (${result.failed||0} échecs)`, 'msg-success');
     document.getElementById('notif-title').value='';
     document.getElementById('notif-body').value='';
     previewNotif();
-    toast('🔔 Notification envoyée via FCM');
+    toast('🔔 Notification envoyée via FCM V1');
     loadNotifsHistory();
   } catch(e) {
     showMsg('notif-msg','❌ '+e.message,'msg-error');
@@ -1907,7 +1959,7 @@ async function sendNotification() {
 
 async function loadNotifsHistory() {
   const el = document.getElementById('notifs-history');
-  const { data } = await sb.from('notifications').select('*').order('created_at',{ascending:false}).limit(20);
+  const { data } = await sb.from('push_notifications').select('*').order('created_at',{ascending:false}).limit(20);
   if (!data?.length) { el.innerHTML='<div style="color:var(--muted);font-size:13px;padding:12px 0;">Aucune notification envoyée.</div>'; return; }
   el.innerHTML = data.map(n=>`
     <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);">
@@ -2078,7 +2130,7 @@ function filterLogs() {
   renderLogs(rows);
 }
 
-const LOG_ICONS = {ban_device:'🚫',unban_device:'✅',delete_device:'🗑️',add_note:'📝',add_license:'🎫',edit_license:'✏️',save_config:'⚙️',save_flags:'🚩',send_notification:'🔔',send_email:'📧',create_promo:'🎟️',enable_maintenance:'🔧',disable_maintenance:'✅',delete_playlist:'🗑️',admin_delete_playlist:'🗑️'};
+const LOG_ICONS = {ban_device:'🚫',unban_device:'✅',delete_device:'🗑️',add_note:'📝',add_license:'🎫',edit_license:'✏️',save_config:'⚙️',save_flags:'🚩',send_notification:'🔔',send_email:'📧',create_promo:'🎟️',enable_maintenance:'🔧',disable_maintenance:'✅',delete_playlist:'🗑️',admin_delete_playlist:'🗑️',activate_kill_switch:'🔴',deactivate_kill_switch:'🟢',send_broadcast:'📢',delete_broadcast:'🗑️'};
 
 function renderLogs(rows) {
   const tbody=document.getElementById('logs-tbody');
@@ -2132,6 +2184,201 @@ function showMsg(id,txt,cls='msg-info') { const el=document.getElementById(id); 
 function showModalMsg(id,txt) { showMsg(id,txt,'msg-error'); }
 async function logAction(action,target='',details={}) {
   try { await sb.from('admin_logs').insert([{ action, admin_email:adminUser?.email, admin_id:adminUser?.id, target_user:target, details, created_at:new Date().toISOString() }]); } catch(_) {}
+}
+
+/* ════════════════════════════════════════
+   KILL SWITCH
+════════════════════════════════════════ */
+let killSwitchActive = false;
+
+async function loadKillSwitch() {
+  try {
+    const { data } = await sb.from('app_config').select('*').eq('key','kill_switch');
+    const val = data?.[0]?.value;
+    killSwitchActive = val === 'true';
+    updateKillSwitchUI();
+  } catch(e) { toast('❌ Kill Switch : '+e.message); }
+}
+
+function updateKillSwitchUI() {
+  const stateEl = document.getElementById('killswitch-state');
+  const btnEl = document.getElementById('btn-killswitch');
+  const badgeEl = document.getElementById('sb-kill');
+  if (stateEl) stateEl.innerHTML = killSwitchActive
+    ? '<span class="badge b-red b-dot">ACTIF — App bloquée</span>'
+    : '<span class="badge b-green b-dot">Désactivé</span>';
+  if (btnEl) {
+    btnEl.className = killSwitchActive ? 'btn btn-success btn-sm' : 'btn btn-danger btn-sm';
+    const lbl = btnEl.querySelector('.blbl');
+    if (lbl) lbl.textContent = killSwitchActive ? '✅ Désactiver' : '🔪 Activer le Kill Switch';
+  }
+  if (badgeEl) {
+    badgeEl.textContent = killSwitchActive ? 'ON' : 'OFF';
+    badgeEl.style.background = killSwitchActive ? 'rgba(255,45,85,.25)' : 'rgba(48,209,88,.15)';
+    badgeEl.style.color = killSwitchActive ? 'var(--r)' : 'var(--g)';
+  }
+
+  // Update the section card content
+  const secCard = document.querySelector('#sec-killswitch .card');
+  if (secCard) {
+    secCard.innerHTML = `
+      <div class="card-title">État du Kill Switch</div>
+      <div style="display:flex;align-items:center;gap:14px;padding:18px 0;border-bottom:1px solid var(--border);margin-bottom:18px;">
+        <div style="width:56px;height:56px;border-radius:16px;background:${killSwitchActive?'rgba(255,45,85,.15)':'rgba(48,209,88,.1)'};display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;border:1px solid ${killSwitchActive?'rgba(255,45,85,.3)':'rgba(48,209,88,.2)'}">${killSwitchActive?'🔴':'🟢'}</div>
+        <div>
+          <div style="font-size:18px;font-weight:700;font-family:'Syne',sans-serif;color:${killSwitchActive?'var(--r)':'var(--g)'}">${killSwitchActive?'KILL SWITCH ACTIF':'Kill Switch désactivé'}</div>
+          <div style="font-size:12.5px;color:var(--sub);margin-top:4px;">${killSwitchActive?'L\'application est bloquée pour TOUS les utilisateurs.':'L\'application fonctionne normalement.'}</div>
+        </div>
+      </div>
+      <div style="font-size:11.5px;color:var(--muted);line-height:1.7;">
+        <strong style="color:var(--r);">⚠️ Attention :</strong> Le Kill Switch bloque <strong>instantanément</strong> l'accès à l'application pour tous les utilisateurs.<br>
+        Contrairement au mode maintenance, il n'affiche aucun message — l'app refuse simplement de démarrer.<br>
+        Utilisez-le uniquement en cas d'urgence (faille de sécurité, contenu illégal, etc.).
+      </div>
+      <div style="margin-top:18px;">
+        <div class="sec-label">Historique Kill Switch</div>
+        <div id="killswitch-history"><div style="color:var(--muted);font-size:12.5px;">Chargement…</div></div>
+      </div>
+    `;
+    loadKillSwitchHistory();
+  }
+}
+
+async function toggleKillSwitch() {
+  const newState = !killSwitchActive;
+  if (newState && !confirm('⚠️ ATTENTION : Activer le Kill Switch va BLOQUER l\'application pour TOUS les utilisateurs immédiatement.\n\nÊtes-vous sûr ?')) return;
+  setLoading('btn-killswitch', true);
+  try {
+    await upsertConfig('kill_switch', String(newState));
+    killSwitchActive = newState;
+    await logAction(newState ? 'activate_kill_switch' : 'deactivate_kill_switch', '—');
+    updateKillSwitchUI();
+    toast(newState ? '🔴 Kill Switch ACTIVÉ — App bloquée !' : '🟢 Kill Switch désactivé');
+  } catch(e) { toast('❌ '+e.message); }
+  finally { setLoading('btn-killswitch', false); }
+}
+
+async function loadKillSwitchHistory() {
+  const el = document.getElementById('killswitch-history');
+  if (!el) return;
+  const { data } = await sb.from('admin_logs').select('*')
+    .or('action.eq.activate_kill_switch,action.eq.deactivate_kill_switch')
+    .order('created_at',{ascending:false}).limit(10);
+  if (!data?.length) { el.innerHTML='<div style="color:var(--muted);font-size:12.5px;padding:8px 0;">Aucun historique.</div>'; return; }
+  el.innerHTML = data.map(l=>{
+    const isOn = l.action === 'activate_kill_switch';
+    return `<div class="mrow">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:16px;">${isOn?'🔴':'🟢'}</span>
+        <div>
+          <div style="font-size:12.5px;font-weight:500;color:${isOn?'var(--r)':'var(--g)'}">${isOn?'Activé':'Désactivé'}</div>
+          <div style="font-size:10.5px;color:var(--muted);">${esc(l.admin_email||'—')} · ${l.created_at?timeAgo(l.created_at):'—'}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ════════════════════════════════════════
+   BROADCAST MESSAGES
+════════════════════════════════════════ */
+let broadcastLoaded = false;
+
+async function loadBroadcast() {
+  if (broadcastLoaded) return; broadcastLoaded = true;
+  loadBroadcastHistory();
+}
+
+function previewBroadcast() {
+  setText('broadcast-prev-title', document.getElementById('broadcast-title').value || 'Titre du message');
+  setText('broadcast-prev-body', document.getElementById('broadcast-body').value || 'Le contenu apparaîtra ici…');
+}
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('broadcast-title')?.addEventListener('input', previewBroadcast);
+  document.getElementById('broadcast-body')?.addEventListener('input', previewBroadcast);
+});
+
+async function sendBroadcast() {
+  const title = document.getElementById('broadcast-title').value.trim();
+  const body  = document.getElementById('broadcast-body').value.trim();
+  const type  = document.getElementById('broadcast-type')?.value || 'info';
+  const priority = document.getElementById('broadcast-priority')?.value || 'normal';
+  const segment  = document.getElementById('broadcast-segment')?.value || 'all';
+  const days     = parseInt(document.getElementById('broadcast-expiry-days')?.value) || 7;
+  if (!title || !body) { showMsg('broadcast-msg','Titre et message obligatoires','msg-error'); return; }
+  setLoading('btn-broadcast', true);
+  try {
+    const { error } = await sb.from('broadcast_messages').insert([{
+      title, body, type,
+      is_active: true,
+      priority,
+      target_segment: segment,
+      sent_by: adminUser?.email || 'admin',
+      created_at: new Date().toISOString(),
+      expires_at: new Date(Date.now() + days * 86400000).toISOString()
+    }]);
+    if (error) throw error;
+    await logAction('send_broadcast', '—', { title });
+    showMsg('broadcast-msg','✅ Message broadcast envoyé à tous les utilisateurs !','msg-success');
+    document.getElementById('broadcast-title').value = '';
+    document.getElementById('broadcast-body').value = '';
+    toast('📢 Broadcast envoyé !');
+    broadcastLoaded = false;
+    loadBroadcastHistory();
+  } catch(e) {
+    showMsg('broadcast-msg','❌ '+e.message,'msg-error');
+  } finally {
+    setLoading('btn-broadcast', false);
+  }
+}
+
+async function loadBroadcastHistory() {
+  const secCard = document.querySelector('#sec-broadcast .card:last-child') || document.querySelector('#sec-broadcast .card');
+  // Add history card if not present
+  let historyCard = document.getElementById('broadcast-history-card');
+  if (!historyCard) {
+    historyCard = document.createElement('div');
+    historyCard.id = 'broadcast-history-card';
+    historyCard.className = 'card';
+    historyCard.style.marginTop = '18px';
+    document.querySelector('#sec-broadcast')?.appendChild(historyCard);
+  }
+  historyCard.innerHTML = '<div class="card-title">📢 Historique des broadcasts</div><div class="loading"><div class="big-spin"></div> Chargement…</div>';
+
+  try {
+    const { data, error } = await sb.from('broadcast_messages').select('*').order('created_at',{ascending:false}).limit(20);
+    if (error) throw error;
+    if (!data?.length) {
+      historyCard.innerHTML = '<div class="card-title">📢 Historique des broadcasts</div><div style="color:var(--muted);font-size:13px;padding:12px 0;">Aucun broadcast envoyé.</div>';
+      return;
+    }
+    historyCard.innerHTML = '<div class="card-title">📢 Historique des broadcasts</div>' + data.map(b=>{
+      const isActive = b.is_active && (!b.expires_at || new Date(b.expires_at) > new Date());
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;">${esc(b.title||'—')}</div>
+          <div style="font-size:11.5px;color:var(--sub);margin-top:3px;max-width:400px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(b.body||'')}</div>
+          <div style="font-size:10.5px;color:var(--muted);margin-top:2px;">${esc(b.sent_by||'—')} · ${b.created_at?timeAgo(b.created_at):'—'}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="badge ${isActive?'b-green b-dot':'b-gray'}">${isActive?'Actif':'Expiré'}</span>
+          <button class="btn btn-danger btn-xs" onclick="deleteBroadcast('${b.id}')">🗑️</button>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    historyCard.innerHTML = '<div class="card-title">📢 Historique</div><div style="color:var(--r);font-size:12.5px;">Erreur : '+esc(e.message)+'</div>';
+  }
+}
+
+async function deleteBroadcast(id) {
+  if (!confirm('Supprimer ce broadcast ?')) return;
+  const { error } = await sb.from('broadcast_messages').delete().eq('id', id);
+  if (error) { toast('❌ '+error.message); return; }
+  await logAction('delete_broadcast', '—', {broadcast_id:id});
+  toast('🗑️ Broadcast supprimé');
+  broadcastLoaded = false;
+  loadBroadcastHistory();
 }
 </script>
 </body>
